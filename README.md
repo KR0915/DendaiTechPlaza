@@ -1,3 +1,7 @@
+最初にすること
+cd frontend
+npm i
+
 docker起動
 構築から
 docker-compose up --build
@@ -7,13 +11,13 @@ docker-compose up -d
 
 docker停止
 docker-compose down
-#volumesも削除したいとき 
+#volumesも削除したいとき
 docker-compose down --volumes
-docker-compose up --d
+docker-compose up -d
 or
 
 springboot　jar作成
-cd /backend
+cd ./backend
 mvnw clean package
 
 dockerから直接データベースいじるとき。
