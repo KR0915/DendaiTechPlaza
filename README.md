@@ -1,24 +1,78 @@
-最初にすること
+# プロジェクトセットアップガイド
+
+このガイドでは、プロジェクトのセットアップ手順と主要な操作方法について説明します。
+
+## 目次
+
+- [フロントエンド設定](#フロントエンド設定)
+- [Docker操作](#docker操作)
+- [バックエンド設定](#バックエンド設定)
+- [データベース操作](#データベース操作)
+
+## フロントエンド設定
+
+フロントエンドの依存関係をインストールするには、以下のコマンドを実行します：
+
+```bash
 cd frontend
-npm i
+npm install
+```
 
-docker起動
-構築から
+## Docker操作
+
+### ビルドと起動
+
+Dockerコンテナをビルドして起動するには：
+
+```bash
 docker-compose up --build
+```
 
-バックグラウンド起動
+### バックグラウンド起動
+
+コンテナをバックグラウンドで起動するには：
+
+```bash
 docker-compose up -d
+```
 
-docker停止
+### Docker停止
+
+実行中のコンテナを停止するには：
+
+```bash
 docker-compose down
-#volumesも削除したいとき
+```
+
+### ボリュームを含めた完全な停止と再起動
+
+データボリュームも含めてコンテナを完全に停止し、再起動するには：
+
+```bash
 docker-compose down --volumes
 docker-compose up -d
-or
+```
 
-springboot　jar作成
+## バックエンド設定
+
+SpringbootのJARファイルを作成するには：
+
+```bash
 cd ./backend
-mvnw clean package
+./mvnw clean package
+```
 
-dockerから直接データベースいじるとき。
+## データベース操作
+
+PostgreSQLデータベースに直接接続するには：
+
+```bash
 docker exec -it postgres-db psql -U kaihatsurta -d dendaiTech
+```
+
+このコマンドは、`postgres-db`コンテナ内のPostgreSQLに接続し、ユーザー`kaihatsurta`として`dendaiTech`データベースにアクセスします。
+
+---
+
+注意：このREADMEは基本的なセットアップ手順を提供しています。詳細な設定や追加の操作については、プロジェクトの詳細なドキュメントを参照してください。
+```
