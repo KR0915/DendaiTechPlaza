@@ -59,7 +59,7 @@ SpringbootのJARファイルを作成するには：
 
 ```bash
 cd ./backend
-./mvnw clean package
+./mvn clean package
 ```
 
 ## データベース操作
