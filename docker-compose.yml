@@ -18,9 +18,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/mydb
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/dendaiTech
+      SPRING_DATASOURCE_USERNAME: kaihatsurta
+      SPRING_DATASOURCE_PASSWORD: WEVtaE1pVkFwc0NuRkJkUVp1dmM
     depends_on:
       - db
 
@@ -28,13 +28,14 @@ services:
     image: postgres:14
     container_name: postgres-db
     environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: dendaiTech
+      POSTGRES_USER: kaihatsurta
+      POSTGRES_PASSWORD: WEVtaE1pVkFwc0NuRkJkUVp1dmM
     volumes:
       - ./db/data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d # SQLスクリプトを自動実行するための設定
     ports:
-      - "5432:5432"
+      - "54320:5432"
 
 volumes:
   db-data:
