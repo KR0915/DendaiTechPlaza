@@ -1,0 +1,17 @@
+db
+
+# Java関連 (Spring Boot)
+backend/target/
+backend/*.jar
+backend/*.war
+backend/*.class
+
+# Node.js関連 (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/.env
+frontend/npm-debug.log
+
+# OS関連
+.DS_Store
+Thumbs.db
