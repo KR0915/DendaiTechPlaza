@@ -9,7 +9,7 @@ interface Post {
     department: string
     grade: string
     semester: string
-    likes: number
+    likesCount: number
     createdAt: string
 }
 
@@ -61,7 +61,7 @@ export default function PopularPosts() {
                     <p>学科: {post.department}</p>
                     <p>学年: {post.grade}</p>
                     <p>学期: {post.semester}</p>
-                    <p>いいね数: {post.likes}</p>
+                    <p>いいね数: {post.likesCount}</p>
                     <p>投稿日: {new Date(post.createdAt).toLocaleDateString()}</p>
                 </div>
             ))}
