@@ -2,7 +2,7 @@ package com.dendai.backend.dto;
 
 import java.time.LocalDateTime;
 
-public interface PopularPostDto {
+public interface PostDto {
     Integer getPostId();
     String getTitle();
     String getDescription();
@@ -13,4 +13,5 @@ public interface PopularPostDto {
     LocalDateTime getCreatedAt();
     String getUsername();
     Long getLikesCount();
+    Integer getUserId();
 }
