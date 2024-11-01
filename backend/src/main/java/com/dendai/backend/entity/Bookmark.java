@@ -23,11 +23,11 @@ public class Bookmark {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookmarks_bookmark_id_seq")
     @SequenceGenerator(name = "bookmarks_bookmark_id_seq", sequenceName = "bookmarks_bookmark_id_seq", allocationSize = 1)
     @Column(name = "bookmark_id")
-    private Integer bookmarkId;
+    private Long bookmarkId;
 
     @Column(name = "post_id", nullable = false)
-    private Integer postId;  // 外部キー: 投稿ID
+    private Long postId;  // Changed from Integer to Long
 
     @Column(name = "user_id", nullable = false)
-    private Integer userId;  // 外部キー: ユーザーID
+    private Integer userId;
 }

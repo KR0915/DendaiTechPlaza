@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,7 +66,8 @@ public class PostController {
             @RequestParam(required = false) String semester,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<PostDto> searchResults = postService.searchPosts(keyword, year, grade, department, semester, PageRequest.of(page, size));
+        Page<PostDto> searchResults = postService.searchPosts(keyword, year, grade, department, semester,
+                PageRequest.of(page, size));
         return ResponseEntity.ok(searchResults);
     }
 
@@ -90,10 +92,34 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
     }
 
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
+        // TODO: 認証されたユーザーのIDを取得する。ここでは仮のユーザーIDを使用
+        Integer userId = 1; // この部分は実際の認証システムに合わせて変更する必要があります
+        postService.deletePost(postId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{postId}/bookmark")
+    public ResponseEntity<Void> addBookmark(@PathVariable Long postId) {
+        // TODO: 認証されたユーザーのIDを取得する。ここでは仮のユーザーIDを使用
+        Integer userId = 1; // この部分は実際の認証システムに合わせて変更する必要があります
+        postService.addBookmark(postId, userId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{postId}/bookmark")
+    public ResponseEntity<Void> removeBookmark(@PathVariable Long postId) {
+        // TODO: 認証されたユーザーのIDを取得する。ここでは仮のユーザーIDを使用
+        Integer userId = 1; // この部分は実際の認証システムに合わせて変更する必要があります
+        postService.removeBookmark(postId, userId);
+        return ResponseEntity.ok().build();
+    }
+
     // エラーハンドリング
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("An error occurred: " + e.getMessage());
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
     }
 }
