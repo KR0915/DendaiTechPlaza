@@ -1,5 +1,7 @@
 package com.dendai.backend.dto;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -22,4 +24,6 @@ public class PostSubmissionDto {
 
     @NotBlank(message = "Related period is required")
     private String relatedPeriod;
+
+    private List<String> sharedUrls;
 }

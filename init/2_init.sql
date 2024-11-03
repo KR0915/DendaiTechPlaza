@@ -22,7 +22,8 @@ INSERT INTO Posts (user_id, created_at, updated_at, title, description, academic
 (7, NOW(), NOW(), 'Operating Systems', 'Principles of operating systems', 2024, 'AD', 3, '後期'),
 (8, NOW(), NOW(), 'Computer Networks', 'Fundamentals of computer networking', 2024, 'AD', 3, '前期'),
 (9, NOW(), NOW(), 'Software Engineering', 'Software development lifecycle and methodologies', 2024, 'AD', 4, '後期'),
-(10, NOW(), NOW(), 'Artificial Intelligence', 'Introduction to AI concepts and applications', 2024, 'AD', 4, '前期');
+(10, NOW(), NOW(), 'Artificial Intelligence', 'Introduction to AI concepts and applications', 2024, 'AD', 4, '前期'),
+(1, NOW(), NOW(), 'alice投稿複数てすと', 'aliceの複数投稿テストです', 2022, 'FI', 2, '前期');
 
 -- Comments
 INSERT INTO Comments (user_id, content) VALUES
@@ -81,6 +82,7 @@ INSERT INTO Threads (comment_id, reply_id) VALUES
 INSERT INTO SharedURLs (post_id, link) VALUES
 (1, 'https://example.com/cs-basics'),
 (2, 'https://example.com/adv-math'),
+(2, 'https://example.com/data-structures'),
 (3, 'https://example.com/data-structures'),
 (4, 'https://example.com/dbms-intro'),
 (5, 'https://example.com/ml-basics'),

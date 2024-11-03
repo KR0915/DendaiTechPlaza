@@ -76,9 +76,12 @@ public class PostController {
 
     @GetMapping("/{postId}")
     public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
-        return postService.getPostById(postId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        try {
+            PostDto postDto = postService.getPostById(postId);
+            return ResponseEntity.ok(postDto);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/count")
@@ -107,7 +110,6 @@ public class PostController {
         boolean isBookmarked = postService.isPostBookmarkedByUser(postId, userId);
         return ResponseEntity.ok(isBookmarked);
     }
-    
 
     @PostMapping("/{postId}/bookmark")
     public ResponseEntity<Void> addBookmark(@PathVariable Long postId) {

@@ -1,7 +1,8 @@
 package com.dendai.backend.service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,18 +14,23 @@ import com.dendai.backend.dto.PostDto;
 import com.dendai.backend.dto.PostSubmissionDto;
 import com.dendai.backend.entity.Bookmark;
 import com.dendai.backend.entity.Post;
+import com.dendai.backend.entity.SharedURL;
 import com.dendai.backend.repository.BookmarkRepository;
 import com.dendai.backend.repository.PostRepository;
+import com.dendai.backend.repository.SharedURLRepository;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final SharedURLRepository sharedURLRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, BookmarkRepository bookmarkRepository) {
+    public PostService(PostRepository postRepository, BookmarkRepository bookmarkRepository,
+            SharedURLRepository sharedURLRepository) {
         this.postRepository = postRepository;
         this.bookmarkRepository = bookmarkRepository;
+        this.sharedURLRepository = sharedURLRepository;
     }
 
     public Page<PostDto> getPopularPosts(Pageable pageable) {
@@ -44,8 +50,12 @@ public class PostService {
         return postRepository.searchPostsByKeywordAndFilters(keyword, year, grade, department, semester, pageable);
     }
 
-    public Optional<PostDto> getPostById(Long postId) {
-        return postRepository.findPostById(postId);
+    public PostDto getPostById(Long postId) {
+        PostDto postDto = postRepository.findPostById(postId);
+        if (postDto == null) {
+            throw new RuntimeException("Post not found with id: " + postId);
+        }
+        return postDto;
     }
 
     public long getPostCount() {
@@ -65,7 +75,20 @@ public class PostService {
         newPost.setCreatedAt(LocalDateTime.now());
         newPost.setUpdatedAt(LocalDateTime.now());
 
-        return postRepository.save(newPost);
+        Post savedPost = postRepository.save(newPost);
+
+        if (submissionDto.getSharedUrls() != null && !submissionDto.getSharedUrls().isEmpty()) {
+            List<SharedURL> sharedURLs = new ArrayList<>();
+            for (String url : submissionDto.getSharedUrls()) {
+                SharedURL sharedURL = new SharedURL();
+                sharedURL.setPost(savedPost);
+                sharedURL.setLink(url);
+                sharedURLs.add(sharedURL);
+            }
+            sharedURLRepository.saveAll(sharedURLs);
+        }
+
+        return savedPost;
     }
 
     @Transactional
