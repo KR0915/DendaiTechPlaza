@@ -1,15 +1,15 @@
 -- Users
 INSERT INTO Users (username, email, password, role) VALUES 
-('alice', 'alice@example.com', 'password123', 'student'),
-('bob', 'bob@example.com', 'securepass', 'admin'),
-('carol', 'carol@example.com', 'mysecret', 'student'),
-('david', 'david@example.com', 'pass1234', 'student'),
-('eve', 'eve@example.com', 'evepass', 'admin'),
-('frank', 'frank@example.com', 'frankpass', 'student'),
-('grace', 'grace@example.com', 'gracepass', 'student'),
-('henry', 'henry@example.com', 'henrypass', 'admin'),
-('isabel', 'isabel@example.com', 'isabelpass', 'student'),
-('jack', 'jack@example.com', 'jackpass', 'admin');
+('alice', 'alice@example.com', '$2a$08$JrcCSVJnlaqq6OlEltOmcuzidpWteU3sUgv8oWPXsM4.bRfcFCUBK', 'student'),
+('bob', 'bob@example.com', '$2a$08$XyBWFqEBvT5RkKjcKqmoveiIF0iL1MrHu6mnuPwim7lDDWapCMtje', 'admin'),
+('carol', 'carol@example.com', '$2a$08$TWtqSEj3u6BkzAVQcqwoW.lsiyflwAJo2OyGf7T59TYgzXpHdk3ga', 'student'),
+('david', 'david@example.com', '$2a$08$M5nkMhCQ.u.jojYr/xJ28.UT9pEjn.2eycBFvWt/e/7n11O4n3zXq', 'student'),
+('eve', 'eve@example.com', '$2a$08$oXgk8AVjdwMhDWu.YhivDen1jt9fqB0JorGixg0T5NP.C6KZAudbi', 'admin'),
+('frank', 'frank@example.com', '$2a$08$BnDsiFPRgMCHFEfUQWRApeewReD/s772KozZf5wH3MEQ8/0alLF9C', 'student'),
+('grace', 'grace@example.com', '$2a$08$.GAYTPFpM/HIR6bjeFlkt.0VlO2I5i761VuH/u4aWVdHHmbsmrCPG', 'student'),
+('henry', 'henry@example.com', '$2a$08$S.59tlLTT8fEx2cm5xm3ZuufLhQmz9CZo8yHoZIP/a5AwXcdW8z0.', 'admin'),
+('isabel', 'isabel@example.com', '$2a$08$89qHdRhl9doV2Tm2i/qyzuzcCO2BEWsxFX0yrrzV1ZL5hU7zrHPOy', 'student'),
+('jack', 'jack@example.com', '$2a$08$j/vlnh6fU2ucByKRjj5OWeFxCk.LZUU2zSAkECNdCE.LXJQJzSsR6', 'admin');
 
 -- Posts
 INSERT INTO Posts (user_id, created_at, updated_at, title, description, academic_year, department, grade, related_period) VALUES

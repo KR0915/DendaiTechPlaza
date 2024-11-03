@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dendai.backend.dto.PostDto;
 import com.dendai.backend.dto.PostSubmissionDto;
 import com.dendai.backend.entity.Post;
+import com.dendai.backend.entity.User;
 import com.dendai.backend.service.PostService;
 
 import jakarta.validation.Valid;
@@ -86,34 +89,51 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<Post> createPost(@Valid @RequestBody PostSubmissionDto submissionDto) {
-        // TODO: 認証されたユーザーのIDを取得する。ここでは仮のユーザーIDを使用
-        Integer userId = 1; // この部分は実際の認証システムに合わせて変更する必要があります
+        Integer userId = getCurrentUserId();
         Post createdPost = postService.createPost(submissionDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
-        // TODO: 認証されたユーザーのIDを取得する。ここでは仮のユーザーIDを使用
-        Integer userId = 1; // この部分は実際の認証システムに合わせて変更する必要があります
-        postService.deletePost(postId, userId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> deletePost(@PathVariable Long postId) {
+        Integer userId = getCurrentUserId();
+        String result = postService.deletePost(postId, userId);
+        return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/{postId}/isBookmark")
+    public ResponseEntity<Boolean> getIsBookmark(@PathVariable Long postId) {
+        Integer userId = getCurrentUserId();
+        boolean isBookmarked = postService.isPostBookmarkedByUser(postId, userId);
+        return ResponseEntity.ok(isBookmarked);
+    }
+    
 
     @PostMapping("/{postId}/bookmark")
     public ResponseEntity<Void> addBookmark(@PathVariable Long postId) {
-        // TODO: 認証されたユーザーのIDを取得する。ここでは仮のユーザーIDを使用
-        Integer userId = 1; // この部分は実際の認証システムに合わせて変更する必要があります
+        Integer userId = getCurrentUserId();
         postService.addBookmark(postId, userId);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{postId}/bookmark")
     public ResponseEntity<Void> removeBookmark(@PathVariable Long postId) {
-        // TODO: 認証されたユーザーのIDを取得する。ここでは仮のユーザーIDを使用
-        Integer userId = 1; // この部分は実際の認証システムに合わせて変更する必要があります
+        Integer userId = getCurrentUserId();
         postService.removeBookmark(postId, userId);
         return ResponseEntity.ok().build();
+    }
+
+    // Helper method to get the current authenticated user's ID
+    private Integer getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new RuntimeException("User not authenticated");
+        }
+        if (!(authentication.getPrincipal() instanceof User)) {
+            throw new RuntimeException("Unexpected principal type");
+        }
+        User user = (User) authentication.getPrincipal();
+        return user.getUser_id();
     }
 
     // エラーハンドリング

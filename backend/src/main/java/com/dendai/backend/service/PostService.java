@@ -86,7 +86,7 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long postId, Integer userId) {
+    public String deletePost(Long postId, Integer userId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
@@ -95,5 +95,13 @@ public class PostService {
         }
 
         postRepository.deleteById(postId);
+        return "Post successfully deleted";
+    }
+
+    public boolean isPostBookmarkedByUser(Long postId, Integer userId) {
+        if (userId == null) {
+            return false;
+        }
+        return bookmarkRepository.findByPostIdAndUserId(postId, userId).isPresent();
     }
 }
