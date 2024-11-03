@@ -12,13 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dendai.backend.dto.AuthenticationRequest;
 import com.dendai.backend.dto.AuthenticationResponse;
+import com.dendai.backend.dto.UserRegistrationDto;
+import com.dendai.backend.entity.User;
 import com.dendai.backend.security.JwtUtil;
 import com.dendai.backend.service.CustomUserDetailsService;
+import com.dendai.backend.service.UserService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
-
+    private final UserService userService;
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -29,11 +36,12 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
+            throws Exception {
         try {
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
-            );
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()));
         } catch (Exception e) {
             throw new Exception("Incorrect username or password", e);
         }
@@ -42,5 +50,11 @@ public class AuthController {
         final String jwt = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
+        User registeredUser = userService.registerUser(registrationDto);
+        return ResponseEntity.ok(registeredUser);
     }
 }
