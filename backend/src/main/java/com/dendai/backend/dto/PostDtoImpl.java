@@ -5,9 +5,15 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@With
 public class PostDtoImpl implements PostDto {
     private Long postId;
     private String title;
@@ -24,4 +30,18 @@ public class PostDtoImpl implements PostDto {
     private Integer userId;
     private List<String> sharedUrls;
     private Page<CommentDto> comments;
+
+    // This constructor is needed for the query
+    public PostDtoImpl(Long postId, String title, String description, Integer year,
+            Long departmentId, String departmentName, Integer grade, String semester,
+            LocalDateTime createdAt, LocalDateTime updatedAt, String username,
+            Long likesCount, Integer userId) {
+        this(postId, title, description, year, departmentId, departmentName, grade, semester,
+                createdAt, updatedAt, username, likesCount, userId, null, null);
+    }
+
+    @Override
+    public void setComments(Page<CommentDto> comments) {
+        this.comments = comments;
+    }
 }

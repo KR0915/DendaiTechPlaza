@@ -8,4 +8,5 @@ public interface ReplyDto {
     LocalDateTime getCreatedAt();
     String getUsername();
     Integer getUserId();
+    Long getCommentId();
 }

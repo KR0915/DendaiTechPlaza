@@ -52,7 +52,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(jwt, userDetails)) {
-                User user = userRepository.findOneByUsername(username)
+                User user = userRepository.findByUsername(username)
                         .orElseThrow(() -> new RuntimeException("User not found"));
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

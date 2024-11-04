@@ -3,7 +3,6 @@ package com.dendai.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,8 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dendai.backend.dto.CommentDto;
+import com.dendai.backend.dto.CommentSubmissionDto;
 import com.dendai.backend.dto.PostDto;
 import com.dendai.backend.dto.PostSubmissionDto;
+import com.dendai.backend.dto.ReplyDto;
+import com.dendai.backend.dto.ReplySubmissionDto;
 import com.dendai.backend.entity.User;
 import com.dendai.backend.service.PostService;
 
@@ -39,16 +42,14 @@ public class PostController {
     public ResponseEntity<Page<PostDto>> getPopularPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<PostDto> popularPosts = postService.getPopularPosts(PageRequest.of(page, size));
-        return ResponseEntity.ok(popularPosts);
+        return ResponseEntity.ok(postService.getPopularPosts(PageRequest.of(page, size)));
     }
 
     @GetMapping("/recent")
     public ResponseEntity<Page<PostDto>> getRecentPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<PostDto> recentPosts = postService.getRecentPosts(PageRequest.of(page, size));
-        return ResponseEntity.ok(recentPosts);
+        return ResponseEntity.ok(postService.getRecentPosts(PageRequest.of(page, size)));
     }
 
     @GetMapping("/user/{userId}")
@@ -56,8 +57,7 @@ public class PostController {
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<PostDto> userPosts = postService.getRecentPostsByUser(userId, PageRequest.of(page, size));
-        return ResponseEntity.ok(userPosts);
+        return ResponseEntity.ok(postService.getRecentPostsByUser(userId, PageRequest.of(page, size)));
     }
 
     @GetMapping("/search")
@@ -69,9 +69,8 @@ public class PostController {
             @RequestParam(required = false) String semester,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Page<PostDto> searchResults = postService.searchPosts(keyword, year, grade, department, semester,
-                PageRequest.of(page, size));
-        return ResponseEntity.ok(searchResults);
+        return ResponseEntity.ok(postService.searchPosts(keyword, year, grade, department, semester,
+                PageRequest.of(page, size)));
     }
 
     @GetMapping("/{postId}")
@@ -81,54 +80,71 @@ public class PostController {
             @RequestParam(defaultValue = "10") int commentSize,
             @RequestParam(defaultValue = "0") int replyPage,
             @RequestParam(defaultValue = "10") int replySize) {
-        Pageable commentPageable = PageRequest.of(commentPage, commentSize);
-        Pageable replyPageable = PageRequest.of(replyPage, replySize);
-        PostDto postDto = postService.getPostById(postId, commentPageable, replyPageable);
-        return ResponseEntity.ok(postDto);
+        return ResponseEntity.ok(postService.getPostById(postId, PageRequest.of(commentPage, commentSize),
+                PageRequest.of(replyPage, replySize)));
     }
 
     @GetMapping("/count")
     public ResponseEntity<Long> getPostCount() {
-        long count = postService.getPostCount();
-        return ResponseEntity.ok(count);
+        return ResponseEntity.ok(postService.getPostCount());
     }
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostSubmissionDto submissionDto) {
-        Integer userId = getCurrentUserId();
-        PostDto createdPost = postService.createPost(submissionDto, userId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(postService.createPost(submissionDto, getCurrentUserId()));
     }
 
     @DeleteMapping("/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable Long postId) {
-        Integer userId = getCurrentUserId();
-        String result = postService.deletePost(postId, userId);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(postService.deletePost(postId, getCurrentUserId()));
     }
 
-    @PostMapping("/{postId}/isBookmark")
+    @GetMapping("/{postId}/isBookmark")
     public ResponseEntity<Boolean> getIsBookmark(@PathVariable Long postId) {
-        Integer userId = getCurrentUserId();
-        boolean isBookmarked = postService.isPostBookmarkedByUser(postId, userId);
-        return ResponseEntity.ok(isBookmarked);
+        return ResponseEntity.ok(postService.isPostBookmarkedByUser(postId, getCurrentUserId()));
     }
 
     @PostMapping("/{postId}/bookmark")
     public ResponseEntity<Void> addBookmark(@PathVariable Long postId) {
-        Integer userId = getCurrentUserId();
-        postService.addBookmark(postId, userId);
+        postService.addBookmark(postId, getCurrentUserId());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{postId}/bookmark")
     public ResponseEntity<Void> removeBookmark(@PathVariable Long postId) {
-        Integer userId = getCurrentUserId();
-        postService.removeBookmark(postId, userId);
+        postService.removeBookmark(postId, getCurrentUserId());
         return ResponseEntity.ok().build();
     }
 
-    // Helper method to get the current authenticated user's ID
+    @PostMapping("/{postId}/comments")
+    public ResponseEntity<CommentDto> createComment(@PathVariable Long postId,
+            @Valid @RequestBody CommentSubmissionDto submissionDto) {
+        submissionDto.setPostId(postId);
+        CommentDto createdComment = postService.createComment(submissionDto, getCurrentUserId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdComment);
+    }
+
+    @PostMapping("/comments/{commentId}/replies")
+    public ResponseEntity<ReplyDto> createReply(@PathVariable Long commentId,
+            @Valid @RequestBody ReplySubmissionDto submissionDto) {
+        submissionDto.setCommentId(commentId);
+        ReplyDto createdReply = postService.createReply(submissionDto, getCurrentUserId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdReply);
+    }
+
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+        postService.deleteComment(commentId, getCurrentUserId());
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/replies/{replyId}")
+    public ResponseEntity<Void> deleteReply(@PathVariable Long replyId) {
+        postService.deleteReply(replyId, getCurrentUserId());
+        return ResponseEntity.noContent().build();
+    }
+
     private Integer getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -137,14 +153,11 @@ public class PostController {
         if (!(authentication.getPrincipal() instanceof User)) {
             throw new RuntimeException("Unexpected principal type");
         }
-        User user = (User) authentication.getPrincipal();
-        return user.getUserId();
+        return ((User) authentication.getPrincipal()).getUserId();
     }
 
-    // エラーハンドリング
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<String> handleRuntimeException(RuntimeException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 }

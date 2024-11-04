@@ -21,4 +21,5 @@ public interface PostDto {
     Integer getUserId();
     List<String> getSharedUrls();
     Page<CommentDto> getComments();
+    void setComments(Page<CommentDto> comments);
 }

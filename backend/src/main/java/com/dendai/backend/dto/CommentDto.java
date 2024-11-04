@@ -10,4 +10,5 @@ public interface CommentDto {
     String getUsername();
     Integer getUserId();
     List<ReplyDto> getReplies();
+    void setReplies(List<ReplyDto> replies);
 }

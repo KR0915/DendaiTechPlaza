@@ -1,5 +1,7 @@
 package com.dendai.backend.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +13,7 @@ import com.dendai.backend.dto.CommentDto;
 import com.dendai.backend.dto.PostDto;
 import com.dendai.backend.dto.ReplyDto;
 import com.dendai.backend.entity.Post;
+import com.dendai.backend.entity.User;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -139,4 +142,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                         "ORDER BY r.created_at ASC", countQuery = "SELECT COUNT(*) FROM replies r " +
                                         "WHERE r.parent_comment_id IN (SELECT comment_id FROM comments WHERE post_id = :postId)", nativeQuery = true)
         Page<ReplyDto> findRepliesByPostId(@Param("postId") Long postId, Pageable pageable);
+
+        void deleteByUserAndPostIdIn(User user, List<Long> postIds);
+
+        void deleteByUser(User user);
 }

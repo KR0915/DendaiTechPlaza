@@ -29,6 +29,8 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()//api/auth以下はtokenが無くても情報取得可能
+                .requestMatchers("/api/user/**").hasAnyRole("student", "admin")
+                .requestMatchers("/api/admin/**").hasRole("admin")
                 .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()//api/posts以下のGetMethodはtokenが無くても情報取得可能
                 .anyRequest().authenticated()
             )
