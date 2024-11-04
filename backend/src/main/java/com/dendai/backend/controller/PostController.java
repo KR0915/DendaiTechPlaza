@@ -3,6 +3,7 @@ package com.dendai.backend.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dendai.backend.dto.PostDto;
 import com.dendai.backend.dto.PostSubmissionDto;
-import com.dendai.backend.entity.Post;
 import com.dendai.backend.entity.User;
 import com.dendai.backend.service.PostService;
 
@@ -75,13 +75,16 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostDto> getPostById(@PathVariable Long postId) {
-        try {
-            PostDto postDto = postService.getPostById(postId);
-            return ResponseEntity.ok(postDto);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<PostDto> getPostById(
+            @PathVariable Long postId,
+            @RequestParam(defaultValue = "0") int commentPage,
+            @RequestParam(defaultValue = "10") int commentSize,
+            @RequestParam(defaultValue = "0") int replyPage,
+            @RequestParam(defaultValue = "10") int replySize) {
+        Pageable commentPageable = PageRequest.of(commentPage, commentSize);
+        Pageable replyPageable = PageRequest.of(replyPage, replySize);
+        PostDto postDto = postService.getPostById(postId, commentPageable, replyPageable);
+        return ResponseEntity.ok(postDto);
     }
 
     @GetMapping("/count")
@@ -91,9 +94,9 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> createPost(@Valid @RequestBody PostSubmissionDto submissionDto) {
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostSubmissionDto submissionDto) {
         Integer userId = getCurrentUserId();
-        Post createdPost = postService.createPost(submissionDto, userId);
+        PostDto createdPost = postService.createPost(submissionDto, userId);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost);
     }
 
@@ -135,7 +138,7 @@ public class PostController {
             throw new RuntimeException("Unexpected principal type");
         }
         User user = (User) authentication.getPrincipal();
-        return user.getUser_id();
+        return user.getUserId();
     }
 
     // エラーハンドリング

@@ -1,5 +1,6 @@
 package com.dendai.backend.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User registerUser(UserRegistrationDto registrationDto) {
-        if (userRepository.findOneByUsername(registrationDto.getUsername()).isPresent()) {
+        if (userRepository.findByUsername(registrationDto.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
         if (userRepository.findByEmail(registrationDto.getEmail()).isPresent()) {
@@ -55,6 +56,8 @@ public class UserServiceImpl implements UserService {
         newUser.setEmail(registrationDto.getEmail());
         newUser.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
         newUser.setRole(registrationDto.getRole());
+        newUser.setCreatedAt(LocalDateTime.now());
+        newUser.setUpdatedAt(LocalDateTime.now());
 
         return userRepository.save(newUser);
     }

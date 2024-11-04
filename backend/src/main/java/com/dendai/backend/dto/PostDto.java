@@ -3,12 +3,15 @@ package com.dendai.backend.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 public interface PostDto {
-    Integer getPostId();
+    Long getPostId();
     String getTitle();
     String getDescription();
     Integer getYear();
-    String getDepartment();
+    Long getDepartmentId();
+    String getDepartmentName();
     Integer getGrade();
     String getSemester();
     LocalDateTime getCreatedAt();
@@ -16,5 +19,6 @@ public interface PostDto {
     String getUsername();
     Long getLikesCount();
     Integer getUserId();
-    List<String> getSharedUrls(); // 文字列のリストとして定義
+    List<String> getSharedUrls();
+    Page<CommentDto> getComments();
 }

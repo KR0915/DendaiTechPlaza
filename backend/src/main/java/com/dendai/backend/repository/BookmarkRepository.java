@@ -9,6 +9,6 @@ import com.dendai.backend.entity.Bookmark;
 
 @Repository
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
-    Optional<Bookmark> findByPostIdAndUserId(Long postId, Integer userId);
-    void deleteByPostIdAndUserId(Long postId, Integer userId);
+    Optional<Bookmark> findByPost_PostIdAndUser_UserId(Long postId, Integer userId);
+    void deleteByPost_PostIdAndUser_UserId(Long postId, Integer userId);
 }
