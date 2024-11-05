@@ -1,7 +1,6 @@
 package com.dendai.backend.controller;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dendai.backend.dto.ChangePasswordDto;
@@ -37,8 +37,9 @@ public class UserController {
     @Operation(summary = "ユーザーのブックマークを取得", description = "現在のユーザーのブックマークされた投稿のページを取得します")
     @GetMapping("/bookmarks")
     public ResponseEntity<Page<PostDtoImpl>> getUserBookmarks(
-            @Parameter(description = "ページネーション情報") Pageable pageable) {
-        Page<PostDtoImpl> bookmarks = userService.getUserBookmarks(getCurrentUserId(), pageable);
+            @Parameter(description = "ページ番号") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "ページサイズ") @RequestParam(defaultValue = "10") int size) {
+        Page<PostDtoImpl> bookmarks = userService.getUserBookmarks(getCurrentUserId(), page, size);
         return ResponseEntity.ok(bookmarks);
     }
 

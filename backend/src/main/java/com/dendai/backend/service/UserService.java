@@ -3,7 +3,6 @@ package com.dendai.backend.service;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import com.dendai.backend.dto.ChangePasswordDto;
 import com.dendai.backend.dto.PostDtoImpl;
@@ -18,5 +17,5 @@ public interface UserService {
     UserInfoDto updateUserInfo(Integer userId, UserInfoDto userInfoDto);
     void changePassword(Integer userId, ChangePasswordDto changePasswordDto);
     void deleteAccount(Integer userId);
-    Page<PostDtoImpl> getUserBookmarks(Integer userId, Pageable pageable);
+    Page<PostDtoImpl> getUserBookmarks(Integer userId, int page, int size);
 }

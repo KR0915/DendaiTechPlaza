@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final PasswordEncoder passwordEncoder;
-        private final CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
     private final ReplyRepository replyRepository;
     private final BookmarkRepository bookmarkRepository;
 
@@ -143,7 +144,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PostDtoImpl> getUserBookmarks(Integer userId, Pageable pageable) {
+    public Page<PostDtoImpl> getUserBookmarks(Integer userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         return userRepository.findUserBookmarks(userId, pageable);
     }
 }
