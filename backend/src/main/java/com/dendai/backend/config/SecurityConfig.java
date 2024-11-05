@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/**").hasAnyRole("student", "admin")
                         .requestMatchers("/api/admin/**").hasRole("admin")
                         .requestMatchers(HttpMethod.GET, "/api/posts/**").permitAll()// api/posts以下のGetMethodはtokenが無くても情報取得可能
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

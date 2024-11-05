@@ -18,27 +18,39 @@ import com.dendai.backend.dto.UserInfoDto;
 import com.dendai.backend.entity.User;
 import com.dendai.backend.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+@Tag(name = "User", description = "ユーザー管理API")
 public class UserController {
 
     private final UserService userService;
 
+    @SecurityRequirement(name = "bearer-jwt")
+    @Operation(summary = "ユーザーのブックマークを取得", description = "現在のユーザーのブックマークされた投稿のページを取得します")
     @GetMapping("/bookmarks")
-    public ResponseEntity<Page<PostDtoImpl>> getUserBookmarks(Pageable pageable) {
+    public ResponseEntity<Page<PostDtoImpl>> getUserBookmarks(
+            @Parameter(description = "ページネーション情報") Pageable pageable) {
         Page<PostDtoImpl> bookmarks = userService.getUserBookmarks(getCurrentUserId(), pageable);
         return ResponseEntity.ok(bookmarks);
     }
 
+    @SecurityRequirement(name = "bearer-jwt")
+    @Operation(summary = "ユーザー情報を取得", description = "現在のユーザーの情報を取得します")
     @GetMapping("/info")
     public ResponseEntity<UserInfoDto> getUserInfo() {
         return ResponseEntity.ok(userService.getUserInfo(getCurrentUserId()));
     }
 
+    @SecurityRequirement(name = "bearer-jwt")
+    @Operation(summary = "パスワードを変更", description = "現在のユーザーのパスワードを変更します")
     @PutMapping("/password")
     public ResponseEntity<Void> changePassword(
             @Valid @RequestBody ChangePasswordDto changePasswordDto) {
@@ -46,19 +58,22 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @SecurityRequirement(name = "bearer-jwt")
+    @Operation(summary = "アカウントを削除", description = "現在のユーザーのアカウントを削除します")
     @DeleteMapping("/account")
     public ResponseEntity<Void> deleteAccount() {
         userService.deleteAccount(getCurrentUserId());
+
         return ResponseEntity.ok().build();
     }
 
     private Integer getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("User not authenticated");
+            throw new RuntimeException("ユーザーが認証されていません");
         }
         if (!(authentication.getPrincipal() instanceof User)) {
-            throw new RuntimeException("Unexpected principal type");
+            throw new RuntimeException("予期しないプリンシパルタイプです");
         }
         return ((User) authentication.getPrincipal()).getUserId();
     }

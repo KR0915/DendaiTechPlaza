@@ -18,12 +18,15 @@ import com.dendai.backend.security.JwtUtil;
 import com.dendai.backend.service.CustomUserDetailsService;
 import com.dendai.backend.service.UserService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "認証API")
 public class AuthController {
     private final UserService userService;
     @Autowired
@@ -35,6 +38,7 @@ public class AuthController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Operation(summary = "ログイン", description = "ユーザーを認証し、JWTトークンを返します")
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
             throws Exception {
@@ -43,7 +47,7 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),
                             authenticationRequest.getPassword()));
         } catch (Exception e) {
-            throw new Exception("Incorrect username or password", e);
+            throw new Exception("ユーザー名またはパスワードが正しくありません", e);
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
@@ -52,6 +56,7 @@ public class AuthController {
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
 
+    @Operation(summary = "ユーザー登録", description = "新しいユーザーを登録します")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody UserRegistrationDto registrationDto) {
         User registeredUser = userService.registerUser(registrationDto);
