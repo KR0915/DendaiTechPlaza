@@ -1,6 +1,24 @@
 INSERT INTO Departments (name) VALUES 
 ('AD'),
-('FI');
+('AJ'),
+('EK'),
+('EF'),
+('ES'),
+('EC'),
+('EJ'),
+('EH'),
+('FI'),
+('FA'),
+('FR'),
+('NC'),
+('NM'),
+('NE'),
+('RB'),
+('RE'),
+('RD'),
+('RU'),
+('RM'),
+('RG');
 
 INSERT INTO Users (username, email, password, role, created_at, updated_at) VALUES 
 ('alice', 'alice@example.com', '$2a$08$JrcCSVJnlaqq6OlEltOmcuzidpWteU3sUgv8oWPXsM4.bRfcFCUBK', 'student', NOW(), NOW()),
