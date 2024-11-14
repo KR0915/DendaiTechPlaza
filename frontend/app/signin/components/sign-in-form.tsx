@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { signIn } from 'next-auth/react'
+import { useSearchParams } from "next/navigation"
 import { useState } from 'react'
 
 export default function SignInForm() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
 
 
 
@@ -20,13 +23,10 @@ export default function SignInForm() {
             const result = await signIn("credentials", {
                 username,
                 password,
-                redirect: false,
+                callbackUrl: `${callbackUrl}` 
             });
             if (result?.error) {
                 console.error(result.error);
-            } else {
-                // Redirect or update UI state on successful sign-in
-                window.location.href = "/";
             }
         } catch (error) {
             console.error("Error during sign in:", error);

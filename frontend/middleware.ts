@@ -5,11 +5,11 @@ import { NextResponse } from 'next/server'
 export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
 
-    // Define paths that should be accessible without authentication
-    const publicPaths = ['/signin', '/register']
+    // 許可リンク集。ここにかいてあるリンクから始まるパスはログインして無くても見れる。
+    const publicPaths = ['/signin', '/register', '/search', '/post']
 
-    // Check if the current path is in the public paths
-    const isPublicPath = publicPaths.some(path => request.nextUrl.pathname.startsWith(path))
+    // トップページまたは許可されたリンクかどうか調べる。
+    const isPublicPath = request.nextUrl.pathname === '/' || publicPaths.some(path => request.nextUrl.pathname.startsWith(path))
 
     if (token) {
         // トークンの有効期限が切れているかチェック
@@ -29,7 +29,7 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(loginUrl)
     }
 
-    if (token && (request.nextUrl.pathname === '/signin')) {
+    if (token && (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/register')) {
         // ユーザーがすでにログインしていて、ログインまたは登録ページにアクセスしようとしている場合は、ホームページにリダイレクトします。
         return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_SITE_URL as string, request.url))
     }

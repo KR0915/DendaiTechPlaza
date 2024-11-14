@@ -1,4 +1,7 @@
+'use server';
+import { authOptions } from "@/lib/auth";
 import { Post, PostResponse } from "@/types/post";
+import { getServerSession } from "next-auth";
 
 export class PostGet {
     // APIへのURLを宣言
@@ -16,7 +19,31 @@ export class PostGet {
      * @throws {Error} 投稿の取得に失敗した場合
      */
     static async getPostbyId(postId: string, commentPage = "0", commentSize = "10", replyPage = "0", replySize = "10"): Promise<Post> {
-        const res = await fetch(`${this.baseApiUrl}/api/posts/${postId}?commentPage=${commentPage}&commentSize=${commentSize}&replyPage=${replyPage}&replySize=${replySize}`);
+        const res = await fetch(`${this.baseApiUrl}/api/posts/${postId}?commentPage=${commentPage}&commentSize=${commentSize}&replyPage=${replyPage}&replySize=${replySize}`, { method: 'GET' });
+        if (!res.ok) {
+            throw new Error('Failed to fetch posts');
+        }
+        return res.json();
+    }
+
+    /**
+     * 投稿をブックマークしているかどうか取得する
+     *
+     * @param postId - ブックマークしているかどうか確認したい投稿のID
+     * @returns ブックマークしているかどうか true or false 
+     * @throws {Error} 投稿の取得に失敗した場合
+     */
+    static async getisBookmark(postId: string): Promise<boolean> {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return false;
+        }
+        const res = await fetch(`${this.baseApiUrl}/api/posts/${postId}/isBookmark}`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${session.accessToken}`
+            },
+        });
         if (!res.ok) {
             throw new Error('Failed to fetch posts');
         }
@@ -34,12 +61,12 @@ export class PostGet {
      *
      */
     static async getPopularPosts(): Promise<PostResponse> {
-        const res = await fetch(`${this.baseApiUrl}/api/posts/popular`);
+        const res = await fetch(`${this.baseApiUrl}/api/posts/popular`, { method: 'GET' });
         if (!res.ok) {
             throw new Error('Failed to fetch posts');
         }
         return res.json();
     }
 
-    
+
 }

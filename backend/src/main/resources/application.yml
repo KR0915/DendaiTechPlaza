@@ -34,7 +34,8 @@ logging:
 
 jwt:
   secret: ZC0e9PI+xuOgwryN5csYNd1+hbHo1iiz05JsTemKc70=
-  expiration: 3600
+  #JWT TOKENの有効期限:秒(1週間) 7 * 24 * 60 * 60
+  expiration: 604800
 
 
 registration:
