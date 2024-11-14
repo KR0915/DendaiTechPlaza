@@ -1,0 +1,220 @@
+{
+    "content": [
+        {
+            "year": 2024,
+            "username": "alice",
+            "title": "Introduction to Computer Science",
+            "description": "Basics of computer science",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "前期",
+            "likesCount": 2,
+            "postId": 1,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 1,
+            "comments": null,
+            "grade": 1,
+            "sharedUrls": [
+                "https://example.com/cs-basics"
+            ],
+            "departmentId": 1
+        },
+        {
+            "year": 2024,
+            "username": "bob",
+            "title": "Advanced Mathematics",
+            "description": "Topics in advanced mathematics",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "FI",
+            "semester": "後期",
+            "likesCount": 2,
+            "postId": 2,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 2,
+            "comments": null,
+            "grade": 2,
+            "sharedUrls": [
+                "https://example.com/adv-math",
+                "https://example.com/data-structures"
+            ],
+            "departmentId": 9
+        },
+        {
+            "year": 2024,
+            "username": "carol",
+            "title": "Data Structures and Algorithms",
+            "description": "Fundamental data structures and algorithms",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "前期",
+            "likesCount": 2,
+            "postId": 3,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 3,
+            "comments": null,
+            "grade": 2,
+            "sharedUrls": [
+                "https://example.com/data-structures"
+            ],
+            "departmentId": 1
+        },
+        {
+            "year": 2024,
+            "username": "david",
+            "title": "Database Management Systems",
+            "description": "Introduction to DBMS",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "後期",
+            "likesCount": 2,
+            "postId": 4,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 4,
+            "comments": null,
+            "grade": 3,
+            "sharedUrls": [
+                "https://example.com/dbms-intro"
+            ],
+            "departmentId": 1
+        },
+        {
+            "year": 2024,
+            "username": "eve",
+            "title": "Machine Learning Basics",
+            "description": "Introduction to machine learning concepts",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "前期",
+            "likesCount": 2,
+            "postId": 5,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 5,
+            "comments": null,
+            "grade": 4,
+            "sharedUrls": [
+                "https://example.com/ml-basics"
+            ],
+            "departmentId": 1
+        },
+        {
+            "year": 2024,
+            "username": "frank",
+            "title": "Web Development Fundamentals",
+            "description": "HTML, CSS, and JavaScript basics",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "前期",
+            "likesCount": 1,
+            "postId": 6,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 6,
+            "comments": null,
+            "grade": 2,
+            "sharedUrls": [
+                "https://example.com/web-dev-fundamentals"
+            ],
+            "departmentId": 1
+        },
+        {
+            "year": 2024,
+            "username": "grace",
+            "title": "Operating Systems",
+            "description": "Principles of operating systems",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "後期",
+            "likesCount": 1,
+            "postId": 7,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 7,
+            "comments": null,
+            "grade": 3,
+            "sharedUrls": [
+                "https://example.com/operating-systems"
+            ],
+            "departmentId": 1
+        },
+        {
+            "year": 2024,
+            "username": "henry",
+            "title": "Computer Networks",
+            "description": "Fundamentals of computer networking",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "前期",
+            "likesCount": 1,
+            "postId": 8,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 8,
+            "comments": null,
+            "grade": 3,
+            "sharedUrls": [
+                "https://example.com/computer-networks"
+            ],
+            "departmentId": 1
+        },
+        {
+            "year": 2024,
+            "username": "isabel",
+            "title": "Software Engineering",
+            "description": "Software development lifecycle and methodologies",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "後期",
+            "likesCount": 1,
+            "postId": 9,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 9,
+            "comments": null,
+            "grade": 4,
+            "sharedUrls": [
+                "https://example.com/software-engineering"
+            ],
+            "departmentId": 1
+        },
+        {
+            "year": 2024,
+            "username": "jack",
+            "title": "Artificial Intelligence",
+            "description": "Introduction to AI concepts and applications",
+            "updatedAt": "2024-11-12T06:34:51.998869",
+            "departmentName": "AD",
+            "semester": "前期",
+            "likesCount": 1,
+            "postId": 10,
+            "createdAt": "2024-11-12T06:34:51.998869",
+            "userId": 10,
+            "comments": null,
+            "grade": 4,
+            "sharedUrls": [
+                "https://example.com/ai-intro"
+            ],
+            "departmentId": 1
+        }
+    ],
+    "pageable": {
+        "pageNumber": 0,
+        "pageSize": 10,
+        "sort": {
+            "empty": true,
+            "sorted": false,
+            "unsorted": true
+        },
+        "offset": 0,
+        "paged": true,
+        "unpaged": false
+    },
+    "last": false,
+    "totalPages": 2,
+    "totalElements": 11,
+    "size": 10,
+    "number": 0,
+    "sort": {
+        "empty": true,
+        "sorted": false,
+        "unsorted": true
+    },
+    "first": true,
+    "numberOfElements": 10,
+    "empty": false
+}
