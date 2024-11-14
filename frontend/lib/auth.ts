@@ -52,7 +52,6 @@ export const authOptions: NextAuthOptions = {
                         headers: { "Content-Type": "application/json" }
                     });
                     const data = await res.json();
-                    console.log(data);
                     if (res.ok && data.token) {
                         // Return an object that will be encoded in the JWT
                         return {

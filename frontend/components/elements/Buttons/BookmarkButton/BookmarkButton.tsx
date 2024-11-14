@@ -1,8 +1,9 @@
 'use client'
 
 import { Button } from '@/components/ui/button';
-import { PostGet } from '@/utils/dendaitech/Post/GET/PostGet';
-import { PostPost } from '@/utils/dendaitech/Post/POST/PostPOST';
+import { deleteBookmark } from '@/utils/dendaitech/Post/DELETE/PostDELTE';
+import { getIsBookmark } from '@/utils/dendaitech/Post/GET/PostGet';
+import { addBookmark } from '@/utils/dendaitech/Post/POST/PostPOST';
 import { Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -16,7 +17,7 @@ export default function BookmarkButton({ postId }: BookmarkButtonProps) {
     useEffect(() => {
         const fetchBookmarkStatus = async () => {
             try {
-                const isBookmark = await PostGet.getisBookmark(postId);
+                const isBookmark = await getIsBookmark(postId);
                 setIsLiked(isBookmark);
             } catch (error) {
                 console.error('Error fetching bookmark status:', error);
@@ -26,9 +27,11 @@ export default function BookmarkButton({ postId }: BookmarkButtonProps) {
         fetchBookmarkStatus();
     }, [])
 
-    const pushLike = () => {
+    const pushLike = async () => {
         if (isLiked == false) {
-            PostPost.addBookmark(postId);
+            await addBookmark(postId);
+        } else {
+            await deleteBookmark(postId);
         }
         setIsLiked(!isLiked)
     }
