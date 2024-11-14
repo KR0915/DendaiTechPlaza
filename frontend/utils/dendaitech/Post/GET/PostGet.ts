@@ -47,7 +47,8 @@ export async function getIsBookmark(postId: string): Promise<boolean> {
     if (!res.ok) {
         throw new Error('Failed to fetch bookmark status');
     }
-    return res.json();
+    const text = await res.text();
+    return text.toLowerCase() === 'true';
 }
 
 /**

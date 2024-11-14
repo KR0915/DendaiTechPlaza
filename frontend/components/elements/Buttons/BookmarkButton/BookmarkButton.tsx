@@ -12,38 +12,52 @@ interface BookmarkButtonProps {
 }
 
 export default function BookmarkButton({ postId }: BookmarkButtonProps) {
-    const [isLiked, setIsLiked] = useState<boolean>(false);
+    const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchBookmarkStatus = async () => {
             try {
                 const isBookmark = await getIsBookmark(postId);
-                setIsLiked(isBookmark);
+                setIsBookmarked(isBookmark);
             } catch (error) {
                 console.error('Error fetching bookmark status:', error);
             }
         };
 
         fetchBookmarkStatus();
-    }, [])
+    }, [postId]);
 
-    const pushLike = async () => {
-        if (isLiked == false) {
-            await addBookmark(postId);
-        } else {
-            await deleteBookmark(postId);
+    const toggleBookmark = async () => {
+        if (isLoading) return;
+
+        setIsLoading(true);
+        try {
+            if (isBookmarked) {
+                await deleteBookmark(postId);
+
+            } else {
+                await addBookmark(postId);
+
+            }
+            setIsBookmarked(!isBookmarked);
+        } catch (error) {
+            console.error('Error toggling bookmark:', error);
+
+        } finally {
+            setIsLoading(false);
         }
-        setIsLiked(!isLiked)
     }
 
     return (
         <Button
             variant="ghost"
             size="icon"
-            onClick={pushLike}
-            className={`transition-colors ${isLiked ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-500'}`}
+            onClick={toggleBookmark}
+            disabled={isLoading}
+            className={`transition-colors ${isBookmarked ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-500'}`}
         >
-            <Star className="h-6 w-6" fill={isLiked ? 'currentColor' : 'none'} />
+            <Star className="h-6 w-6" fill={isBookmarked ? 'currentColor' : 'none'} />
             <span className="sr-only">ブックマーク</span>
         </Button>
     )
