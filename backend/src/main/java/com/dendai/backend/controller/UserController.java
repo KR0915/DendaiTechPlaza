@@ -64,7 +64,6 @@ public class UserController {
     @DeleteMapping("/account")
     public ResponseEntity<Void> deleteAccount() {
         userService.deleteAccount(getCurrentUserId());
-
         return ResponseEntity.ok().build();
     }
 

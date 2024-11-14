@@ -30,38 +30,34 @@ declare module "next-auth/jwt" {
     }
 }
 
-
-
-
-
-
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                username: { label: "Username", type: "text" },
+                userEmail: { label: "UserEmail", type: "email" },
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                if (!credentials?.username || !credentials?.password) {
+                if (!credentials?.userEmail || !credentials?.password) {
                     return null;
                 }
                 try {
                     const res = await fetch(`${process.env.SPRING_REST_API_URL}/auth/login`, {
                         method: 'POST',
                         body: JSON.stringify({
-                            username: credentials.username,
+                            email: credentials.userEmail,
                             password: credentials.password
                         }),
                         headers: { "Content-Type": "application/json" }
                     });
                     const data = await res.json();
+                    console.log(data);
                     if (res.ok && data.token) {
                         // Return an object that will be encoded in the JWT
                         return {
-                            id: credentials.username,
-                            username: credentials.username,
+                            id: credentials.userEmail,
+                            username: credentials.userEmail,
                             accessToken: data.token
                         };
                     }

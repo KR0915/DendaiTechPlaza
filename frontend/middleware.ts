@@ -31,7 +31,7 @@ export async function middleware(request: NextRequest) {
 
     if (token && (request.nextUrl.pathname === '/signin' || request.nextUrl.pathname === '/register')) {
         // ユーザーがすでにログインしていて、ログインまたは登録ページにアクセスしようとしている場合は、ホームページにリダイレクトします。
-        return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_SITE_URL as string, request.url))
+        return NextResponse.redirect(new URL(process.env.NEXT_PUBLIC_URL as string, request.url))
     }
 
     return NextResponse.next()

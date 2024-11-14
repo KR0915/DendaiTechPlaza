@@ -105,7 +105,7 @@ public class AuthController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             return ResponseEntity.ok(authentication.getAuthorities().stream()
-                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN") || a.getAuthority().equals("admin")));
+                    .anyMatch(a -> a.getAuthority().equals("admin")));
         }
         return ResponseEntity.ok(false);
     }

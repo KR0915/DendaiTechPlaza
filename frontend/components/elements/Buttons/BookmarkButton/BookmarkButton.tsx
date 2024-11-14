@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 
 interface BookmarkButtonProps {
     postId: string;
-  }
+}
 
 export default function BookmarkButton({ postId }: BookmarkButtonProps) {
     const [isLiked, setIsLiked] = useState<boolean>(false);
@@ -22,7 +22,7 @@ export default function BookmarkButton({ postId }: BookmarkButtonProps) {
                 console.error('Error fetching bookmark status:', error);
             }
         };
-    
+
         fetchBookmarkStatus();
     }, [])
 

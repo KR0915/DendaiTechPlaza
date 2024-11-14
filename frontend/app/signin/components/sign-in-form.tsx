@@ -9,7 +9,7 @@ import { useState } from 'react'
 
 export default function SignInForm() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [username, setUsername] = useState<string>('');
+    const [userEmail, setUserEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || '/';
@@ -21,7 +21,7 @@ export default function SignInForm() {
         setIsLoading(true);
         try {
             const result = await signIn("credentials", {
-                username,
+                userEmail,
                 password,
                 callbackUrl: `${callbackUrl}` 
             });
@@ -44,10 +44,10 @@ export default function SignInForm() {
             <CardContent className="flex flex-col space-y-4">
                 <form onSubmit={handleOAuthSignIn}>
                     <Input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="Username"
+                        type="email"
+                        value={userEmail}
+                        onChange={(e) => setUserEmail(e.target.value)}
+                        placeholder="Email"
                     />
                     <Input
                         type="password"
