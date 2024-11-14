@@ -11,6 +11,8 @@ interface AuthWrapperProps {
 export default function AuthWrapper({ initialSession }: AuthWrapperProps) {
     const { data: session } = useSession()
 
+    
+
     // セッションデータが利用可能になるまで、初期セッションを使用
     const currentSession = session ?? initialSession
 

@@ -12,20 +12,28 @@ export default function SignInForm() {
     const [password, setPassword] = useState<string>('');
 
 
-    const handleOAuthSignIn = async () => {
-        setIsLoading(true)
+
+    const handleOAuthSignIn = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
         try {
-            await signIn("credentials", {
+            const result = await signIn("credentials", {
                 username,
                 password,
-                callbackUrl: "/"
-            })
+                redirect: false,
+            });
+            if (result?.error) {
+                console.error(result.error);
+            } else {
+                // Redirect or update UI state on successful sign-in
+                window.location.href = "/";
+            }
         } catch (error) {
-            console.error("Error during sign in:", error)
+            console.error("Error during sign in:", error);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     return (
         <Card className="w-[350px]">
@@ -48,7 +56,7 @@ export default function SignInForm() {
                         placeholder="Password"
                         className="mt-5"
                     />
-                    <Button type="submit"  disabled={isLoading} className="mt-5">Sign In</Button>
+                    <Button type="submit" disabled={isLoading} className="mt-5">Sign In</Button>
                 </form>
             </CardContent>
         </Card>
