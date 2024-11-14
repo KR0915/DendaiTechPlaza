@@ -1,26 +1,6 @@
 'use client';
+import { Post, PostResponse } from '@/types/post';
 import { useEffect, useState } from 'react';
-
-interface Post {
-    postId: number;
-    title: string;
-    description: string;
-    year: number;
-    departmentName: string;
-    grade: number;
-    semester: string;
-    likesCount: number;
-    createdAt: string;
-    username: string;
-}
-
-interface PostResponse {
-    content: Post[];
-    totalPages: number;
-    totalElements: number;
-    size: number;
-    number: number;
-}
 
 async function getPosts(): Promise<PostResponse> {
     const res = await fetch(`http://localhost:8080/api/posts/popular`);
