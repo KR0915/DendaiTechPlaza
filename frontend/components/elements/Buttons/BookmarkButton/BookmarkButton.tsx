@@ -16,16 +16,16 @@ export default function BookmarkButton({ postId }: BookmarkButtonProps) {
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const fetchBookmarkStatus = async () => {
+        async function fetchBookmarkStatus(postId: string) {
             try {
                 const isBookmark = await getIsBookmark(postId);
                 setIsBookmarked(isBookmark);
             } catch (error) {
                 console.error('Error fetching bookmark status:', error);
             }
-        };
+        }
 
-        fetchBookmarkStatus();
+        fetchBookmarkStatus(postId);
     }, [postId]);
 
     const toggleBookmark = async () => {
