@@ -35,20 +35,26 @@ export async function getPostById(postId: string, commentPage = "0", commentSize
  */
 export async function getIsBookmark(postId: string): Promise<boolean> {
     const session = await getServerSession(authOptions);
+    console.log(`${baseApiUrl}/posts/${postId}/isBookmark`);
     if (!session) {
         return false;
     }
-    const res = await fetch(`${baseApiUrl}/posts/${postId}/isBookmark`, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`
-        },
-    });
-    if (!res.ok) {
-        throw new Error('Failed to fetch bookmark status');
+    try {
+        const res = await fetch(`${baseApiUrl}/posts/${postId}/isBookmark`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${session.accessToken}`
+            },
+        });
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const text = await res.text();
+        return text.toLowerCase() === 'true';
+    } catch (error) {
+        console.error('Error fetching bookmark status:', error);
+        return false;
     }
-    const text = await res.text();
-    return text.toLowerCase() === 'true';
 }
 
 /**
