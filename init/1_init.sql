@@ -89,14 +89,14 @@ INSERT INTO Departments (name) VALUES
 ('RG');
 
 INSERT INTO Users (username, email, password, role, created_at, updated_at) VALUES 
-('alice', '22fi122@ms.dendai.ac.jp', '$2a$08$JrcCSVJnlaqq6OlEltOmcuzidpWteU3sUgv8oWPXsM4.bRfcFCUBK', 'student', NOW(), NOW()),
+('alice', '20fi122@ms.dendai.ac.jp', '$2a$08$JrcCSVJnlaqq6OlEltOmcuzidpWteU3sUgv8oWPXsM4.bRfcFCUBK', 'student', NOW(), NOW()),
 ('bob', '19ad061@ms.dendai.ac.jp', '$2a$08$XyBWFqEBvT5RkKjcKqmoveiIF0iL1MrHu6mnuPwim7lDDWapCMtje', 'admin', NOW(), NOW()),
 ('carol', '24fi055@ms.dendai.ac.jp', '$2a$08$TWtqSEj3u6BkzAVQcqwoW.lsiyflwAJo2OyGf7T59TYgzXpHdk3ga', 'student', NOW(), NOW()),
 ('david', '21ec120@ems.dendai.ac.jp', '$2a$08$M5nkMhCQ.u.jojYr/xJ28.UT9pEjn.2eycBFvWt/e/7n11O4n3zXq', 'student', NOW(), NOW()),
 ('eve', '20ej110@ms.dendai.ac.jp', '$2a$08$oXgk8AVjdwMhDWu.YhivDen1jt9fqB0JorGixg0T5NP.C6KZAudbi', 'admin', NOW(), NOW()),
 ('frank', '18fr102@ms.dendai.ac.jp', '$2a$08$BnDsiFPRgMCHFEfUQWRApeewReD/s772KozZf5wH3MEQ8/0alLF9C', 'student', NOW(), NOW()),
 ('grace', '20nc120@ms.dendai.ac.jp', '$2a$08$.GAYTPFpM/HIR6bjeFlkt.0VlO2I5i761VuH/u4aWVdHHmbsmrCPG', 'student', NOW(), NOW()),
-('henry', '22ne120@ms.dendai.ac.jp', '$2a$08$S.59tlLTT8fEx2cm5xm3ZuufLhQmz9CZo8yHoZIP/a5AwXcdW8z0.', 'admin', NOW(), NOW()),
+('henry', '20ne120@ms.dendai.ac.jp', '$2a$08$S.59tlLTT8fEx2cm5xm3ZuufLhQmz9CZo8yHoZIP/a5AwXcdW8z0.', 'admin', NOW(), NOW()),
 ('isabel', '19ad110@ms.dendai.ac.jp', '$2a$08$89qHdRhl9doV2Tm2i/qyzuzcCO2BEWsxFX0yrrzV1ZL5hU7zrHPOy', 'student', NOW(), NOW()),
 ('jack', '20es120@ms.dendai.ac.jp', '$2a$08$j/vlnh6fU2ucByKRjj5OWeFxCk.LZUU2zSAkECNdCE.LXJQJzSsR6', 'admin', NOW(), NOW());
 

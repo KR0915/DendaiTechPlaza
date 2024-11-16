@@ -72,7 +72,7 @@ public class PostController {
     @GetMapping("/search")
     public ResponseEntity<Page<PostDto>> searchPosts(
             @Parameter(description = "検索キーワード") @RequestParam(required = false) String keyword,
-            @Parameter(description = "学年") @RequestParam(required = false) Integer year,
+            @Parameter(description = "西暦年") @RequestParam(required = false) Integer year,
             @Parameter(description = "学年") @RequestParam(required = false) Integer grade,
             @Parameter(description = "学科") @RequestParam(required = false) String department,
             @Parameter(description = "学期") @RequestParam(required = false) String semester,
