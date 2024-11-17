@@ -14,12 +14,12 @@ export default async function post() {
     return (
         <>
         <div>このページはセッション確認のページである。開発中の確認のみに用いること</div>
-        <h1>以下が生セッション(JSON.stringify)である。</h1>
+        <h1>以下が生セッションである。</h1>
         <div>
             {SessionJson}
         </div>
 
-        <h1>以下が生セッション(JSON.parse.user.stringify)である。</h1>
+        <h1>以下が少し加工したセッションである。</h1>
         <div>
             {userData}
         </div>
