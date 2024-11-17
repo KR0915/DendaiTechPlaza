@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { deleteBookmark } from '@/utils/dendaitech/Post/DELETE/PostDELTE';
-import { getIsBookmark } from '@/utils/dendaitech/Post/GET/PostGet';
+import { getIsBookmark } from '@/utils/dendaitech/Post/GET/PostGET';
 import { addBookmark } from '@/utils/dendaitech/Post/POST/PostPOST';
 import { Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
