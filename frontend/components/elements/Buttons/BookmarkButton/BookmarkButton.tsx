@@ -8,7 +8,7 @@ import { Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface BookmarkButtonProps {
-    postId: string;
+    postId: number;
 }
 
 export default function BookmarkButton({ postId }: BookmarkButtonProps) {

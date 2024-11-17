@@ -5,6 +5,6 @@ export default async function post({ params }: { params: Promise<{ id: string }>
 
     return (
         <><div>このページは投稿番号{`${postParams.id}`}番のページである。</div>
-        <BookmarkButton postId={`${postParams.id}`} /></>
+        <BookmarkButton postId={Number(postParams.id)} /></>
     );
 }

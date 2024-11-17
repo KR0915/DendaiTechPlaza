@@ -54,7 +54,7 @@ export async function getPostById(postId: string, commentPage = 0, commentSize =
  * const isBookmarked = await getIsBookmark('123');
  * console.log(isBookmarked); // true または false
  */
-export async function getIsBookmark(postId: string): Promise<boolean> {
+export async function getIsBookmark(postId: number): Promise<boolean> {
     const session = await getServerSession(authOptions);
     if (!session) {
         return false;

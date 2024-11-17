@@ -14,7 +14,7 @@ const baseApiUrl: string = `${process.env.SPRING_REST_API_URL}`;
  * @returns ブックマークが削除できたらtrue できなかったらfalse
  * @throws {Error} ブックマークの削除に失敗した場合
  */
-export async function deleteBookmark(postId: string): Promise<boolean> {
+export async function deleteBookmark(postId: number): Promise<boolean> {
     const session = await getServerSession(authOptions);
     if (!session) {
         const loginUrl = `${process.env.NEXT_PUBLIC_URL}/signin/?callbackUrl=${process.env.NEXT_PUBLIC_URL}/post/${postId}`
