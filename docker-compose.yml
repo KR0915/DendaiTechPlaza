@@ -5,11 +5,6 @@ services:
     container_name: nextjs-app
     ports:
       - "3000:3000"
-    environment:
-      SPRING_REST_API_URL: http://springboot-app:8080/api
-      NEXTAUTH_URL: http://nextjs-app:3000
-      NEXTAUTH_SECRET: WVBoRUhRdVZsT25YcUpkTGFmam9iVHRlQVNSeml3SURaTkNNS3NGVw==
-      NEXT_PUBLIC_URL: http://nextjs-app:3000
     depends_on:
       - backend
 
