@@ -37,6 +37,7 @@ export async function deleteUserByAdmin(userId: number, callbackUrl?: string): P
     }
 
     try {
+        // TODO ユーザー強制削除する際のパスワード入力チェック
         const res = await fetch(`${baseApiUrl}/admin/users/${userId}`, {
             method: 'DELETE',
             headers: {
@@ -82,6 +83,7 @@ export async function deletePostByAdmin(postId: number, callbackUrl?: string): P
         redirect(loginUrl.href);
     }
     try {
+        // TODO 投稿強制削除する際の削除用パスワードチェック
         const res = await fetch(`${baseApiUrl}/admin/posts/${postId}`, {
             method: 'DELETE',
             headers: {
