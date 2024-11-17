@@ -4,46 +4,45 @@ import { Button } from '@/components/ui/button';
 import { deleteBookmark } from '@/utils/dendaitech/Post/DELETE/PostDELTE';
 import { getIsBookmark } from '@/utils/dendaitech/Post/GET/PostGET';
 import { addBookmark } from '@/utils/dendaitech/Post/POST/PostPOST';
-import { Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import StarButton from './StarButton';
 
 interface BookmarkButtonProps {
     postId: number;
 }
 
 export default function BookmarkButton({ postId }: BookmarkButtonProps) {
-    const [isLiked, setIsLiked] = useState<boolean>(false);
+    const [isBookmark, setIsBookmark] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchBookmarkStatus = async () => {
             try {
-                const isBookmark = await getIsBookmark(postId);
-                setIsLiked(isBookmark);
+                const isPreBookmark = await getIsBookmark(postId);
+                setIsBookmark(isPreBookmark);
             } catch (error) {
                 console.error('Error fetching bookmark status:', error);
             }
         };
 
         fetchBookmarkStatus();
-    }, [])
+    }, [postId])
 
-    const pushLike = async () => {
-        if (isLiked == false) {
+    const pushBookmark = async () => {
+        if (isBookmark == false) {
             await addBookmark(postId);
         } else {
             await deleteBookmark(postId);
         }
-        setIsLiked(!isLiked)
+        setIsBookmark(!isBookmark)
     }
 
     return (
         <Button
             variant="ghost"
             size="icon"
-            onClick={pushLike}
-            className={`transition-colors ${isLiked ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-400 hover:text-gray-500'}`}
+            onClick={pushBookmark}
         >
-            <Star className="h-6 w-6" fill={isLiked ? 'currentColor' : 'none'} />
+            <StarButton isBookmark={isBookmark}></StarButton>
             <span className="sr-only">ブックマーク</span>
         </Button>
     )

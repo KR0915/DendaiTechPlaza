@@ -16,9 +16,7 @@ export default function AuthWrapper({ initialSession }: AuthWrapperProps) {
     // セッションデータが利用可能になるまで、初期セッションを使用
     const currentSession = session ?? initialSession
 
-    if (currentSession) {
-        return <div>hoge</div>
-    } else {
+    if (!currentSession) {
         return <SignInForm />
     }
 }

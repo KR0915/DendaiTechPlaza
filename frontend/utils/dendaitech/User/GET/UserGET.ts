@@ -59,6 +59,55 @@ export async function getUser(callbackUrl?:string): Promise<DendaiUser | Error> 
 }
 
 /**
+ * 現在のユーザー情報をトークンを使用して取得する
+ *
+ * 主にログイン時にユーザー名を取得するために使用する 
+ * @param callbackUrl - コールバックURL（オプション）
+ * @returns ユーザー情報（DendaiUser）、または取得失敗時にErrorオブジェクト
+ * @throws {Error} セッションが存在しない場合（ログインページにリダイレクト）
+ * 
+ * @example
+ * // ユーザー情報取得成功の例
+ * const result = await getUserByToken(token);
+ * if (!(result instanceof Error)) {
+ *   console.log('ユーザー情報:', result);
+ * } else {
+ *   console.error('ユーザー情報取得エラー:', result.message);
+ * }
+ * 
+ * @example
+ * // ユーザー情報取得失敗の例
+ * const result = await getUserByToken('/profile');
+ * if (result instanceof Error) {
+ *   console.error('ユーザー情報取得エラー:', result.message);
+ * }
+ */
+export async function getUserByToken(token:string, callbackUrl?:string): Promise<DendaiUser | Error> {
+    if (!token) {
+        const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);
+        if (callbackUrl) {
+            loginUrl.searchParams.append('callbackUrl', callbackUrl)
+        }
+        redirect(loginUrl.href);
+    }
+
+    try {
+        const res = await fetch(`${baseApiUrl}/user/info`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+        });
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+    } catch (error) {
+        return new Error(`ユーザー情報の取得に失敗しました:\n${error}`);
+    }
+}
+
+/**
  * ユーザーのブックマークした投稿を取得する
  * 
  * @param page - ページ番号（デフォルト: 0）

@@ -1,3 +1,5 @@
+import { DendaiUser } from "@/types/user";
+import { getUserByToken } from "@/utils/dendaitech/User/GET/UserGET";
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -7,7 +9,7 @@ declare module "next-auth" {
             id: string;
             username: string;
             name?: string | null;
-            email?: string | null;
+            userEmail: string;
         };
         accessToken: string;
         error?: string;
@@ -18,7 +20,7 @@ declare module "next-auth" {
         username: string;
         accessToken: string;
         name?: string;
-        email?: string;
+        userEmail: string;
     }
 }
 
@@ -26,6 +28,7 @@ declare module "next-auth/jwt" {
     interface JWT {
         id: string;
         username: string;
+        userEmail: string;
         accessToken: string;
     }
 }
@@ -54,9 +57,19 @@ export const authOptions: NextAuthOptions = {
                     const data = await res.json();
                     if (res.ok && data.token) {
                         // Return an object that will be encoded in the JWT
+                        let id: number | string = credentials.userEmail;
+                        let username: string = credentials.userEmail;
+                        const userInfo: DendaiUser | Error = await getUserByToken(data.token);
+                        if (!(userInfo instanceof Error)) {
+                            id = userInfo.userId;
+                            username = userInfo.username;
+                        } else {
+                            console.error('ユーザー情報取得エラー:', userInfo.message);
+                        }
                         return {
-                            id: credentials.userEmail,
-                            username: credentials.userEmail,
+                            id: id.toString(),
+                            username: username,
+                            userEmail: credentials.userEmail,
                             accessToken: data.token
                         };
                     }
@@ -72,6 +85,7 @@ export const authOptions: NextAuthOptions = {
             if (user) {
                 token.id = user.id;
                 token.username = user.username;
+                token.userEmail = user.userEmail;
                 token.accessToken = user.accessToken;
             }
             return token;
@@ -81,7 +95,7 @@ export const authOptions: NextAuthOptions = {
                 id: token.id,
                 username: token.username,
                 name: token.name,
-                email: token.email,
+                userEmail: token.userEmail,
             };
             session.accessToken = token.accessToken;
             return session;
