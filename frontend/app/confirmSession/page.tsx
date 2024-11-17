@@ -19,7 +19,7 @@ export default async function post() {
             {SessionJson}
         </div>
 
-        <h1>以下が少し加工したセッションである。</h1>
+        <h1>以下がセッションからユーザーデータを取り出したものである。</h1>
         <div>
             {userData}
         </div>
