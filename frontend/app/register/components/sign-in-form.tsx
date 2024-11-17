@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { signIn } from 'next-auth/react'
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 import { useState } from 'react'
 
 export default function SignInForm() {
@@ -16,7 +16,6 @@ export default function SignInForm() {
     const [userEmail, setUserEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [commonPassword, setCommonPassword] = useState<string>('');
-    const router = useRouter()
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || '/';
 
