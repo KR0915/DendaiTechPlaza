@@ -42,7 +42,7 @@ export async function deleteUser(callbackUrl?:string): Promise<boolean | Error> 
 
     try {
         const res = await fetch(`${baseApiUrl}/user/account`, {
-            method: 'PUT',
+            method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${session.accessToken}`
             },

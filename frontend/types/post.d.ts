@@ -1,3 +1,5 @@
+import { Pageable, Sort } from "./pageable";
+
 export interface Reply {
     replyId: number;
     content: string;
@@ -16,19 +18,6 @@ export interface Comment {
     replies: Reply[];
 }
 
-export interface Pageable {
-    pageNumber: number;
-    pageSize: number;
-    sort: {
-        empty: boolean;
-        sorted: boolean;
-        unsorted: boolean;
-    };
-    offset: number;
-    paged: boolean;
-    unpaged: boolean;
-}
-
 export interface CommentPage {
     content: Comment[];
     pageable: Pageable;
@@ -37,11 +26,7 @@ export interface CommentPage {
     last: boolean;
     size: number;
     number: number;
-    sort: {
-        empty: boolean;
-        sorted: boolean;
-        unsorted: boolean;
-    };
+    sort: Sort;
     numberOfElements: number;
     first: boolean;
     empty: boolean;
