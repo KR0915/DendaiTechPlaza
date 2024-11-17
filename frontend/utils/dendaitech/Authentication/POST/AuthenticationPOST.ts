@@ -60,13 +60,25 @@ export async function addUser(username: string, email: string, password: string,
             .regex(/[a-z]/, "パスワードは少なくとも1つの小文字を含む必要があります。")
             .regex(/[0-9]/, "パスワードは少なくとも1つの数字を含む必要があります。")
             .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>/?]/, "パスワードは少なくとも1つの特殊文字(!@#$%^&*()_+-=[]{};\':\"\\|,.<>/?)を含む必要があります。"),
-        commonPassword: z.enum([`${process.env.COMMON_STUDENT_PASSWORD}`, `${process.env.COMMON_ADMIN_PASSWORD}`], {
-            errorMap: () => ({ message: "入力された共通パスワードは不適切です" })
-        }),
         role: z.enum(['student', 'admin'], {
             errorMap: () => ({ message: "入力されたロールは不適切です" })
         }),
-    });
+        commonPassword: z.string()
+    }).refine(
+        (data) => {
+            if (data.role === 'student' && data.commonPassword === process.env.COMMON_STUDENT_PASSWORD) {
+                return true;
+            }
+            if (data.role === 'admin' && data.commonPassword === process.env.COMMON_ADMIN_PASSWORD) {
+                return true;
+            }
+            return false;
+        },
+        {
+            message: "入力された共通パスワードは不適切です",
+            path: ["commonPassword"]
+        }
+    );
 
     try {
         // すべてのデータを一度にバリデーション
