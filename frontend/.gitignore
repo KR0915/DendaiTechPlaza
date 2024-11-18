@@ -38,3 +38,7 @@ yarn-error.log*
 next-env.d.ts
 
 *storybook.log
+
+#iconsのファイルはgithubにはあげないがgitkeepだけはディレクトリ維持のために導入する
+public/user/icons/*
+!public/user/icons/.gitkeep
