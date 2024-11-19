@@ -313,35 +313,3 @@ INSERT INTO Replies (parent_comment_id, user_id, content, created_at, updated_at
 (9, 8, E'Thanks for your feedback!', NOW(), NOW()),
 (10, 9, E'I\'ll address your question in a follow-up post.', NOW(), NOW()),
 (2, 10, E'Thank you for your interest in the topic.', NOW(), NOW());
-
-
-INSERT INTO shared_urls (post_id, link, created_at, updated_at) VALUES
-(1, 'https://zenn.dev/kiwichan101kg/articles/ee5460b61bce25', NOW(), NOW()),
-(2, 'https://zenn.dev/kiwichan101kg/articles/ee5460b61bce25', NOW(), NOW()),
-(2, 'https://zenn.dev/kiwichan101kg/articles/ee5460b61bce25', NOW(), NOW()),
-(3, 'https://zenn.dev/kiwichan101kg/articles/ee5460b61bce25', NOW(), NOW()),
-(4, 'https://zenn.dev/kiwichan101kg/articles/ee5460b61bce25', NOW(), NOW()),
-(5, 'https://zenn.dev/kiwichan101kg/articles/ee5460b61bce25', NOW(), NOW()),
-(6, 'https://qiita.com/dai_designing/items/f78650e844b47cead6e9', NOW(), NOW()),
-(7, 'https://qiita.com/dai_designing/items/f78650e844b47cead6e9', NOW(), NOW()),
-(8, 'https://qiita.com/dai_designing/items/f78650e844b47cead6e9', NOW(), NOW()),
-(9, 'https://qiita.com/dai_designing/items/f78650e844b47cead6e9', NOW(), NOW()),
-(10, 'https://qiita.com/dai_designing/items/f78650e844b47cead6e9', NOW(), NOW());
-
-
-INSERT INTO Bookmarks (post_id, user_id, created_at) VALUES
-(1, 1, NOW()),
-(2, 2, NOW()),
-(1, 3, NOW()),
-(3, 4, NOW()),
-(4, 5, NOW()),
-(5, 6, NOW()),
-(6, 7, NOW()),
-(7, 8, NOW()),
-(8, 9, NOW()),
-(9, 10, NOW()),
-(10, 1, NOW()),
-(2, 3, NOW()),
-(3, 5, NOW()),
-(4, 7, NOW()),
-(5, 9, NOW());
