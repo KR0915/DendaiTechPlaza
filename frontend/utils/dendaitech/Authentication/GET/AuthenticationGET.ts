@@ -32,7 +32,7 @@ const baseApiUrl: string = `${process.env.SPRING_REST_API_URL}`;
  *   console.error(error); // リダイレクトが発生するため、このコードは実行されない
  * }
  */
-export async function getIsAdmin(callbackUrl?: string): Promise<boolean> {
+export async function getIsAdmin(callbackUrl?: string): Promise<boolean | Error> {
     const session = await getServerSession(authOptions);
     if (!session) {
         const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);
@@ -55,6 +55,6 @@ export async function getIsAdmin(callbackUrl?: string): Promise<boolean> {
         return text.toLowerCase() === 'true';
     } catch (error) {
         console.error('管理者チェックに失敗しました:', error);
-        return false;
+        return new Error(`管理者チェックに失敗しました:\n${error}`);
     }
 }

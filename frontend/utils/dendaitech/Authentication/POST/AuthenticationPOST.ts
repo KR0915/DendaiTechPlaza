@@ -40,7 +40,7 @@ const baseApiUrl: string = `${process.env.SPRING_REST_API_URL}`;
  * );
  * console.log(result); // "ユーザー名は3文字以上必要です"
  */
-export async function addUser(username: string, email: string, password: string, commonPassword: string, role: string, callbackUrl?: string): Promise<boolean | string> {
+export async function addUser(username: string, email: string, password: string, commonPassword: string, role: string): Promise<boolean | Error> {
     const departmentCodes = ['ad', 'aj', 'ek', 'ef', 'es', 'ec', 'ej', 'eh', 'fi', 'fa', 'fr', 'nc', 'nm', 'ne', 'rb', 're', 'rd', 'ru', 'rm', 'rg'];
 
     const registerSchema = z.object({
@@ -113,7 +113,7 @@ export async function addUser(username: string, email: string, password: string,
     } catch (error) {
         if (error instanceof z.ZodError) {
             // 最初のエラーメッセージを返す
-            return error.errors[0].message;
+            return error;
         }
         throw error;
     }

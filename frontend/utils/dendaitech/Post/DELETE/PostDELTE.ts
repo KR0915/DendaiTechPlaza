@@ -27,23 +27,27 @@ const baseApiUrl: string = `${process.env.SPRING_REST_API_URL}`;
  *   console.error(error.message); // "ブックマークの削除に失敗しました。"
  * }
  */
-export async function deleteBookmark(postId: number): Promise<boolean> {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        const loginUrl = `${process.env.NEXT_PUBLIC_URL}/signin/?callbackUrl=${process.env.NEXT_PUBLIC_URL}/post/${postId}`
-        redirect(loginUrl);
+export async function deleteBookmark(postId: number): Promise<boolean | Error> {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            const loginUrl = `${process.env.NEXT_PUBLIC_URL}/signin/?callbackUrl=${process.env.NEXT_PUBLIC_URL}/post/${postId}`
+            redirect(loginUrl);
+        }
+        const res = await fetch(`${baseApiUrl}/posts/${postId}/bookmark`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!res.ok) {
+            return new Error('ブックマークの削除に失敗しました。');
+        }
+        return res.ok;
+    } catch (error) {
+        return new Error(`ブックマークの削除に失敗しました。:\n${error}`)
     }
-    const res = await fetch(`${baseApiUrl}/posts/${postId}/bookmark`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-            'Content-Type': 'application/json',
-        },
-    });
-    if (!res.ok) {
-        throw new Error('ブックマークの削除に失敗しました。');
-    }
-    return res.ok;
 }
 
 
@@ -68,7 +72,7 @@ export async function deleteBookmark(postId: number): Promise<boolean> {
  *   console.error(error.message); // "投稿の削除に失敗しました。"
  * }
  */
-export async function deletPost(postId: number, callbackUrl?: string): Promise<boolean> {
+export async function deletPost(postId: number, callbackUrl?: string): Promise<boolean | Error> {
     const session = await getServerSession(authOptions);
     if (!session) {
         const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);
@@ -113,26 +117,30 @@ export async function deletPost(postId: number, callbackUrl?: string): Promise<b
  *   console.error(error.message); // "返信の削除に失敗しました。"
  * }
  */
-export async function deletReply(replyId: number, callbackUrl?: string): Promise<boolean> {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);
-        if (callbackUrl) {
-            loginUrl.searchParams.append('callbackUrl', callbackUrl)
+export async function deletReply(replyId: number, callbackUrl?: string): Promise<boolean | Error> {
+    try {
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);
+            if (callbackUrl) {
+                loginUrl.searchParams.append('callbackUrl', callbackUrl)
+            }
+            redirect(loginUrl.href);
         }
-        redirect(loginUrl.href);
+        const res = await fetch(`${baseApiUrl}/posts/replies/${replyId}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!res.ok) {
+            return new Error('返信の削除に失敗しました。');
+        }
+        return res.ok;
+    } catch (error) {
+        return new Error(`返信の削除に失敗しました。\n${error}`);
     }
-    const res = await fetch(`${baseApiUrl}/posts/replies/${replyId}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-            'Content-Type': 'application/json',
-        },
-    });
-    if (!res.ok) {
-        throw new Error('返信の削除に失敗しました。');
-    }
-    return res.ok;
 }
 
 
