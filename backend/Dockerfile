@@ -1,11 +1,13 @@
-# ベースイメージ
 FROM openjdk:17-jdk-slim
 
-# 作業ディレクトリの作成
+# Set working directory
 WORKDIR /app
 
-# Spring Boot の JAR ファイルをコピー
-COPY target/backend-0.0.1-SNAPSHOT.jar .
+# Copy the JAR file
+COPY target/backend-0.0.1-SNAPSHOT.jar app.jar
 
-# アプリケーションを実行
-CMD ["java", "-jar", "backend-0.0.1-SNAPSHOT.jar"]
+# Expose the port the app runs on
+EXPOSE 8080
+
+# Run the application
+CMD ["java", "-jar", "app.jar"]
