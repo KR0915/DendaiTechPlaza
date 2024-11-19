@@ -1,6 +1,7 @@
 package com.dendai.backend.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,7 +35,9 @@ public class AdminController {
     @GetMapping("/users/search")
     public ResponseEntity<Page<UserInfoDto>> searchUsers(
             @Parameter(description = "検索クエリ") @RequestParam String query,
-            @Parameter(description = "ページネーション情報") Pageable pageable) {
+            @Parameter(description = "ページ番号") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "ページサイズ") @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<UserInfoDto> users = adminService.searchUsers(query, pageable);
         return ResponseEntity.ok(users);
     }

@@ -34,7 +34,7 @@ public class UserController {
     private final UserService userService;
 
     @SecurityRequirement(name = "bearer-jwt")
-    @Operation(summary = "ユーザーのブックマークを取得", description = "現在のユーザーのブックマークされた投稿のページを取得します")
+    @Operation(summary = "ユーザーがブックマークした投稿を取得", description = "現在のユーザーがブックマークした投稿を取得します")
     @GetMapping("/bookmarks")
     public ResponseEntity<Page<PostDtoImpl>> getUserBookmarks(
             @Parameter(description = "ページ番号") @RequestParam(defaultValue = "0") int page,
@@ -64,7 +64,6 @@ public class UserController {
     @DeleteMapping("/account")
     public ResponseEntity<Void> deleteAccount() {
         userService.deleteAccount(getCurrentUserId());
-
         return ResponseEntity.ok().build();
     }
 
