@@ -3,6 +3,7 @@ import { getPostById } from "@/utils/dendaitech/Post/GET/PostGET";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
 import AvatarPost from "../components/avatar";
 import BookmarkCountButton from "../components/bookmarkCountButton/bookmarkCountButton";
+import Comments from "../components/comments";
 import Ogps from "../components/ogps";
 import Tag from "../components/tag";
 
@@ -10,6 +11,7 @@ export default async function post({ params }: { params: Promise<{ id: string }>
     const postParams = await params;
     const post = await getPostById(postParams.id, 0, 5, 0, 3);
     const postUpadateAt = convertUTCtoJST(post.updatedAt);
+
 
     return (
         <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200">
@@ -27,8 +29,8 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                 <div className="p-8">
                     <div className="flex flex-col gap-1 mb-6">
                         <div className="flex items-center gap-2">
-                            <AvatarPost image={`/user/icons/${post.userId}.webp`} />
-                            <h2 className="font-medium">{`${post.username}`}</h2>
+                            <AvatarPost src={`/user/icons/${post.userId}.webp`} alt={post.username} fallback={post.username} />
+                            <h2 className="font-medium text-lg">{`${post.username}`}</h2>
                         </div>
                         <div className="grid grid-cols-5 items-center gap-2">
                             <div className="col-span-4 font-bold text-xl"><h1>{post.title}</h1></div>
@@ -48,6 +50,11 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                     <p className="text-gray-700 mb-6">
                         {post.description}
                     </p>
+
+                    <div>
+                        <h2 className="font-bold mb-">コメント</h2>
+                    </div>
+                    <Comments commnents={post.comments} />
                 </div>
 
             </Card>
