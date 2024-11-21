@@ -1,4 +1,5 @@
 'use client';
+import BookmarkButton from "@/components/elements/Buttons/BookmarkButton/BookmarkButton";
 import { Post, PostResponse } from "@/types/post";
 import { getPopularPosts, getRecentPosts } from "@/utils/dendaitech/Post/GET/PostGET";
 import { useEffect, useState } from "react";
@@ -65,6 +66,7 @@ export default function Home() {
             <p>いいね数: {post.likesCount}</p>
             <p>投稿者: {post.username}</p>
             <p>投稿日: {new Date(post.createdAt).toLocaleDateString()}</p>
+            <BookmarkButton postId={post.postId} />
           </div>
         ))}
       </div>
@@ -82,6 +84,8 @@ export default function Home() {
             <p>いいね数: {post.likesCount}</p>
             <p>投稿者: {post.username}</p>
             <p>投稿日: {new Date(post.createdAt).toLocaleDateString()}</p>
+            <BookmarkButton postId={post.postId} />
+
           </div>
         ))}
       </div>
