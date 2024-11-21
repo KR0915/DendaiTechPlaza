@@ -1,5 +1,5 @@
-"use client";
-
+'use client';
+import BookmarkButton from "@/components/elements/Buttons/BookmarkButton/BookmarkButton";
 import PostCard from "@/components/elements/PstCard/PostCard";
 import { Post, PostResponse } from "@/types/post";
 import {
@@ -7,6 +7,7 @@ import {
   getRecentPosts,
 } from "@/utils/dendaitech/Post/GET/PostGET";
 import { useEffect, useState } from "react";
+
 export default function Home() {
   const [recentPosts, setRecentPosts] = useState<Post[]>([]);
   const [popularPosts, setPopularPosts] = useState<Post[]>([]);
@@ -65,7 +66,7 @@ export default function Home() {
 
       <div className="mt-20">
         <h1>人気の投稿</h1>
-        {/* {popularPosts.map(post => (
+        {popularPosts.map(post => (
           <div key={post.postId} className="post">
             <h3>{post.title}</h3>
             <p>{post.description}</p>
@@ -76,8 +77,10 @@ export default function Home() {
             <p>いいね数: {post.likesCount}</p>
             <p>投稿者: {post.username}</p>
             <p>投稿日: {new Date(post.createdAt).toLocaleDateString()}</p>
+            <BookmarkButton postId={post.postId} />
+
           </div>
-        ))} */}
+        ))}
       </div>
     </div>
   );
