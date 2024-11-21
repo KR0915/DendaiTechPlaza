@@ -1,5 +1,8 @@
 'use client';
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { CommentPage } from "@/types/post";
+import { ChevronsUpDown } from "lucide-react";
 import AvatarPost from "./avatar";
 import Reply from "./reply";
 
@@ -23,7 +26,20 @@ export default function Comments({ commnents }: Commentsprops) {
                     <p>{comment.content}</p>
                     <p>{comment.createdAt}</p>
                     <div>
-                        <Reply replies={comment.replies} />
+                        {comment.replies.length !==0 &&
+                            <Collapsible>
+                                <CollapsibleTrigger asChild>
+                                    <Button variant="ghost">
+                                        <ChevronsUpDown className="h-4 w-4" />
+                                        <span className="sr-only">Toggle</span>
+                                        {`${comment.replies.length}件の返信`}
+                                    </Button>
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                    <Reply replies={comment.replies} />
+                                </CollapsibleContent>
+                            </Collapsible>
+                        }
                     </div>
                 </div>
             ))}
