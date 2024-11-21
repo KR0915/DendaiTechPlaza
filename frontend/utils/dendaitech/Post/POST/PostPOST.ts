@@ -145,7 +145,8 @@ export async function addPost(title: string, description: string, year: number, 
  * );
  * console.log(result); // "コメントは5文字以上必要です"
  */
-export async function addComment(postId: number, content: string, callbackUrl?: string): Promise<boolean | string> {
+export async function addComment(postId: number, content: string, callbackUrl?: string): Promise<boolean> {
+    console.log(content)
     const session = await getServerSession(authOptions);
     if (!session) {
         const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);
@@ -167,7 +168,7 @@ export async function addComment(postId: number, content: string, callbackUrl?: 
             postId,
         });
 
-        const res = await fetch(`${baseApiUrl}/posts/comments`, {
+        const res = await fetch(`${baseApiUrl}/posts/${postId}/comments`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${session.accessToken}`,
@@ -186,10 +187,12 @@ export async function addComment(postId: number, content: string, callbackUrl?: 
         return true;
     } catch (error) {
         if (error instanceof z.ZodError) {
-            // 最初のエラーメッセージを返す
-            return error.errors[0].message;
+            throw new Error(error.errors[0].message);
         }
-        throw error;
+        if (error instanceof Error) {
+            throw error;
+        }
+        throw new Error('予期せぬエラーが発生しました。');
     }
 }
 

@@ -54,7 +54,7 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                     <div>
                         <h2 className="font-bold mb-">コメント</h2>
                     </div>
-                    <Comments commnents={post.comments} />
+                    <Comments commnents={post.comments} postId={post.postId} />
                 </div>
 
             </Card>
