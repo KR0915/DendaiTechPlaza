@@ -58,14 +58,16 @@ export default function Home() {
         <h1 className="text-2xl font-bold mb-6">最近の投稿</h1>
         <div>
           {recentPosts.map(post => (
-            <PostCard post={post} />
+            <div key={post.postId}>
+              <PostCard post={post}/>
+            </div>
           ))}
         </div>
       </div>
 
       <div className="mt-20">
         <h1>人気の投稿</h1>
-        {/* {popularPosts.map(post => (
+        {popularPosts.map(post => (
           <div key={post.postId} className="post">
             <h3>{post.title}</h3>
             <p>{post.description}</p>
@@ -77,7 +79,7 @@ export default function Home() {
             <p>投稿者: {post.username}</p>
             <p>投稿日: {new Date(post.createdAt).toLocaleDateString()}</p>
           </div>
-        ))} */}
+        ))} 
       </div>
     </div>
   );
