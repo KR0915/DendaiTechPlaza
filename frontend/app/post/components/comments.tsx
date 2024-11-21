@@ -1,8 +1,9 @@
 'use client';
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { CommentPage } from "@/types/post";
+import { addComment } from "@/utils/dendaitech/Post/POST/PostPOST";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -12,18 +13,35 @@ import Reply from "./reply";
 
 interface Commentsprops {
     commnents: CommentPage | undefined;
+    postId: number;
 }
 
-export default function Comments({ commnents }: Commentsprops) {
+export default function Comments({ commnents, postId }: Commentsprops) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [newComment, setNewComment] = useState("");
+    const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<Error | string>();
     const { data: session, status } = useSession();
-    
-    const handleCommentSubmit = (e: React.FormEvent) => {
+
+    const handleCommentSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        // TODO: Implement comment submission logic
-        console.log("Submitting comment:", newComment)
-        setNewComment("")
+        if (newComment.trim() === "") return;
+        try {
+            const result = await addComment(
+                postId,
+                `${newComment}`
+            );
+            if (result === true) {
+                console.log("メッセージが正常に追加されました。")
+                setNewComment("");
+                setIsInputFocused(false);
+                setErrorMessage("");
+            }
+        } catch (error) {
+           if (error instanceof Error) {
+            setErrorMessage(error);
+           }
+        }
     }
     if (!commnents) {
         return <p>Not Comment</p>
@@ -31,19 +49,40 @@ export default function Comments({ commnents }: Commentsprops) {
 
     return (
         <div className="space-y-4">
-            <form onSubmit={handleCommentSubmit} className="space-y-4">
-                <div className="flex items-start gap-2">
-                    <AvatarPost src={`/user/icons/${session?.user.id}.webp`} alt={session?.user.name} fallback={username} size="md" />
-                    <Textarea
-                        placeholder="コメントを入力..."
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        className="flex-grow min-h-[100px]"
-                    />
-                </div>
-                <Button type="submit" className="ml-auto">コメントする</Button>
-            </form>
-            
+            {(session && status === "authenticated")
+                ?
+                <form onSubmit={handleCommentSubmit} className="space-y-4 mt-2">
+                    <div className="flex items-start gap-2">
+                        <AvatarPost src={`/user/icons/${session?.user.id}.webp`} alt={`${session.user.name}`} fallback={`${session.user.name}`} size="md" />
+                        <div className="flex flex-col flex-grow">
+                            <Input
+                                type="text"
+                                placeholder="コメントする..."
+                                value={newComment}
+                                onFocus={() => setIsInputFocused(true)}
+                                onChange={(e) => setNewComment(e.target.value)}
+                                className="flex-grow"
+                            />
+                            {isInputFocused &&
+                                <div className="mt-2 ml-auto">
+                                    <Button variant={"outline"} onClick={() => setIsInputFocused(false)}>キャンセル</Button>
+                                    <Button type="submit" className="ml-2" disabled={newComment.trim() === ""}>コメント</Button>
+                                </div>
+                            }
+                            <div className="text-red-500">
+                                {errorMessage && `${errorMessage}`}
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                :
+                <div>
+                    none
+                </div>//TODO セッションが無い時の表示
+            }
+
+
             {commnents.content.map(comment => (
                 <div key={comment.commentId}>
                     <div className="flex gap-2">
