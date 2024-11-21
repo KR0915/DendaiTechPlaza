@@ -1,6 +1,6 @@
 import { Pageable, Sort } from "./pageable";
 
-export interface Reply {
+export interface postReply {
     replyId: number;
     content: string;
     createdAt: string;
@@ -9,17 +9,17 @@ export interface Reply {
     commentId: number;
 }
 
-export interface Comment {
+export interface postComment {
     commentId: number;
     content: string;
     createdAt: string;
     username: string;
     userId: number;
-    replies: Reply[];
+    replies: postReply[];
 }
 
 export interface CommentPage {
-    content: Comment[];
+    content: postComment[];
     pageable: Pageable;
     totalElements: number;
     totalPages: number;

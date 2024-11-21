@@ -33,7 +33,11 @@ const baseApiUrl: string = `${process.env.SPRING_REST_API_URL}`;
  * }
  */
 export async function getPostById(postId: string, commentPage = 0, commentSize = 10, replyPage = 0, replySize = 10): Promise<Post> {
-    const res = await fetch(`${baseApiUrl}/posts/${postId}?commentPage=${commentPage}&commentSize=${commentSize}&replyPage=${replyPage}&replySize=${replySize}`, { method: 'GET' });
+    const res = await fetch(`${baseApiUrl}/posts/${postId}?commentPage=${commentPage}&commentSize=${commentSize}&replyPage=${replyPage}&replySize=${replySize}`,
+        {
+            method: 'GET',
+            next: { revalidate: 0 } //キャッシュを毎回更新
+        },);
     if (!res.ok) {
         throw new Error('Failed to fetch posts');
     }
@@ -99,7 +103,11 @@ export async function getIsBookmark(postId: number): Promise<boolean> {
  * }
  */
 export async function getUserPosts(userId: string, page = 0, size = 10): Promise<PostResponse> {
-    const res = await fetch(`${baseApiUrl}/posts/user/${userId}?page=${page}&size=${size}`, { method: 'GET' });
+    const res = await fetch(`${baseApiUrl}/posts/user/${userId}?page=${page}&size=${size}`,
+        {
+            method: 'GET',
+            next: { revalidate: 0 }
+        });
     if (!res.ok) {
         throw new Error('Failed to fetch user posts');
     }
@@ -219,11 +227,14 @@ export async function getSearchPosts(keyword?: string, year?: number, grade?: nu
  *   console.error('最近の投稿の取得中にエラーが発生しました:', error);
  * }
  */
-export async function getRecentPosts(page=0, size=10): Promise<PostResponse> {
+export async function getRecentPosts(page = 0, size = 10): Promise<PostResponse> {
     const targetUrl = new URL(`${baseApiUrl}/posts/recent`);
     targetUrl.searchParams.append('page', page.toString());
     targetUrl.searchParams.append('size', size.toString());
-    const res = await fetch(targetUrl, { method: 'GET' });
+    const res = await fetch(targetUrl, {
+        method: 'GET',
+        next: { revalidate: 0 }
+    });
     if (!res.ok) {
         throw new Error('最近の投稿の取得に失敗しました。');
     }
@@ -251,11 +262,14 @@ export async function getRecentPosts(page=0, size=10): Promise<PostResponse> {
  *   console.error('人気の投稿の取得中にエラーが発生しました:', error);
  * }
  */
-export async function getPopularPosts(page=0, size=10): Promise<PostResponse> {
+export async function getPopularPosts(page = 0, size = 10): Promise<PostResponse> {
     const targetUrl = new URL(`${baseApiUrl}/posts/popular`);
     targetUrl.searchParams.append('page', page.toString());
     targetUrl.searchParams.append('size', size.toString());
-    const res = await fetch(targetUrl, { method: 'GET' });
+    const res = await fetch(targetUrl, {
+        method: 'GET',
+        next: { revalidate: 60 }
+    });
     if (!res.ok) {
         throw new Error('人気の投稿の取得に失敗しました。');
     }
