@@ -59,7 +59,9 @@ export default function Home() {
         <h1 className="text-2xl font-bold mb-6">最近の投稿</h1>
         <div>
           {recentPosts.map(post => (
-            <PostCard post={post} />
+            <div key={post.postId}>
+              <PostCard post={post} />
+            </div>
           ))}
         </div>
       </div>
