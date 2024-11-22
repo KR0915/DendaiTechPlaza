@@ -1,12 +1,12 @@
 "use client";
-
-import PostCard from "@/components/elements/PstCard/PostCard";
+import PostCards from "@/components/elements/Card/PostCards/PostCards";
 import { Post, PostResponse } from "@/types/post";
 import {
   getPopularPosts,
   getRecentPosts,
 } from "@/utils/dendaitech/Post/GET/PostGET";
 import { useEffect, useState } from "react";
+
 export default function Home() {
   const [recentPosts, setRecentPosts] = useState<Post[]>([]);
   const [popularPosts, setPopularPosts] = useState<Post[]>([]);
@@ -54,32 +54,15 @@ export default function Home() {
   }
   return (
     <div className="bg-slate-200">
-      <div className="space-y-2 p-8 max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-6">最近の投稿</h1>
-        <div>
-          {recentPosts.map(post => (
-            <div key={post.postId}>
-              <PostCard post={post}/>
-            </div>
-          ))}
+      <div className="space-y-32 p-8 max-w-4xl mx-auto">
+        <div className="mt-8">
+          <h1 className="text-2xl font-bold mb-6">最近の投稿</h1>
+          <PostCards posts={recentPosts} />
         </div>
-      </div>
-
-      <div className="mt-20">
-        <h1>人気の投稿</h1>
-        {popularPosts.map(post => (
-          <div key={post.postId} className="post">
-            <h3>{post.title}</h3>
-            <p>{post.description}</p>
-            <p>年度: {post.year}</p>
-            <p>学科: {post.departmentName}</p>
-            <p>学年: {post.grade}</p>
-            <p>学期: {post.semester}</p>
-            <p>いいね数: {post.likesCount}</p>
-            <p>投稿者: {post.username}</p>
-            <p>投稿日: {new Date(post.createdAt).toLocaleDateString()}</p>
-          </div>
-        ))} 
+        <div className="mt-20">
+          <h1 className="text-2xl font-bold mb-6">人気の投稿</h1>
+          <PostCards posts={popularPosts} />
+        </div>
       </div>
     </div>
   );

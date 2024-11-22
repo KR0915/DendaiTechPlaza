@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { getPostById } from "@/utils/dendaitech/Post/GET/PostGET";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
+import { Suspense } from "react";
 import AvatarPost from "../components/avatar";
 import BookmarkCountButton from "../components/bookmarkCountButton/bookmarkCountButton";
 import Comments from "../components/comments";
@@ -9,7 +10,7 @@ import Tag from "../components/tag";
 
 export default async function post({ params }: { params: Promise<{ id: string }> }) {
     const postParams = await params;
-    const post = await getPostById(postParams.id, 0, 5, 0, 3);
+    const post = await getPostById(postParams.id, 0, 5, 0, 100);
     const postUpadateAt = convertUTCtoJST(post.updatedAt);
 
 
@@ -18,18 +19,21 @@ export default async function post({ params }: { params: Promise<{ id: string }>
             <Card className="max-w-screen-sm md:max-w-screen-md mt-48 mb-48">
 
                 {/* OGP Grid */}
-                <div className="rounded-lg p-4">
-                    {post.sharedUrls ? (
-                        <Ogps urls={post.sharedUrls} />
-                    ) : (
-                        <p className="text-gray-500 text-center py-4">共有されたURLはありません</p>
-                    )}
-                </div>
+                <Suspense fallback={<p>Loading!</p>}>
+                    <div className="rounded-lg p-4">
+                        {post.sharedUrls ? (
+                            <Ogps urls={post.sharedUrls} />
+                        ) : (
+                            <p className="text-gray-500 text-center py-4">共有されたURLはありません</p>
+                        )}
+                    </div>
+                </Suspense>
+
 
                 <div className="p-8">
                     <div className="flex flex-col gap-1 mb-6">
                         <div className="flex items-center gap-2">
-                            <AvatarPost src={`/user/icons/${post.userId}.webp`} alt={post.username} fallback={post.username} size="lg"/>
+                            <AvatarPost src={`/user/icons/${post.userId}.webp`} alt={post.username} fallback={post.username} size="lg" />
                             <h2 className="font-bold text-lg">{`${post.username}`}</h2>
                         </div>
                         <div className="grid grid-cols-5 items-center gap-2">
@@ -52,9 +56,11 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                     </p>
 
                     <div>
-                        <h2 className="font-bold mb-">コメント</h2>
+                        <h2 className="font-bold mb-2">コメント:{post.comments?.totalElements}件</h2>
                     </div>
-                    <Comments commnents={post.comments} postId={post.postId} />
+                    <Suspense fallback={<p>comments Loading!</p>}>
+                        <Comments comments={post.comments} postId={post.postId} />
+                    </Suspense>
                 </div>
 
             </Card>

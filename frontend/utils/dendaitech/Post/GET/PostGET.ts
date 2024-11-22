@@ -36,7 +36,7 @@ export async function getPostById(postId: string, commentPage = 0, commentSize =
     const res = await fetch(`${baseApiUrl}/posts/${postId}?commentPage=${commentPage}&commentSize=${commentSize}&replyPage=${replyPage}&replySize=${replySize}`,
         {
             method: 'GET',
-            next: { revalidate: 0 } //キャッシュを毎回更新
+            cache: "no-store",
         },);
     if (!res.ok) {
         throw new Error('Failed to fetch posts');

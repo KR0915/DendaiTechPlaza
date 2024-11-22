@@ -63,7 +63,8 @@ CREATE TABLE Bookmarks (
     bookmark_id SERIAL PRIMARY KEY,
     post_id INT REFERENCES Posts(post_id),
     user_id INT REFERENCES Users(user_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (post_id, user_id)
 );
 
 INSERT INTO Departments (name) VALUES 
