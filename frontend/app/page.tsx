@@ -1,6 +1,6 @@
-'use client';
-import BookmarkButton from "@/components/elements/Buttons/BookmarkButton/BookmarkButton";
-import PostCard from "@/components/elements/PstCard/PostCard";
+"use client";
+import PostCard from "@/components/elements/Card/PostCard/PostCard";
+import PostCards from "@/components/elements/Card/PostCards/PostCards";
 import { Post, PostResponse } from "@/types/post";
 import {
   getPopularPosts,
@@ -64,25 +64,10 @@ export default function Home() {
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="mt-20">
-        <h1>人気の投稿</h1>
-        {popularPosts.map(post => (
-          <div key={post.postId} className="post">
-            <h3>{post.title}</h3>
-            <p>{post.description}</p>
-            <p>年度: {post.year}</p>
-            <p>学科: {post.departmentName}</p>
-            <p>学年: {post.grade}</p>
-            <p>学期: {post.semester}</p>
-            <p>いいね数: {post.likesCount}</p>
-            <p>投稿者: {post.username}</p>
-            <p>投稿日: {new Date(post.createdAt).toLocaleDateString()}</p>
-            <BookmarkButton postId={post.postId} />
-
-          </div>
-        ))}
+        <div className="mt-20">
+          <h1 className="text-2xl font-bold mb-6">人気の投稿</h1>
+          <PostCards posts={popularPosts} />
+        </div>
       </div>
     </div>
   );
