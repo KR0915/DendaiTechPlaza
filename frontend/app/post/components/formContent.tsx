@@ -3,6 +3,7 @@
 import SubmitButton from "@/components/elements/Buttons/SubmitButton/SubmitButton";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { addComment, addReply } from "@/utils/dendaitech/Post/POST/PostPOST";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -21,6 +22,7 @@ export default function FormContent({ type, contentId }: FormContentProps) {
     const router = useRouter();
     const [isPress, setIsPress] = useState<boolean>(false);
     const { data: session, status } = useSession();
+    const { toast } = useToast();
 
 
     const handleCommentSubmit = async (e: React.FormEvent) => {
@@ -38,6 +40,10 @@ export default function FormContent({ type, contentId }: FormContentProps) {
                     setIsInputFocused(false);
                     setErrorMessage("");
                     router.refresh();
+                    toast({
+                        title: "コメント追加成功",
+                        description: "コメントの追加に成功しました",
+                    });
                 }
             } else if (type === "reply") {
                 const result = await addReply(
@@ -49,6 +55,10 @@ export default function FormContent({ type, contentId }: FormContentProps) {
                     setIsInputFocused(false);
                     setErrorMessage("");
                     router.refresh();
+                    toast({
+                        title: "返信追加成功",
+                        description: "返信の追加に成功しました",
+                    });
                 }
             }
         } catch (error) {

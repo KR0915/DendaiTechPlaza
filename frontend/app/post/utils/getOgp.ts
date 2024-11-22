@@ -1,3 +1,4 @@
+"use server";
 import ogs from "open-graph-scraper";
 
 export async function getOgp(url: string) {

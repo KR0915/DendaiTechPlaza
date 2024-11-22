@@ -5,7 +5,9 @@ import { Suspense } from "react";
 import AvatarPost from "../components/avatar";
 import BookmarkCountButton from "../components/bookmarkCountButton/bookmarkCountButton";
 import Comments from "../components/comments";
+import OgpCarousel from "../components/OgpCarousel";
 import Ogps from "../components/ogps";
+import { CommentsSkeleton, OgpSkeleton } from "../components/skelton-fallback";
 import Tag from "../components/tag";
 
 export default async function post({ params }: { params: Promise<{ id: string }> }) {
@@ -19,10 +21,17 @@ export default async function post({ params }: { params: Promise<{ id: string }>
             <Card className="max-w-screen-sm md:max-w-screen-md mt-48 mb-48">
 
                 {/* OGP Grid */}
-                <Suspense fallback={<p>Loading!</p>}>
+                <Suspense fallback={<OgpSkeleton />}>
                     <div className="rounded-lg p-4">
                         {post.sharedUrls ? (
-                            <Ogps urls={post.sharedUrls} />
+                            <div>
+                                <div className="hidden md:block">
+                                    <Ogps urls={post.sharedUrls} />
+                                </div>
+                                <div className="block md:hidden max-w-sm">
+                                    <OgpCarousel urls={post.sharedUrls} />
+                                </div>
+                            </div>
                         ) : (
                             <p className="text-gray-500 text-center py-4">共有されたURLはありません</p>
                         )}
@@ -38,7 +47,7 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                         </div>
                         <div className="grid grid-cols-5 items-center gap-2">
                             <div className="col-span-4 font-bold text-xl"><h1>{post.title}</h1></div>
-                            <div>
+                            <div className="ml-auto">
                                 <BookmarkCountButton count={post.likesCount} postId={post.postId} />
                             </div>
                         </div>
@@ -58,7 +67,7 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                     <div>
                         <h2 className="font-bold mb-2">コメント:{post.comments?.totalElements}件</h2>
                     </div>
-                    <Suspense fallback={<p>comments Loading!</p>}>
+                    <Suspense fallback={<CommentsSkeleton />}>
                         <Comments comments={post.comments} postId={post.postId} />
                     </Suspense>
                 </div>
