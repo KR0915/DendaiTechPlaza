@@ -1,37 +1,44 @@
 import { Card } from "@/components/ui/card";
 import { getPostById } from "@/utils/dendaitech/Post/GET/PostGET";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
+import { OgObject } from "open-graph-scraper/types";
 import { Suspense } from "react";
 import AvatarPost from "../components/avatar";
 import BookmarkCountButton from "../components/bookmarkCountButton/bookmarkCountButton";
 import Comments from "../components/comments";
-import OgpCarousel from "../components/OgpCarousel";
+import OgpCarousel from "../components/OGPCarousel/OgpCarousel";
 import Ogps from "../components/ogps";
 import { CommentsSkeleton } from "../components/skelton-fallback";
 import Tag from "../components/tag";
+import { getOgp } from "../utils/getOgp";
 
 export default async function post({ params }: { params: Promise<{ id: string }> }) {
     const postParams = await params;
     const post = await getPostById(postParams.id, 0, 5, 0, 100);
     const postUpadateAt = convertUTCtoJST(post.updatedAt);
 
+    const ogpData: Record<string, OgObject> = {};
+    if (post.sharedUrls) {
+        for (const url of post.sharedUrls) {
+            ogpData[url] = await getOgp(url);
+        }
+    }
+
 
     return (
         <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200">
-            <Card className="max-w-screen-sm md:max-w-screen-md mt-48 mb-48">
+            <Card className="max-w-full md:max-w-screen-md mt-48 mb-48">
 
                 {/* OGP Grid */}
 
-                <div className="rounded-lg p-4">
+                <div className="rounded-lg">
                     {post.sharedUrls ? (
                         <div>
-
-                            <div className="hidden md:block">
-                                    <Ogps urls={post.sharedUrls} />
+                            <div className="hidden md:block p-4">
+                                <Ogps urls={post.sharedUrls} ogpData={ogpData} />
                             </div>
-
-                            <div className="block md:hidden">
-                                <OgpCarousel urls={post.sharedUrls} />
+                            <div className="block md:hidden p-1">
+                                <OgpCarousel urls={post.sharedUrls} ogpData={ogpData} />
                             </div>
                         </div>
                     ) : (

@@ -91,14 +91,16 @@ export default function DeleteContentEllipsisVertical({ type, contentId, userId 
                         {errorMessage && <p className="text-red-500 mt-2">{errorMessage.toString()}</p>}
                     </DialogDescription>
                     <DialogFooter className="flex">
-                        <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                                キャンセル
-                            </Button>
-                        </DialogClose>
-                        <form onSubmit={deleteContentWithId}>
-                            <SubmitButton preText="削除" postText="削除中..." disabled={isSubmitting} />
-                        </form>
+                        <div className="flex ml-auto gap-2">
+                            <DialogClose asChild>
+                                <Button type="button" variant="secondary">
+                                    キャンセル
+                                </Button>
+                            </DialogClose>
+                            <form onSubmit={deleteContentWithId}>
+                                <SubmitButton preText="削除" postText="削除中..." disabled={isSubmitting} />
+                            </form>
+                        </div>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

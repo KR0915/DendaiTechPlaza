@@ -9,9 +9,8 @@ interface OgpProps {
 
 export default function Ogp({ url, ogData }: OgpProps) {
     return (
-
         <Link href={url} className="block h-full">
-            <div className="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col h-full transition-all duration-300 hover:bg-gray-100 group outline outline-offset-0 outline-1 outline-slate-200">
+            <div className="bg-white border border-b-4 border-gray-200 rounded-lg shadow-sm overflow-hidden flex flex-col h-full transition-all duration-300 hover:bg-gray-100 group outline outline-offset-0 outline-1 outline-slate-200">
                 {ogData?.ogImage?.[0]?.url && (
                     <div className="relative aspect-video w-full overflow-hidden">
                         <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300 z-10"></div>
@@ -34,7 +33,6 @@ export default function Ogp({ url, ogData }: OgpProps) {
                 </div>
             </div>
         </Link>
-
     )
 }
 

@@ -3,30 +3,17 @@
 import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel"
 import { OgObject } from '@/types/ogp'
 import { useEffect, useState } from "react"
-import { getOgp } from "../utils/getOgp"
 import OgpMobile from "./ogpMobile"
 
-interface OgpCarouselProps {
+interface OgpCarouselClientProps {
     urls: string[]
+    ogpData: Record<string, OgObject>
 }
 
-export default function OgpCarousel({ urls }: OgpCarouselProps) {
+export default function OgpCarouselClient({ urls, ogpData }: OgpCarouselClientProps) {
     const [api, setApi] = useState<CarouselApi>()
     const [current, setCurrent] = useState(0)
     const [count, setCount] = useState(0)
-    const [ogpData, setOgpData] = useState<Record<string, OgObject>>({})
-
-    useEffect(() => {
-        const fetchOgpData = async () => {
-            const data: Record<string, OgObject> = {}
-            for (const url of urls) {
-                data[url] = await getOgp(url)
-            }
-            setOgpData(data)
-        }
-
-        fetchOgpData()
-    }, [urls])
 
     useEffect(() => {
         if (!api) {
@@ -42,8 +29,8 @@ export default function OgpCarousel({ urls }: OgpCarouselProps) {
     }, [api])
 
     return (
-        <div className="mx-auto max-w-xs">
-            <Carousel setApi={setApi} className="w-full max-w-xs"
+        <div className="mx-auto">
+            <Carousel setApi={setApi} className="w-full"
                 opts={{
                     loop: true,
                 }}

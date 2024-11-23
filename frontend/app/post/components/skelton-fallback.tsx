@@ -15,6 +15,22 @@ export function OgpSkeleton() {
     )
 }
 
+export function OgpMobileSkeleton() {
+    return (
+        <div className="w-[97vw]">
+            <Skeleton className="w-full aspect-video mb-2">
+            </Skeleton>
+            <Skeleton className="p-4 flex-grow mt-2">
+                <h3 className="line-clamp-2 mb-2">
+                </h3>
+                <p className="text-sm line-clamp-3">
+                </p>
+            </Skeleton>
+        </div>
+    )
+}
+
+
 export function CommentsSkeleton() {
     return (
         <div className="p-8">
