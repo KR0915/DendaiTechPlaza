@@ -32,7 +32,6 @@ export default function Comments({ comments, postId }: Commentsprops) {
         const updatedContents = response.comments.content.map(newComment => {
             const existingComment = contents.find(c => c.commentId === newComment.commentId);
             if (existingComment) {
-                // Merge existing replies with new replies
                 const mergedReplies = [
                     ...(existingComment.replies || []),
                     ...(newComment.replies || []).filter(newReply =>
