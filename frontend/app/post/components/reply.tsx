@@ -14,9 +14,10 @@ import FormContent from "./formContent";
 interface Replyprops {
     commentId: number;
     replies: postReply[] | undefined;
+    onContentAdded: () => void;
 }
 
-export default function Reply({ commentId, replies }: Replyprops) {
+export default function Reply({ commentId, replies, onContentAdded}: Replyprops) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isReply, setIsReply] = useState<boolean>(false);
 
@@ -49,7 +50,7 @@ export default function Reply({ commentId, replies }: Replyprops) {
                         </div>
                     </div>
                     {isReply &&
-                        <FormContent type={"reply"} contentId={commentId} />
+                        <FormContent type={"reply"} contentId={commentId} onContentAdded={onContentAdded} />
                     }
                     <CollapsibleContent className="ml-2">
                         {replies.map(reply => (
@@ -83,7 +84,7 @@ export default function Reply({ commentId, replies }: Replyprops) {
                         </Button>
                     </div>
                     {isReply &&
-                        <FormContent type={"reply"} contentId={commentId} />
+                        <FormContent type={"reply"} contentId={commentId} onContentAdded={onContentAdded} />
                     }
                 </div>
             }

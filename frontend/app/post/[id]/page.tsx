@@ -9,14 +9,15 @@ import OgpCarousel from "../components/OGPCarousel/OgpCarousel";
 import Ogps from "../components/ogps";
 import { CommentsSkeleton } from "../components/skelton-fallback";
 import Tag from "../components/tag";
+import "../styles/postContent.css";
 
 export default async function post({ params }: { params: Promise<{ id: string }> }) {
     const postParams = await params;
-    const post = await getPostById(postParams.id, 0, 5, 0, 100);
+    const post = await getPostById(postParams.id, 0, 10, 0, 100);
     const postUpadateAt = convertUTCtoJST(post.updatedAt);
 
     return (
-        <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200">
+        <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200 postContent">
             <Card className="max-w-full md:max-w-screen-md mt-48 mb-48">
 
                 {/* OGP Grid */}
