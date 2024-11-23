@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { getPostById } from "@/utils/dendaitech/Post/GET/PostGET";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
-import { OgObject } from "open-graph-scraper/types";
 import { Suspense } from "react";
 import AvatarPost from "../components/avatar";
 import BookmarkCountButton from "../components/bookmarkCountButton/bookmarkCountButton";
@@ -10,20 +9,11 @@ import OgpCarousel from "../components/OGPCarousel/OgpCarousel";
 import Ogps from "../components/ogps";
 import { CommentsSkeleton } from "../components/skelton-fallback";
 import Tag from "../components/tag";
-import { getOgp } from "../utils/getOgp";
 
 export default async function post({ params }: { params: Promise<{ id: string }> }) {
     const postParams = await params;
     const post = await getPostById(postParams.id, 0, 5, 0, 100);
     const postUpadateAt = convertUTCtoJST(post.updatedAt);
-
-    const ogpData: Record<string, OgObject> = {};
-    if (post.sharedUrls) {
-        for (const url of post.sharedUrls) {
-            ogpData[url] = await getOgp(url);
-        }
-    }
-
 
     return (
         <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200">
@@ -35,10 +25,10 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                     {post.sharedUrls ? (
                         <div>
                             <div className="hidden md:block p-4">
-                                <Ogps urls={post.sharedUrls} ogpData={ogpData} />
+                                <Ogps urls={post.sharedUrls}/>
                             </div>
                             <div className="block md:hidden p-1">
-                                <OgpCarousel urls={post.sharedUrls} ogpData={ogpData} />
+                                <OgpCarousel urls={post.sharedUrls}/>
                             </div>
                         </div>
                     ) : (

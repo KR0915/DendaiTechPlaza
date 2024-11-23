@@ -1,18 +1,15 @@
-import { OgObject } from '@/types/ogp'
 import { Suspense } from "react"
 import { OgpMobileSkeleton } from "../skelton-fallback"
-import OgpCarouselClient from "./OgpCarouselClient"
+import OgpCarouselServer from "./OgpCarouselServer"
 
 interface OgpCarouselProps {
     urls: string[]
-    ogpData: Record<string, OgObject>
 }
 
-export default function OgpCarousel({ urls, ogpData }: OgpCarouselProps) {
+export default function OgpCarousel({ urls }: OgpCarouselProps) {
     return (
         <Suspense fallback={<OgpMobileSkeleton />}>
-            <OgpCarouselClient urls={urls} ogpData={ogpData} />
+            <OgpCarouselServer urls={urls} />
         </Suspense>
     )
 }
-
