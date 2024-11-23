@@ -23,7 +23,8 @@ export default function Comments({ comments, postId }: Commentsprops) {
     const [isAddContent, setIsAddContent] = useState<boolean>(false);
 
     const updateComments = useCallback(async () => {
-        const response = await getPostById(String(postId), 0, contents.length || 10, 0, 100);
+        // TODO　コメントが１０件を超えないとリアルタイムで変化しない困った
+        const response = await getPostById(String(postId), 0, contents.length, 0, 100);
 
         if (!response || !response.comments) {
             return;
