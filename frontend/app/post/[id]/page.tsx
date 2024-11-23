@@ -7,7 +7,7 @@ import BookmarkCountButton from "../components/bookmarkCountButton/bookmarkCount
 import Comments from "../components/comments";
 import OgpCarousel from "../components/OgpCarousel";
 import Ogps from "../components/ogps";
-import { CommentsSkeleton, OgpSkeleton } from "../components/skelton-fallback";
+import { CommentsSkeleton } from "../components/skelton-fallback";
 import Tag from "../components/tag";
 
 export default async function post({ params }: { params: Promise<{ id: string }> }) {
@@ -21,22 +21,23 @@ export default async function post({ params }: { params: Promise<{ id: string }>
             <Card className="max-w-screen-sm md:max-w-screen-md mt-48 mb-48">
 
                 {/* OGP Grid */}
-                <Suspense fallback={<OgpSkeleton />}>
-                    <div className="rounded-lg p-4">
-                        {post.sharedUrls ? (
-                            <div>
-                                <div className="hidden md:block">
+
+                <div className="rounded-lg p-4">
+                    {post.sharedUrls ? (
+                        <div>
+
+                            <div className="hidden md:block">
                                     <Ogps urls={post.sharedUrls} />
-                                </div>
-                                <div className="block md:hidden max-w-sm">
-                                    <OgpCarousel urls={post.sharedUrls} />
-                                </div>
                             </div>
-                        ) : (
-                            <p className="text-gray-500 text-center py-4">共有されたURLはありません</p>
-                        )}
-                    </div>
-                </Suspense>
+
+                            <div className="block md:hidden">
+                                <OgpCarousel urls={post.sharedUrls} />
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 text-center py-4">共有されたURLはありません</p>
+                    )}
+                </div>
 
 
                 <div className="p-8">
