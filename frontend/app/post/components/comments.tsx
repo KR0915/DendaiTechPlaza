@@ -3,7 +3,7 @@ import { CommentPage, postComment } from "@/types/post";
 import { getPostById } from "@/utils/dendaitech/Post/GET/PostGET";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import "../styles/postStyle.css";
 import AvatarPost from "./avatar";
@@ -22,33 +22,60 @@ export default function Comments({ comments, postId }: Commentsprops) {
     const [hasMore, setHasMore] = useState<boolean>(true);  //再読み込み判定
     const [isAddContent, setIsAddContent] = useState<boolean>(false);
 
-    //項目を読み込むときのコールバック
-    const loadMore = async () => {
-        console.log("hogeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-        if (isAddContent === true) {
-            if (cuurentPage !== 0) {
-                setCurrentPage(prev => prev - 1);
-                console.log("ddddddddddddddddd")
-                console.log(cuurentPage)
-                setIsAddContent(false);
-            }
+    const updateComments = useCallback(async () => {
+        const response = await getPostById(String(postId), 0, contents.length || 10, 0, 100);
+
+        if (!response || !response.comments) {
+            return;
         }
 
-        const response = await getPostById(String(postId), cuurentPage, 10, 0, 100);  //API通信
+        const updatedContents = response.comments.content.map(newComment => {
+            const existingComment = contents.find(c => c.commentId === newComment.commentId);
+            if (existingComment) {
+                // Merge existing replies with new replies
+                const mergedReplies = [
+                    ...(existingComment.replies || []),
+                    ...(newComment.replies || []).filter(newReply =>
+                        !(existingComment.replies || []).some(existingReply =>
+                            existingReply.replyId === newReply.replyId
+                        )
+                    )
+                ];
+                return { ...newComment, replies: mergedReplies };
+            }
+            return newComment;
+        });
+
+        setContents(updatedContents);
+    }, [postId, contents]);
+
+    useEffect(() => {
+        if (isAddContent) {
+            updateComments();
+            setIsAddContent(false);
+        }
+    }, [isAddContent, updateComments]);
+
+    const loadMore = async () => {
+        const response = await getPostById(String(postId), cuurentPage, 10, 0, 100);
 
         if (!response || !response.comments || response.comments.empty) {
             setHasMore(false);
             return;
         }
+
         const newComments = response.comments.content.filter(
             newComment => !contents.some(existingComment => existingComment.commentId === newComment.commentId)
         );
 
         setContents(prevContents => [...prevContents, ...newComments]);
-        console.log(cuurentPage);
         setCurrentPage(prevPage => prevPage + 1);
     }
 
+    const handleContentAdded = () => {
+        setIsAddContent(true);
+        setHasMore(true);
+    };
 
     //ロード中に表示する項目
     const loader = <div className="mt-2" key={0}><Loader2 /></div>;
@@ -62,10 +89,7 @@ export default function Comments({ comments, postId }: Commentsprops) {
             <FormContent
                 type={"comment"}
                 contentId={postId}
-                onContentAdded={() => {
-                    setIsAddContent(true);
-                    setHasMore(true);
-                }} />
+                onContentAdded={handleContentAdded} />
 
             <InfiniteScroll
                 pageStart={0}
@@ -90,10 +114,7 @@ export default function Comments({ comments, postId }: Commentsprops) {
                                 <div>
                                     <p className="text">{`${comment.content}`}</p>
                                     <div>
-                                        <Reply replies={comment.replies} commentId={comment.commentId} onContentAdded={() => {
-                                            setIsAddContent(true);
-                                            setHasMore(true);
-                                        }} />
+                                        <Reply replies={comment.replies} commentId={comment.commentId} onContentAdded={handleContentAdded} />
                                     </div>
                                 </div>
                             </div>
