@@ -1,9 +1,9 @@
 "use client";
 import Image from "@/node_modules/next/image";
-import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
-import BookmarkButton from "../../Buttons/BookmarkButton/BookmarkButton";
 import { Post } from "@/types/post";
+import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
 import Link from "next/link";
+import BookmarkButton from "../../Buttons/BookmarkButton/BookmarkButton";
 
 interface PostCardProps {
   post: Post;
@@ -18,7 +18,7 @@ export default function PostCards({ post }: PostCardProps) {
       <div className="flex flex-col items-center">
         <div className="relative w-14 h-14 p-2">
           <Image
-            src={`/user/icons/${post.userId}.webp`}
+            src={`/api/get-icon?id=${post.userId}`} 
             alt="アバター"
             fill
             sizes="56px"

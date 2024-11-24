@@ -58,7 +58,7 @@ export default function Reply({ commentId, replies, onContentAdded, onContentDel
                             <div key={`reply_${reply.replyId}`}>
                                 <div className="flex gap-2">
                                     <div className="grow-0 pt-2">
-                                        <AvatarPost src={`/user/icons/${reply.userId}.webp`} alt={reply.username} fallback={reply.username} size="sm" />
+                                        <AvatarPost src={`/api/get-icon?id=${reply.userId}`}  alt={reply.username} fallback={reply.username} size="sm" />
                                     </div>
                                     <div className="flex flex-col grow pt-2">
                                         <div className="flex items-center">

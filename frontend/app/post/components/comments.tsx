@@ -113,7 +113,7 @@ export default function Comments({ comments, postId }: Commentsprops) {
                     <div key={`comment_${comment.commentId}`}>
                         <div className="flex gap-2">
                             <div className="grow-0 pt-2">
-                                <AvatarPost src={`/user/icons/${comment.userId}.webp`} alt={comment.username} fallback={comment.username} size="md" />
+                                <AvatarPost src={`/api/get-icon?id=${comment.userId}`}  alt={comment.username} fallback={comment.username} size="md" />
                             </div>
                             <div className="flex flex-col grow pt-2">
                                 <div className="flex items-center">
