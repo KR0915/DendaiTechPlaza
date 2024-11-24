@@ -9,7 +9,7 @@ interface PostCardProps {
   post: Post;
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCards({ post }: PostCardProps) {
   return (
     <div
       key={post.postId}
