@@ -39,5 +39,13 @@ export async function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+    // matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+    matcher: [
+        {
+            source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
+            missing: [
+                { type: 'header', key: 'next-action' },
+            ],
+        }
+    ],
 }

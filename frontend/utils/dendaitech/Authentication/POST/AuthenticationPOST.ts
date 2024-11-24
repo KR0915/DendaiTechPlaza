@@ -40,7 +40,7 @@ const baseApiUrl: string = `${process.env.SPRING_REST_API_URL}`;
  * );
  * console.log(result); // "ユーザー名は3文字以上必要です"
  */
-export async function addUser(username: string, email: string, password: string, commonPassword: string, role: string): Promise<boolean | Error> {
+export async function addUser(username: string, email: string, password: string, commonPassword: string, role: string): Promise<boolean> {
     const departmentCodes = ['ad', 'aj', 'ek', 'ef', 'es', 'ec', 'ej', 'eh', 'fi', 'fa', 'fr', 'nc', 'nm', 'ne', 'rb', 're', 'rd', 'ru', 'rm', 'rg'];
 
     const registerSchema = z.object({
@@ -90,7 +90,17 @@ export async function addUser(username: string, email: string, password: string,
             role
         });
 
-        const res = await fetch(`${baseApiUrl}/posts`, {
+        const body =JSON.stringify({
+            username: validatedData.username,
+            email: validatedData.email,
+            password: validatedData.password,
+            commonPassword: validatedData.commonPassword,
+            role: validatedData.role
+        })
+
+        console.log(body);
+
+        const res = await fetch(`${baseApiUrl}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -105,16 +115,18 @@ export async function addUser(username: string, email: string, password: string,
         });
 
         if (!res.ok) {
-            throw new Error('ユーザーの追加に失敗しました。');
+            throw new Error(`ユーザーの追加に失敗しました。\n${res.body}`);
         }
-        // TODO ユーザーのアイコン画像追加処理を書く public/user/id.webpに保存する。
-
+        
         return true;
     } catch (error) {
         if (error instanceof z.ZodError) {
             // 最初のエラーメッセージを返す
-            return error;
+            throw new Error(error.errors[0].message);
         }
-        throw error;
+        if (error instanceof Error) {
+            throw error;
+        }
+        throw new Error('予期せぬエラーが発生しました。');
     }
 }

@@ -1,38 +1,52 @@
 import { Card } from "@/components/ui/card";
 import { getPostById } from "@/utils/dendaitech/Post/GET/PostGET";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
+import { Suspense } from "react";
 import AvatarPost from "../components/avatar";
 import BookmarkCountButton from "../components/bookmarkCountButton/bookmarkCountButton";
+import Comments from "../components/comments";
+import OgpCarousel from "../components/OGPCarousel/OgpCarousel";
 import Ogps from "../components/ogps";
+import { CommentsSkeleton } from "../components/skelton-fallback";
 import Tag from "../components/tag";
+import "../styles/postContent.css";
 
 export default async function post({ params }: { params: Promise<{ id: string }> }) {
     const postParams = await params;
-    const post = await getPostById(postParams.id, 0, 5, 0, 3);
+    const post = await getPostById(postParams.id, 0, 10, 0, 100);
     const postUpadateAt = convertUTCtoJST(post.updatedAt);
 
     return (
-        <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200">
-            <Card className="max-w-screen-sm md:max-w-screen-md mt-48 mb-48">
+        <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200 postContent">
+            <Card className="max-w-full md:max-w-screen-md mt-48 mb-48">
 
                 {/* OGP Grid */}
-                <div className="rounded-lg p-4">
+
+                <div className="rounded-lg">
                     {post.sharedUrls ? (
-                        <Ogps urls={post.sharedUrls} />
+                        <div>
+                            <div className="hidden md:block p-4">
+                                <Ogps urls={post.sharedUrls}/>
+                            </div>
+                            <div className="block md:hidden p-1">
+                                <OgpCarousel urls={post.sharedUrls}/>
+                            </div>
+                        </div>
                     ) : (
                         <p className="text-gray-500 text-center py-4">共有されたURLはありません</p>
                     )}
                 </div>
 
+
                 <div className="p-8">
                     <div className="flex flex-col gap-1 mb-6">
                         <div className="flex items-center gap-2">
-                            <AvatarPost image={`/user/icons/${post.userId}.webp`} />
-                            <h2 className="font-medium">{`${post.username}`}</h2>
+                            <AvatarPost src={`/user/icons/${post.userId}.webp`} alt={post.username} fallback={post.username} size="lg" />
+                            <h2 className="font-bold text-lg">{`${post.username}`}</h2>
                         </div>
                         <div className="grid grid-cols-5 items-center gap-2">
                             <div className="col-span-4 font-bold text-xl"><h1>{post.title}</h1></div>
-                            <div>
+                            <div className="ml-auto">
                                 <BookmarkCountButton count={post.likesCount} postId={post.postId} />
                             </div>
                         </div>
@@ -48,6 +62,13 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                     <p className="text-gray-700 mb-6">
                         {post.description}
                     </p>
+
+                    <div>
+                        <h2 className="font-bold mb-2">コメント:{post.comments?.totalElements}件</h2>
+                    </div>
+                    <Suspense fallback={<CommentsSkeleton />}>
+                        <Comments comments={post.comments} postId={post.postId} />
+                    </Suspense>
                 </div>
 
             </Card>
