@@ -2,7 +2,7 @@
 import { CommentPage, postComment } from "@/types/post";
 import { getPostById } from "@/utils/dendaitech/Post/GET/PostGET";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
-import { Loader2 } from "lucide-react";
+import { Loader2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import "../styles/postStyle.css";
@@ -18,8 +18,8 @@ interface Commentsprops {
 
 export default function Comments({ comments, postId }: Commentsprops) {
     const [contents, setContents] = useState<postComment[]>([]);
-    const [cuurentPage, setCurrentPage] = useState<number>(0);
-    const [hasMore, setHasMore] = useState<boolean>(true);  //再読み込み判定
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [hasMore, setHasMore] = useState<boolean>(true);
     const [isAddContent, setIsAddContent] = useState<boolean>(false);
     const [totalElements, setTotalElements] = useState<number>(comments?.totalElements || 0);
 
@@ -31,7 +31,8 @@ export default function Comments({ comments, postId }: Commentsprops) {
             return;
         }
 
-        const updatedContents = response.comments.content.map(newComment => {
+        const newComments = response.comments.content;
+        const updatedContents = newComments.map(newComment => {
             const existingComment = contents.find(c => c.commentId === newComment.commentId);
             if (existingComment) {
                 const mergedReplies = [
@@ -49,7 +50,7 @@ export default function Comments({ comments, postId }: Commentsprops) {
 
         setContents(updatedContents);
         setTotalElements(response.comments.totalElements);
-        setCurrentPage(Math.ceil(updatedContents.length / 10));
+        setCurrentPage(1);
     }, [postId, contents]);
 
     useEffect(() => {
@@ -64,7 +65,7 @@ export default function Comments({ comments, postId }: Commentsprops) {
             setHasMore(false);
             return;
         }
-        const response = await getPostById(String(postId), cuurentPage, 10, 0, 100);
+        const response = await getPostById(String(postId), currentPage, 10, 0, 100);
 
         if (!response || !response.comments || response.comments.empty) {
             setHasMore(false);
@@ -85,12 +86,10 @@ export default function Comments({ comments, postId }: Commentsprops) {
         setHasMore(true);
     };
 
-
     const handleContentDeleted = useCallback(() => {
         updateComments();
     }, [updateComments]);
 
-    //ロード中に表示する項目
     const loader = <div className="mt-2" key={0}><Loader2 /></div>;
 
     if (!comments) {
@@ -106,8 +105,8 @@ export default function Comments({ comments, postId }: Commentsprops) {
 
             <InfiniteScroll
                 pageStart={0}
-                loadMore={loadMore}    //項目を読み込む際に処理するコールバック関数
-                hasMore={hasMore}      //読み込みを行うかどうかの判定
+                loadMore={loadMore}
+                hasMore={hasMore}
                 loader={loader}
                 threshold={1000}>
                 {contents.map(comment => (

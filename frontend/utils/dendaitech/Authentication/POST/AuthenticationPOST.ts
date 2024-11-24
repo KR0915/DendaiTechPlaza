@@ -98,8 +98,6 @@ export async function addUser(username: string, email: string, password: string,
             role: validatedData.role
         })
 
-        console.log(body);
-
         const res = await fetch(`${baseApiUrl}/auth/register`, {
             method: 'POST',
             headers: {
@@ -115,7 +113,7 @@ export async function addUser(username: string, email: string, password: string,
         });
 
         if (!res.ok) {
-            throw new Error(`ユーザーの追加に失敗しました。\n${res.body}`);
+            throw new Error(`ユーザーの追加に失敗しました。\n${res.json()}`);
         }
         
         return true;
