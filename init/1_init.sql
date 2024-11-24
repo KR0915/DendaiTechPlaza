@@ -63,7 +63,8 @@ CREATE TABLE Bookmarks (
     bookmark_id SERIAL PRIMARY KEY,
     post_id INT REFERENCES Posts(post_id),
     user_id INT REFERENCES Users(user_id),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (post_id, user_id)
 );
 
 INSERT INTO Departments (name) VALUES 
@@ -261,10 +262,10 @@ INSERT INTO shared_urls (post_id, link, created_at, updated_at)
 SELECT 
     p.post_id,
     CASE 
-        WHEN urls.url_num = 1 THEN 'https://zenn.dev/kiwichan101kg/articles/5023bb8288f720'
-        WHEN urls.url_num = 2 THEN 'https://qiita.com/otsukayuhi/items/a510890cebaa74051bbc'
-        WHEN urls.url_num = 3 THEN 'https://qiita.com/studio_haneya/items/738dda2a8f08ad7d82b1'
-        WHEN urls.url_num = 4 THEN 'https://zenn.dev/tns_00/articles/docker-communicate-with-containers'
+        WHEN urls.url_num = 1 THEN 'https://portfolio-atsushi.vercel.app/'
+        WHEN urls.url_num = 2 THEN 'https://portfolio-atsushi.vercel.app/blog/bl5wdq_7qew'
+        WHEN urls.url_num = 3 THEN 'https://portfolio-atsushi.vercel.app/blog/xmgjdgi4ayi3'
+        WHEN urls.url_num = 4 THEN 'https://portfolio-atsushi.vercel.app/work/yt8fw1xyag8f'
     END,
     NOW(),
     NOW()

@@ -75,7 +75,7 @@ export default function SignInForm() {
                         </div>
                     </div>
                     <div className="space-y-2">
-                        <Link href={"/register"}>
+                        <Link href={`/register?callbackUrl=${callbackUrl}`}>
                             <Button variant="outline" className="px-12 text-slate-400">新規登録</Button>
                         </Link>
                     </div>

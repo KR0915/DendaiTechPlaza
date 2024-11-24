@@ -27,27 +27,29 @@ export default function BookmarkCountButton({ count, postId }: bookmarkCountButt
         fetchBookmarkStatus();
     }, [postId])
 
-    // TODO 表示に難あり　解決する
+
     const pushBookmark = async () => {
-        if (isBookmark == false) {
-            await addBookmark(postId);
-            setBookmarkCount((prevCount) => prevCount + 1);
-            console.log(bookmarkCount)
-        } else {
-            await deleteBookmark(postId);
-            setBookmarkCount((prevCount) => prevCount - 1);
+        try {
+            if (isBookmark == false) {
+                await addBookmark(postId);
+                setBookmarkCount((prevCount) => prevCount + 1);
+            } else {
+                await deleteBookmark(postId);
+                setBookmarkCount((prevCount) => prevCount - 1);
+            }
+            setIsBookmark(!isBookmark)
+        } catch (error) {
+            console.error('Error fetching bookmark status:', error);
         }
-        setIsBookmark(!isBookmark)
     }
 
-
     return (
-        <Button variant="outline" className="flex gap-2"  onClick={pushBookmark}>
+        <Button variant="outline" className="flex gap-2" onClick={pushBookmark}>
             <StarButton isBookmark={isBookmark} color="DendaiTechBlue" />
             <span className="sr-only">ブックマーク</span>
             {isBookmark
-            ?<div className="font-bold text-DendaiTechBlue">{count}</div>
-            :<div className="text-black">{bookmarkCount}</div>
+                ? <div className="font-bold text-DendaiTechBlue">{bookmarkCount}</div>
+                : <div className="text-black">{bookmarkCount}</div>
             }
         </Button>
     );

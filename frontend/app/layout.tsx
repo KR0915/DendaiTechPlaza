@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import { Providers } from "@/Providers";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
@@ -31,6 +32,7 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+          <Toaster />
         </Providers>
       </body>
     </html>

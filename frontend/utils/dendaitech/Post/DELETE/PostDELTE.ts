@@ -174,15 +174,19 @@ export async function deletComment(commentId: number, callbackUrl?: string): Pro
         }
         redirect(loginUrl.href);
     }
-    const res = await fetch(`${baseApiUrl}/posts/comments/${commentId}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-            'Content-Type': 'application/json',
-        },
-    });
-    if (!res.ok) {
-        throw new Error('コメントの削除に失敗しました。');
+    try {
+        const res = await fetch(`${baseApiUrl}/posts/comments/${commentId}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${session.accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+        if (!res.ok) {
+            throw new Error('コメントの削除に失敗しました。');
+        }
+        return res.ok;
+    } catch (error) {
+        throw new Error(`コメントの削除に失敗しました。\n${error}`)
     }
-    return res.ok;
 }
