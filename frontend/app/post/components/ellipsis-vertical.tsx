@@ -15,9 +15,10 @@ interface DeleteContentEllipsisVerticalProps {
     type: "comment" | "reply";
     contentId: number;
     userId: string;
+    onContentDeleted: () => void;
 }
 
-export default function DeleteContentEllipsisVertical({ type, contentId, userId }: DeleteContentEllipsisVerticalProps) {
+export default function DeleteContentEllipsisVertical({ type, contentId, userId, onContentDeleted }: DeleteContentEllipsisVerticalProps) {
     const { data: session, status } = useSession();
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const router = useRouter();
@@ -37,10 +38,12 @@ export default function DeleteContentEllipsisVertical({ type, contentId, userId 
                     setErrorMessage("");
                     router.refresh();
                     setIsSubmitting(false);
+                    onContentDeleted();
                     toast({
                         title: "コメント削除成功",
                         description: "コメントの削除に成功しました",
                     })
+                    setIsDialogOpen(false);
                 }
             } else if (type === "reply") {
                 const result = await deletReply(contentId);
@@ -48,10 +51,12 @@ export default function DeleteContentEllipsisVertical({ type, contentId, userId 
                     setErrorMessage("");
                     router.refresh();
                     setIsSubmitting(false);
+                    onContentDeleted();
                     toast({
                         title: "返信削除成功",
                         description: "返信の削除に成功しました",
                     })
+                    setIsDialogOpen(false);
                 }
             }
         } catch (error) {
@@ -91,14 +96,16 @@ export default function DeleteContentEllipsisVertical({ type, contentId, userId 
                         {errorMessage && <p className="text-red-500 mt-2">{errorMessage.toString()}</p>}
                     </DialogDescription>
                     <DialogFooter className="flex">
-                        <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                                キャンセル
-                            </Button>
-                        </DialogClose>
-                        <form onSubmit={deleteContentWithId}>
-                            <SubmitButton preText="削除" postText="削除中..." disabled={isSubmitting} />
-                        </form>
+                        <div className="flex ml-auto gap-2">
+                            <DialogClose asChild>
+                                <Button type="button" variant="secondary">
+                                    キャンセル
+                                </Button>
+                            </DialogClose>
+                            <form onSubmit={deleteContentWithId}>
+                                <SubmitButton preText="削除" postText="削除中..." disabled={isSubmitting} />
+                            </form>
+                        </div>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

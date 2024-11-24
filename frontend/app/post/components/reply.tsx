@@ -14,9 +14,11 @@ import FormContent from "./formContent";
 interface Replyprops {
     commentId: number;
     replies: postReply[] | undefined;
+    onContentAdded: () => void;
+    onContentDeleted: () => void;
 }
 
-export default function Reply({ commentId, replies }: Replyprops) {
+export default function Reply({ commentId, replies, onContentAdded, onContentDeleted}: Replyprops) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [isReply, setIsReply] = useState<boolean>(false);
 
@@ -49,11 +51,11 @@ export default function Reply({ commentId, replies }: Replyprops) {
                         </div>
                     </div>
                     {isReply &&
-                        <FormContent type={"reply"} contentId={commentId} />
+                        <FormContent type={"reply"} contentId={commentId} onContentAdded={onContentAdded} />
                     }
                     <CollapsibleContent className="ml-2">
                         {replies.map(reply => (
-                            <div key={reply.replyId}>
+                            <div key={`reply_${reply.replyId}`}>
                                 <div className="flex gap-2">
                                     <div className="grow-0 pt-2">
                                         <AvatarPost src={`/user/icons/${reply.userId}.webp`} alt={reply.username} fallback={reply.username} size="sm" />
@@ -63,7 +65,12 @@ export default function Reply({ commentId, replies }: Replyprops) {
                                             <h2 className="text-base font-bold">{`${reply.username}`}</h2>
                                             <p className="ml-2 my-auto text-xs text-slate-600">{convertUTCtoJST(reply.createdAt)}</p>
                                             <div className="ml-auto">
-                                                <DeleteContentEllipsisVertical type={"reply"} contentId={reply.replyId} userId={String(reply.userId)} />
+                                            <DeleteContentEllipsisVertical 
+                                                    type={"reply"} 
+                                                    contentId={reply.replyId} 
+                                                    userId={String(reply.userId)}
+                                                    onContentDeleted={onContentDeleted}
+                                                />
                                             </div>
                                         </div>
                                         <div>
@@ -83,7 +90,7 @@ export default function Reply({ commentId, replies }: Replyprops) {
                         </Button>
                     </div>
                     {isReply &&
-                        <FormContent type={"reply"} contentId={commentId} />
+                        <FormContent type={"reply"} contentId={commentId} onContentAdded={onContentAdded} />
                     }
                 </div>
             }

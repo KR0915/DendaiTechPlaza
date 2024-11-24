@@ -2,7 +2,7 @@
 
 import { Session } from "next-auth"
 import { useSession } from "next-auth/react"
-import SignInForm from "./sign-in-form"
+import RegisterForm from "./register-form"
 
 interface AuthWrapperProps {
     initialSession: Session | null
@@ -17,6 +17,6 @@ export default function AuthWrapper({ initialSession }: AuthWrapperProps) {
     const currentSession = session ?? initialSession
 
     if (!currentSession) {
-        return <SignInForm />
+        return <RegisterForm />
     }
 }
