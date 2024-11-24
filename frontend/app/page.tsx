@@ -64,8 +64,8 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="mt-20">
-          <h1 className="text-2xl font-bold mb-6">人気の投稿</h1>
+        <div>
+          <h1 className="mt-16 text-2xl font-bold mb-6">人気の投稿</h1>
           <PostCards posts={popularPosts} />
         </div>
       </div>
