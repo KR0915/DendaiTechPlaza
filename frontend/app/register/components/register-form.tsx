@@ -5,19 +5,25 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { addUser } from "@/utils/dendaitech/Authentication/POST/AuthenticationPOST"
+import GenarateIcon from "@/utils/file/GenarateIcon"
 import { signIn } from 'next-auth/react'
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import router from "next/router"
 import { useState } from 'react'
 
-export default function SignInForm() {
+export default function RegisterForm() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [userName, setUserName] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [commonPassword, setCommonPassword] = useState<string>('');
+    const [errorMessage, setErrorMessage] = useState<Error>();
     const searchParams = useSearchParams();
-    const callbackUrl = searchParams.get('callbackUrl') || '/';
+    const callbackUrl = searchParams.get('callbackUrl') || process.env.NEXT_PUBLIC_URL as string;
+
+
 
 
     // TODO 新規登録の実装
@@ -25,16 +31,35 @@ export default function SignInForm() {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const result = await signIn("credentials", {
-                userEmail,
-                password,
-                callbackUrl: `${callbackUrl}`
-            });
-            if (result?.error) {
-                console.error(result.error);
+            const isAddUser = await addUser(userName, userEmail, password, commonPassword, "student");
+            if (isAddUser) {
+                const result = await signIn("credentials", {
+                    redirect: false,
+                    userEmail,
+                    password
+                });
+                if (result?.ok) {
+                    try {
+                        console.log("1111111111111111111111111111111");
+                        const genatateAction = await GenarateIcon();
+                        if (genatateAction) {
+                        console.log("Icon111111111111111111111");
+                            router.push(callbackUrl);
+                        }
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            setErrorMessage(error);
+                        }
+                    }
+                }
+                if (result?.error) {
+                    console.error(result.error);
+                }
             }
         } catch (error) {
-            console.error("Error during sign in:", error);
+            if (error instanceof Error) {
+                setErrorMessage(error);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -88,6 +113,9 @@ export default function SignInForm() {
                             value={commonPassword}
                             onChange={(e) => setCommonPassword(e.target.value)}
                         />
+                    </div>
+                    <div className="text-red-500">
+                        {errorMessage && `${errorMessage}`}
                     </div>
                     <div className="space-y-2">
                         <div className="mt-16 grid grid-cols-3 gap-4">

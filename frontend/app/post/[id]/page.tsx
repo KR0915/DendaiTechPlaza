@@ -5,38 +5,37 @@ import { Suspense } from "react";
 import AvatarPost from "../components/avatar";
 import BookmarkCountButton from "../components/bookmarkCountButton/bookmarkCountButton";
 import Comments from "../components/comments";
-import OgpCarousel from "../components/OgpCarousel";
+import OgpCarousel from "../components/OGPCarousel/OgpCarousel";
 import Ogps from "../components/ogps";
-import { CommentsSkeleton, OgpSkeleton } from "../components/skelton-fallback";
+import { CommentsSkeleton } from "../components/skelton-fallback";
 import Tag from "../components/tag";
+import "../styles/postContent.css";
 
 export default async function post({ params }: { params: Promise<{ id: string }> }) {
     const postParams = await params;
-    const post = await getPostById(postParams.id, 0, 5, 0, 100);
+    const post = await getPostById(postParams.id, 0, 10, 0, 100);
     const postUpadateAt = convertUTCtoJST(post.updatedAt);
 
-
     return (
-        <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200">
-            <Card className="max-w-screen-sm md:max-w-screen-md mt-48 mb-48">
+        <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200 postContent">
+            <Card className="max-w-full md:max-w-screen-md mt-48 mb-48">
 
                 {/* OGP Grid */}
-                <Suspense fallback={<OgpSkeleton />}>
-                    <div className="rounded-lg p-4">
-                        {post.sharedUrls ? (
-                            <div>
-                                <div className="hidden md:block">
-                                    <Ogps urls={post.sharedUrls} />
-                                </div>
-                                <div className="block md:hidden max-w-sm">
-                                    <OgpCarousel urls={post.sharedUrls} />
-                                </div>
+
+                <div className="rounded-lg">
+                    {post.sharedUrls ? (
+                        <div>
+                            <div className="hidden md:block p-4">
+                                <Ogps urls={post.sharedUrls}/>
                             </div>
-                        ) : (
-                            <p className="text-gray-500 text-center py-4">共有されたURLはありません</p>
-                        )}
-                    </div>
-                </Suspense>
+                            <div className="block md:hidden p-1">
+                                <OgpCarousel urls={post.sharedUrls}/>
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 text-center py-4">共有されたURLはありません</p>
+                    )}
+                </div>
 
 
                 <div className="p-8">

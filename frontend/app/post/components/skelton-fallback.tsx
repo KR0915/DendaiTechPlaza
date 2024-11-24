@@ -7,25 +7,29 @@ export function OgpSkeleton() {
         <div className="rounded-lg p-4 max-w-screen-sm md:max-w-screen-md">
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Skeleton className="h-36 w-48" />
-                    <Skeleton className="h-8 w-full" />
-                </div>
-                <div className="space-y-2">
-                    <Skeleton className="h-36 w-full" />
-                    <Skeleton className="h-8 w-full" />
-                </div>
-                <div className="space-y-2">
-                    <Skeleton className="h-36 w-full" />
-                    <Skeleton className="h-8 w-full" />
-                </div>
-                <div className="space-y-2">
-                    <Skeleton className="h-36 w-full" />
-                    <Skeleton className="h-8 w-full" />
+                    <Skeleton className="w-[341px] h-[190px]" />
+                    <Skeleton className="w-[341px] h-[110px]" />
                 </div>
             </div>
         </div>
     )
 }
+
+export function OgpMobileSkeleton() {
+    return (
+        <div className="w-[97vw]">
+            <Skeleton className="w-full aspect-video mb-2">
+            </Skeleton>
+            <Skeleton className="p-4 flex-grow mt-2">
+                <h3 className="line-clamp-2 mb-2">
+                </h3>
+                <p className="text-sm line-clamp-3">
+                </p>
+            </Skeleton>
+        </div>
+    )
+}
+
 
 export function CommentsSkeleton() {
     return (

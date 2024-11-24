@@ -32,7 +32,7 @@ const baseApiUrl: string = `${process.env.SPRING_REST_API_URL}`;
  *   console.error('ユーザー情報取得エラー:', result.message);
  * }
  */
-export async function getUser(callbackUrl?:string): Promise<DendaiUser | Error> {
+export async function getUser(callbackUrl?: string): Promise<DendaiUser> {
     const session = await getServerSession(authOptions);
     if (!session) {
         const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);
@@ -41,6 +41,8 @@ export async function getUser(callbackUrl?:string): Promise<DendaiUser | Error> 
         }
         redirect(loginUrl.href);
     }
+    console.log("ユーザーぜよ");
+    console.log(session)
 
     try {
         const res = await fetch(`${baseApiUrl}/user/info`, {
@@ -52,9 +54,11 @@ export async function getUser(callbackUrl?:string): Promise<DendaiUser | Error> 
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
+        console.log("ユーザーさいごぜよ");
+        console.log(res.json());
         return res.json();
     } catch (error) {
-        return new Error(`ユーザー情報の取得に失敗しました:\n${error}`);
+        throw new Error(`ユーザー情報の取得に失敗しました:\n${error}`);
     }
 }
 
@@ -82,7 +86,7 @@ export async function getUser(callbackUrl?:string): Promise<DendaiUser | Error> 
  *   console.error('ユーザー情報取得エラー:', result.message);
  * }
  */
-export async function getUserByToken(token:string, callbackUrl?:string): Promise<DendaiUser | Error> {
+export async function getUserByToken(token: string, callbackUrl?: string): Promise<DendaiUser | Error> {
     if (!token) {
         const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);
         if (callbackUrl) {
@@ -133,7 +137,7 @@ export async function getUserByToken(token:string, callbackUrl?:string): Promise
  *   console.error('ブックマーク投稿取得エラー:', result.message);
  * }
  */
-export async function getUserBookmarks(page=0, size=10,callbackUrl?:string): Promise<PostResponse | Error> {
+export async function getUserBookmarks(page = 0, size = 10, callbackUrl?: string): Promise<PostResponse | Error> {
     const session = await getServerSession(authOptions);
     if (!session) {
         const loginUrl = new URL(`${process.env.NEXT_PUBLIC_URL}/signin`);

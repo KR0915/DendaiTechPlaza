@@ -13,9 +13,10 @@ import AvatarPost from "./avatar";
 interface FormContentProps {
     type: "comment" | "reply";
     contentId: number;
+    onContentAdded?: () => void;
 }
 
-export default function FormContent({ type, contentId }: FormContentProps) {
+export default function FormContent({ type, contentId, onContentAdded }: FormContentProps) {
     const [newContent, setNewContent] = useState("");
     const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<Error | string>();
@@ -40,6 +41,10 @@ export default function FormContent({ type, contentId }: FormContentProps) {
                     setIsInputFocused(false);
                     setErrorMessage("");
                     router.refresh();
+                    if (onContentAdded) {
+                        console.log("kiteruyo")
+                        onContentAdded();
+                    }
                     toast({
                         title: "コメント追加成功",
                         description: "コメントの追加に成功しました",
@@ -55,6 +60,9 @@ export default function FormContent({ type, contentId }: FormContentProps) {
                     setIsInputFocused(false);
                     setErrorMessage("");
                     router.refresh();
+                    if (onContentAdded) {
+                        onContentAdded();
+                    }
                     toast({
                         title: "返信追加成功",
                         description: "返信の追加に成功しました",
@@ -84,7 +92,7 @@ export default function FormContent({ type, contentId }: FormContentProps) {
                         }
                         <div className="flex flex-col flex-grow">
                             <Textarea
-                                placeholder={type==="comment"? "コメントする・・・":"返信する・・・"}
+                                placeholder={type === "comment" ? "コメントする・・・" : "返信する・・・"}
                                 value={newContent}
                                 onFocus={() => setIsInputFocused(true)}
                                 onChange={(e) => setNewContent(e.target.value)}
