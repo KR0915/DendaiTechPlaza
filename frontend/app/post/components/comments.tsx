@@ -21,10 +21,11 @@ export default function Comments({ comments, postId }: Commentsprops) {
     const [cuurentPage, setCurrentPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);  //再読み込み判定
     const [isAddContent, setIsAddContent] = useState<boolean>(false);
+    const [totalElements, setTotalElements] = useState<number>(comments?.totalElements || 0);
 
     const updateComments = useCallback(async () => {
         // TODO　コメントが１０件を超えないとリアルタイムで変化しない困った
-        const response = await getPostById(String(postId), 0, contents.length, 0, 100);
+        const response = await getPostById(String(postId), 0, Math.max(contents.length, 10), 0, 100);
 
         if (!response || !response.comments) {
             return;
@@ -47,6 +48,8 @@ export default function Comments({ comments, postId }: Commentsprops) {
         });
 
         setContents(updatedContents);
+        setTotalElements(response.comments.totalElements);
+        setCurrentPage(Math.ceil(updatedContents.length / 10));
     }, [postId, contents]);
 
     useEffect(() => {
@@ -57,6 +60,10 @@ export default function Comments({ comments, postId }: Commentsprops) {
     }, [isAddContent, updateComments]);
 
     const loadMore = async () => {
+        if (contents.length >= totalElements) {
+            setHasMore(false);
+            return;
+        }
         const response = await getPostById(String(postId), cuurentPage, 10, 0, 100);
 
         if (!response || !response.comments || response.comments.empty) {
@@ -70,12 +77,18 @@ export default function Comments({ comments, postId }: Commentsprops) {
 
         setContents(prevContents => [...prevContents, ...newComments]);
         setCurrentPage(prevPage => prevPage + 1);
+        setTotalElements(response.comments.totalElements);
     }
 
     const handleContentAdded = () => {
         setIsAddContent(true);
         setHasMore(true);
     };
+
+
+    const handleContentDeleted = useCallback(() => {
+        updateComments();
+    }, [updateComments]);
 
     //ロード中に表示する項目
     const loader = <div className="mt-2" key={0}><Loader2 /></div>;
@@ -98,7 +111,7 @@ export default function Comments({ comments, postId }: Commentsprops) {
                 loader={loader}
                 threshold={1000}>
                 {contents.map(comment => (
-                    <div key={`${cuurentPage}_${comment.commentId}`}>
+                    <div key={`comment_${comment.commentId}`}>
                         <div className="flex gap-2">
                             <div className="grow-0 pt-2">
                                 <AvatarPost src={`/user/icons/${comment.userId}.webp`} alt={comment.username} fallback={comment.username} size="md" />
@@ -108,13 +121,18 @@ export default function Comments({ comments, postId }: Commentsprops) {
                                     <h2 className="text-base font-bold">{`${comment.username}`}</h2>
                                     <p className="ml-2 my-auto text-xs text-slate-600">{convertUTCtoJST(comment.createdAt)}</p>
                                     <div className="ml-auto">
-                                        <DeleteContentEllipsisVertical type={"comment"} contentId={comment.commentId} userId={String(comment.userId)} />
+                                        <DeleteContentEllipsisVertical
+                                            type={"comment"}
+                                            contentId={comment.commentId}
+                                            userId={String(comment.userId)}
+                                            onContentDeleted={handleContentDeleted}
+                                        />
                                     </div>
                                 </div>
                                 <div>
                                     <p className="text">{`${comment.content}`}</p>
                                     <div>
-                                        <Reply replies={comment.replies} commentId={comment.commentId} onContentAdded={handleContentAdded} />
+                                        <Reply replies={comment.replies} commentId={comment.commentId} onContentAdded={handleContentAdded} onContentDeleted={handleContentDeleted} />
                                     </div>
                                 </div>
                             </div>

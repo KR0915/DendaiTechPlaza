@@ -15,9 +15,10 @@ interface DeleteContentEllipsisVerticalProps {
     type: "comment" | "reply";
     contentId: number;
     userId: string;
+    onContentDeleted: () => void;
 }
 
-export default function DeleteContentEllipsisVertical({ type, contentId, userId }: DeleteContentEllipsisVerticalProps) {
+export default function DeleteContentEllipsisVertical({ type, contentId, userId, onContentDeleted }: DeleteContentEllipsisVerticalProps) {
     const { data: session, status } = useSession();
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const router = useRouter();
@@ -37,10 +38,12 @@ export default function DeleteContentEllipsisVertical({ type, contentId, userId 
                     setErrorMessage("");
                     router.refresh();
                     setIsSubmitting(false);
+                    onContentDeleted();
                     toast({
                         title: "コメント削除成功",
                         description: "コメントの削除に成功しました",
                     })
+                    setIsDialogOpen(false);
                 }
             } else if (type === "reply") {
                 const result = await deletReply(contentId);
@@ -48,10 +51,12 @@ export default function DeleteContentEllipsisVertical({ type, contentId, userId 
                     setErrorMessage("");
                     router.refresh();
                     setIsSubmitting(false);
+                    onContentDeleted();
                     toast({
                         title: "返信削除成功",
                         description: "返信の削除に成功しました",
                     })
+                    setIsDialogOpen(false);
                 }
             }
         } catch (error) {

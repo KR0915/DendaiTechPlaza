@@ -1,15 +1,15 @@
-import Image from "next/image"
-import Link from "next/link"
-import { getOgp } from "../utils/getOgp"
+import Image from "next/image";
+import Link from "next/link";
+import { getOgp } from "../utils/getOgp";
 
 interface OgpProps {
     url: string
 }
 
 export default async function Ogp({ url }: OgpProps) {
-    const ogp = await getOgp(url)
     const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
     await sleep(1000);
+    const ogp = await getOgp(url)
 
 
 
