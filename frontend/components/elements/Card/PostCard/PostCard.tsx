@@ -1,16 +1,19 @@
-"use client";
 import Image from "@/node_modules/next/image";
 import { Post } from "@/types/post";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
 import Link from "next/link";
+import { Suspense } from "react";
 import BookmarkButton from "../../Buttons/BookmarkButton/BookmarkButton";
 
 interface PostCardProps {
   post: Post;
-  bookmarkStatus: Map<number, boolean>;
+  bookmarkStatus?: Map<number, boolean>;
+  bookmarkCount?: Map<number, number>;
+  OnClickBookmarkButton?: (postId: number, type: string) => void;
 }
 
-export default function PostCards({ post, bookmarkStatus }: PostCardProps) {
+
+export default function PostCards({ post, bookmarkStatus, bookmarkCount, OnClickBookmarkButton }: PostCardProps) {
   return (
     <div
       key={post.postId}
@@ -19,7 +22,7 @@ export default function PostCards({ post, bookmarkStatus }: PostCardProps) {
       <div className="flex flex-col items-center">
         <div className="relative w-14 h-14 p-2">
           <Image
-            src={`/api/get-icon?id=${post.userId}`} 
+            src={`/api/get-icon?id=${post.userId}`}
             alt="アバター"
             fill
             sizes="56px"
@@ -32,9 +35,13 @@ export default function PostCards({ post, bookmarkStatus }: PostCardProps) {
         </div>
         <div className="flex items-center">
           <div>
-            <BookmarkButton postId={post.postId} InitialState={bookmarkStatus.get(post.postId) || false} />
+            <BookmarkButton postId={post.postId} State={bookmarkStatus && bookmarkStatus.get(post.postId) || false} OnClickBookmarkButton={OnClickBookmarkButton} />
           </div>
-          <div className="text-DendaiTechBlue">{post.likesCount}</div>
+          <div className="text-DendaiTechBlue">
+            <Suspense fallback={post.likesCount}>
+              {bookmarkCount ? bookmarkCount.get(post.postId) : post.likesCount}
+            </Suspense>
+          </div>
         </div>
       </div>
       <Link href={`/post/${post.postId}`}>

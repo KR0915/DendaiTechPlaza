@@ -1,26 +1,28 @@
-'use client'
-
 import { Button } from '@/components/ui/button';
 import { deleteBookmark } from '@/utils/dendaitech/Post/DELETE/PostDELTE';
 import { addBookmark } from '@/utils/dendaitech/Post/POST/PostPOST';
-import { useState } from 'react';
 import StarButton from './StarButton';
 
 interface BookmarkButtonProps {
     postId: number;
-    InitialState: boolean;
+    State: boolean;
+    OnClickBookmarkButton?: (postId: number, type: string) => void;
 }
 
-export default function BookmarkButton({ postId, InitialState}: BookmarkButtonProps) {
-    const [isBookmark, setIsBookmark] = useState<boolean>(InitialState);
+export default function BookmarkButton({ postId, State, OnClickBookmarkButton }: BookmarkButtonProps) {
 
     const pushBookmark = async () => {
-        if (isBookmark == false) {
+        if (State == false) {
             await addBookmark(postId);
+            if (OnClickBookmarkButton) {
+                OnClickBookmarkButton(postId, "add");
+            }
         } else {
             await deleteBookmark(postId);
+            if (OnClickBookmarkButton) {
+                OnClickBookmarkButton(postId, "delete");
+            }
         }
-        setIsBookmark(!isBookmark)
     }
 
     return (
@@ -29,7 +31,7 @@ export default function BookmarkButton({ postId, InitialState}: BookmarkButtonPr
             size="icon"
             onClick={pushBookmark}
         >
-            <StarButton isBookmark={isBookmark} color='DendaiTechBlue'></StarButton>
+            <StarButton isBookmark={State} color='DendaiTechBlue'></StarButton>
             <span className="sr-only">ブックマーク</span>
         </Button>
     )
