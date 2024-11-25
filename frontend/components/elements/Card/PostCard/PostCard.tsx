@@ -44,42 +44,42 @@ export default function PostCards({ post, bookmarkStatus, bookmarkCount, OnClick
           </div>
         </div>
       </div>
-      <Link href={`/post/${post.postId}`}>
-        <div className="flex flex-col space-y-2 py-2">
+      <div className="flex flex-col space-y-2 py-2">
+        <Link href={`/post/${post.postId}`}>
           <h3 className="text-lg font-bold">{post.title}</h3>
           <p className="text-sm">{post.description}</p>
-          <div className="flex flex-wrap gap-2">
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.year}
-              </div>
-            </Link>
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.departmentName}
-              </div>
-            </Link>
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.grade}
-              </div>
-            </Link>
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.semester}
-              </div>
-            </Link>
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.username}
-              </div>
-            </Link>
-            <div className="ml-auto pr-2  text-sm text-gray-500 self-end">
-              {convertUTCtoJST(post.updatedAt)}
+        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.year}
             </div>
+          </Link>
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.departmentName}
+            </div>
+          </Link>
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.grade}
+            </div>
+          </Link>
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.semester}
+            </div>
+          </Link>
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.username}
+            </div>
+          </Link>
+          <div className="ml-auto pr-2  text-sm text-gray-500 self-end">
+            {convertUTCtoJST(post.updatedAt)}
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }
