@@ -2,30 +2,17 @@
 
 import { Button } from '@/components/ui/button';
 import { deleteBookmark } from '@/utils/dendaitech/Post/DELETE/PostDELTE';
-import { getIsBookmark } from '@/utils/dendaitech/Post/GET/PostGET';
 import { addBookmark } from '@/utils/dendaitech/Post/POST/PostPOST';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import StarButton from './StarButton';
 
 interface BookmarkButtonProps {
     postId: number;
+    InitialState: boolean;
 }
 
-export default function BookmarkButton({ postId }: BookmarkButtonProps) {
-    const [isBookmark, setIsBookmark] = useState<boolean>(false);
-
-    useEffect(() => {
-        const fetchBookmarkStatus = async () => {
-            try {
-                const isPreBookmark = await getIsBookmark(postId);
-                setIsBookmark(isPreBookmark);
-            } catch (error) {
-                console.error('Error fetching bookmark status:', error);
-            }
-        };
-
-        fetchBookmarkStatus();
-    }, [postId])
+export default function BookmarkButton({ postId, InitialState}: BookmarkButtonProps) {
+    const [isBookmark, setIsBookmark] = useState<boolean>(InitialState);
 
     const pushBookmark = async () => {
         if (isBookmark == false) {
@@ -42,7 +29,7 @@ export default function BookmarkButton({ postId }: BookmarkButtonProps) {
             size="icon"
             onClick={pushBookmark}
         >
-            <StarButton isBookmark={isBookmark}></StarButton>
+            <StarButton isBookmark={isBookmark} color='DendaiTechBlue'></StarButton>
             <span className="sr-only">ブックマーク</span>
         </Button>
     )

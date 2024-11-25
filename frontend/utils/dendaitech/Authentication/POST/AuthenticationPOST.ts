@@ -90,14 +90,6 @@ export async function addUser(username: string, email: string, password: string,
             role
         });
 
-        const body =JSON.stringify({
-            username: validatedData.username,
-            email: validatedData.email,
-            password: validatedData.password,
-            commonPassword: validatedData.commonPassword,
-            role: validatedData.role
-        })
-
         const res = await fetch(`${baseApiUrl}/auth/register`, {
             method: 'POST',
             headers: {

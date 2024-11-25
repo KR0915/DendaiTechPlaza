@@ -7,9 +7,10 @@ import BookmarkButton from "../../Buttons/BookmarkButton/BookmarkButton";
 
 interface PostCardProps {
   post: Post;
+  bookmarkStatus: Map<number, boolean>;
 }
 
-export default function PostCards({ post }: PostCardProps) {
+export default function PostCards({ post, bookmarkStatus }: PostCardProps) {
   return (
     <div
       key={post.postId}
@@ -31,7 +32,7 @@ export default function PostCards({ post }: PostCardProps) {
         </div>
         <div className="flex items-center">
           <div>
-            <BookmarkButton postId={post.postId} />
+            <BookmarkButton postId={post.postId} InitialState={bookmarkStatus.get(post.postId) || false} />
           </div>
           <div className="text-DendaiTechBlue">{post.likesCount}</div>
         </div>
