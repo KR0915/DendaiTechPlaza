@@ -39,7 +39,6 @@ export const SearchForm: React.FC<SearchFormProps> = React.memo(({
     setGradeChecked,
     semesterChecked,
     setSemesterChecked,
-    handleClear: _, // avoid naming conflict
   } = searchOptions;
 
   return (
