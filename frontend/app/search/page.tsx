@@ -1,11 +1,4 @@
-// "use client";
-// import { Post } from "@/types/post";
-// import { getSearchPosts } from "@/utils/dendaitech/Post/GET/PostGET";
-// import { FormEvent, useCallback, useEffect, useState } from "react";
-// import { SearchForm } from "./components/SearchForm";
-// import { SearchResults } from "./components/SearchResults";
-// import { useSearchOptions } from "./hooks/useSearchOptions";
-// import { isPostResponse } from "./utils/searchUtils";
+"use client";
 
 // export default function SearchPage() {
 //   const searchOptions = useSearchOptions();
