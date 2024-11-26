@@ -29,7 +29,7 @@ export default function OgpCarouselClient({ urls, ogpData }: OgpCarouselClientPr
     }, [api])
 
     return (
-        <div className="mx-auto">
+        <div className="mx-auto min-w-[96vw]">
             <Carousel setApi={setApi} className="w-full"
                 opts={{
                     loop: true,

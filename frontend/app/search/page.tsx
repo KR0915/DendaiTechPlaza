@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useEffect, FormEvent } from "react";
-import { SearchForm } from "./components/SearchForm";
-import { SearchResults } from "./components/SearchResults";
-import { getSearchPosts } from "@/utils/dendaitech/Post/GET/PostGET";
 import { Post } from "@/types/post";
+import { getSearchPosts } from "@/utils/dendaitech/Post/GET/PostGET";
+import { FormEvent, useEffect, useState } from "react";
+import { SearchForm } from "./components/SearchForm";
+import { SearchResults } from "./components/searchResults";
 import { useSearchOptions } from "./hooks/useSearchOptions";
 import { isPostResponse } from "./utils/searchUtils";
 

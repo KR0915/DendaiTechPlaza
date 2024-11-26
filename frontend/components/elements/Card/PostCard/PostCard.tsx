@@ -1,15 +1,19 @@
-"use client";
 import Image from "@/node_modules/next/image";
-import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
-import BookmarkButton from "../../Buttons/BookmarkButton/BookmarkButton";
 import { Post } from "@/types/post";
+import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
 import Link from "next/link";
+import { Suspense } from "react";
+import BookmarkButton from "../../Buttons/BookmarkButton/BookmarkButton";
 
 interface PostCardProps {
   post: Post;
+  bookmarkStatus?: Map<number, boolean>;
+  bookmarkCount?: Map<number, number>;
+  OnClickBookmarkButton?: (postId: number, type: string) => void;
 }
 
-export default function PostCards({ post }: PostCardProps) {
+
+export default function PostCards({ post, bookmarkStatus, bookmarkCount, OnClickBookmarkButton }: PostCardProps) {
   return (
     <div
       key={post.postId}
@@ -18,7 +22,7 @@ export default function PostCards({ post }: PostCardProps) {
       <div className="flex flex-col items-center">
         <div className="relative w-14 h-14 p-2">
           <Image
-            src={`/user/icons/${post.userId}.webp`}
+            src={`/api/get-icon?id=${post.userId}`}
             alt="アバター"
             fill
             sizes="56px"
@@ -31,47 +35,51 @@ export default function PostCards({ post }: PostCardProps) {
         </div>
         <div className="flex items-center">
           <div>
-            <BookmarkButton postId={post.postId} />
+            <BookmarkButton postId={post.postId} State={bookmarkStatus && bookmarkStatus.get(post.postId) || false} OnClickBookmarkButton={OnClickBookmarkButton} />
           </div>
-          <div className="text-DendaiTechBlue">{post.likesCount}</div>
+          <div className="text-DendaiTechBlue">
+            <Suspense fallback={post.likesCount}>
+              {bookmarkCount ? bookmarkCount.get(post.postId) : post.likesCount}
+            </Suspense>
+          </div>
         </div>
       </div>
-      <Link href={`/post/${post.postId}`}>
-        <div className="flex flex-col space-y-2 py-2">
+      <div className="flex flex-col space-y-2 py-2">
+        <Link href={`/post/${post.postId}`}>
           <h3 className="text-lg font-bold">{post.title}</h3>
           <p className="text-sm">{post.description}</p>
-          <div className="flex flex-wrap gap-2">
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.year}
-              </div>
-            </Link>
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.departmentName}
-              </div>
-            </Link>
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.grade}
-              </div>
-            </Link>
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.semester}
-              </div>
-            </Link>
-            <Link href={"/search"}>
-              <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-                {post.username}
-              </div>
-            </Link>
-            <div className="ml-auto pr-2  text-sm text-gray-500 self-end">
-              {convertUTCtoJST(post.updatedAt)}
+        </Link>
+        <div className="flex flex-wrap gap-2">
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.year}
             </div>
+          </Link>
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.departmentName}
+            </div>
+          </Link>
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.grade}
+            </div>
+          </Link>
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.semester}
+            </div>
+          </Link>
+          <Link href={"/search"}>
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+              {post.username}
+            </div>
+          </Link>
+          <div className="ml-auto pr-2  text-sm text-gray-500 self-end">
+            {convertUTCtoJST(post.updatedAt)}
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }
