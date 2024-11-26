@@ -41,7 +41,7 @@ export default async function post({ params }: { params: Promise<{ id: string }>
                 <div className="p-8">
                     <div className="flex flex-col gap-1 mb-6">
                         <div className="flex items-center gap-2">
-                            <AvatarPost src={`/user/icons/${post.userId}.webp`} alt={post.username} fallback={post.username} size="lg" />
+                            <AvatarPost src={`/api/get-icon?id=${post.userId}`} alt={post.username} fallback={post.username} size="lg" />
                             <h2 className="font-bold text-lg">{`${post.username}`}</h2>
                         </div>
                         <div className="grid grid-cols-5 items-center gap-2">

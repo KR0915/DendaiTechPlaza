@@ -1,39 +1,28 @@
-'use client'
-
 import { Button } from '@/components/ui/button';
 import { deleteBookmark } from '@/utils/dendaitech/Post/DELETE/PostDELTE';
-import { getIsBookmark } from '@/utils/dendaitech/Post/GET/PostGET';
 import { addBookmark } from '@/utils/dendaitech/Post/POST/PostPOST';
-import { useEffect, useState } from 'react';
 import StarButton from './StarButton';
 
 interface BookmarkButtonProps {
     postId: number;
+    State: boolean;
+    OnClickBookmarkButton?: (postId: number, type: string) => void;
 }
 
-export default function BookmarkButton({ postId }: BookmarkButtonProps) {
-    const [isBookmark, setIsBookmark] = useState<boolean>(false);
-
-    useEffect(() => {
-        const fetchBookmarkStatus = async () => {
-            try {
-                const isPreBookmark = await getIsBookmark(postId);
-                setIsBookmark(isPreBookmark);
-            } catch (error) {
-                console.error('Error fetching bookmark status:', error);
-            }
-        };
-
-        fetchBookmarkStatus();
-    }, [postId])
+export default function BookmarkButton({ postId, State, OnClickBookmarkButton }: BookmarkButtonProps) {
 
     const pushBookmark = async () => {
-        if (isBookmark == false) {
+        if (State == false) {
             await addBookmark(postId);
+            if (OnClickBookmarkButton) {
+                OnClickBookmarkButton(postId, "add");
+            }
         } else {
             await deleteBookmark(postId);
+            if (OnClickBookmarkButton) {
+                OnClickBookmarkButton(postId, "delete");
+            }
         }
-        setIsBookmark(!isBookmark)
     }
 
     return (
@@ -42,7 +31,7 @@ export default function BookmarkButton({ postId }: BookmarkButtonProps) {
             size="icon"
             onClick={pushBookmark}
         >
-            <StarButton isBookmark={isBookmark}></StarButton>
+            <StarButton isBookmark={State} color='DendaiTechBlue'></StarButton>
             <span className="sr-only">ブックマーク</span>
         </Button>
     )

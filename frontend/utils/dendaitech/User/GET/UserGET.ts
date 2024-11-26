@@ -41,8 +41,6 @@ export async function getUser(callbackUrl?: string): Promise<DendaiUser> {
         }
         redirect(loginUrl.href);
     }
-    console.log("ユーザーぜよ");
-    console.log(session)
 
     try {
         const res = await fetch(`${baseApiUrl}/user/info`, {
@@ -54,8 +52,7 @@ export async function getUser(callbackUrl?: string): Promise<DendaiUser> {
         if (!res.ok) {
             throw new Error(`HTTP error! status: ${res.status}`);
         }
-        console.log("ユーザーさいごぜよ");
-        console.log(res.json());
+
         return res.json();
     } catch (error) {
         throw new Error(`ユーザー情報の取得に失敗しました:\n${error}`);
