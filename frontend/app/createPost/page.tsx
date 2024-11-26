@@ -1,18 +1,30 @@
 'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { addPost } from "@/utils/dendaitech/Post/POST/PostPOST";
+import { Loader2, X } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import AvatarPost from "../post/components/avatar"; // AvatarPost コンポーネントをインポート
-import { X } from "lucide-react";
+import { ItemSelect } from "./components/ItemSelect";
+
+
+const departmentsData = [
+    "AD", "AJ", "EK", "EF", "ES", "EC", "EJ", "EH", "FI", "FA",
+    "FR", "NC", "NM", "NE", "RB", "RE", "RD", "RU", "RM", "RG"
+]
+
+const semestersData = ["前期", "後期", "その他"];
+
+const gradeData = ["1", "2", "3", "4"];
 
 export default function CreatePost() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [year, setYear] = useState(new Date().getFullYear());
-    const [grade, setGrade] = useState(1);
+    const [grade, setGrade] = useState("1");
     const [department, setDepartment] = useState("ES");
     const [semester, setSemester] = useState("前期");
     const [sharedUrls, setSharedUrls] = useState(["", ""]);
@@ -21,7 +33,7 @@ export default function CreatePost() {
     const { data: session, status } = useSession();
 
     if (status === "loading") {
-        return <p>Loading...</p>;
+        return <Loader2 className="ml-2 h-4 w-4 animate-spin" />;
     };
 
     if (!session) {
@@ -31,9 +43,9 @@ export default function CreatePost() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        const result = await addPost(title, description, year, grade, department, semester, sharedUrls, "/dashboard");
+        const result = await addPost(title, description, year, Number(grade), department, semester, sharedUrls, "/");
         if (result === true) {
-            router.push("/dashboard");
+            router.push("/");
         } else {
             setError(result as string);
         }
@@ -121,61 +133,28 @@ export default function CreatePost() {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">学年</label>
-                        <select
+                    <Label className="text-sm font-medium text-gray-700">学年</Label>
+                        <ItemSelect
+                            data={gradeData}
+                            labelName={"学年"}
                             value={grade}
-                            onChange={(e) => setGrade(Number(e.target.value))}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                            required
-                        >
-                            <option value={1}>1</option>
-                            <option value={2}>2</option>
-                            <option value={3}>3</option>
-                            <option value={4}>4</option>
-                        </select>
+                            onChange={(value) => setGrade(value)} />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">学科</label>
-                        <select
+                        <Label className="text-sm font-medium text-gray-700">学部</Label>
+                        <ItemSelect
+                            labelName={"学部"}
+                            data={departmentsData}
                             value={department}
-                            onChange={(e) => setDepartment(e.target.value)}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                            required
-                        >
-                            <option value="AD">AD</option>
-                            <option value="AJ">AJ</option>
-                            <option value="EK">EK</option>
-                            <option value="EF">EF</option>
-                            <option value="ES">ES</option>
-                            <option value="EC">EC</option>
-                            <option value="EJ">EJ</option>
-                            <option value="EH">EH</option>
-                            <option value="FI">FI</option>
-                            <option value="FA">FA</option>
-                            <option value="FR">FR</option>
-                            <option value="NC">NC</option>
-                            <option value="NM">NM</option>
-                            <option value="NE">NE</option>
-                            <option value="RB">RB</option>
-                            <option value="RE">RE</option>
-                            <option value="RD">RD</option>
-                            <option value="RU">RU</option>
-                            <option value="RM">RM</option>
-                            <option value="RG">RG</option>
-                        </select>
+                            onChange={(value) => setDepartment(value)} />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">学期</label>
-                        <select
+                        <Label className="text-sm font-medium text-gray-700">学期</Label>
+                        <ItemSelect
+                            labelName={"学期"}
+                            data={semestersData}
                             value={semester}
-                            onChange={(e) => setSemester(e.target.value)}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                            required
-                        >
-                            <option value="前期">前期</option>
-                            <option value="後期">後期</option>
-                            <option value="その他">その他</option>
-                        </select>
+                            onChange={(value) => setSemester(value)} />
                     </div>
                     <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
                         投稿する
