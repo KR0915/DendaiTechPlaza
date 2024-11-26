@@ -23,15 +23,27 @@ export type SearchOptionsReturn = {
 };
 
 export const useSearchOptions = (): SearchOptionsReturn => {
-  const [year, setYear] = useState(() => localStorage.getItem("year") || "2024");
-  const [department, setDepartment] = useState(() => localStorage.getItem("department") || "FI");
-  const [grade, setGrade] = useState(() => localStorage.getItem("grade") || "3");
-  const [semester, setSemester] = useState(() => localStorage.getItem("semester") || "前期");
-  const [yearChecked, setYearChecked] = useState(() => localStorage.getItem("yearChecked") === "true");
-  const [departmentChecked, setDepartmentChecked] = useState(() => localStorage.getItem("departmentChecked") === "true");
-  const [gradeChecked, setGradeChecked] = useState(() => localStorage.getItem("gradeChecked") === "true");
-  const [semesterChecked, setSemesterChecked] = useState(() => localStorage.getItem("semesterChecked") === "true");
-  const [searchText, setSearchText] = useState(() => localStorage.getItem("searchText") || "");
+  const [year, setYear] = useState("2024");
+  const [department, setDepartment] = useState("FI");
+  const [grade, setGrade] = useState("3");
+  const [semester, setSemester] = useState("前期");
+  const [yearChecked, setYearChecked] = useState(false);
+  const [departmentChecked, setDepartmentChecked] = useState(false);
+  const [gradeChecked, setGradeChecked] = useState(false);
+  const [semesterChecked, setSemesterChecked] = useState(false);
+  const [searchText, setSearchText] = useState("");
+
+  useEffect(() => {
+    setYear(localStorage.getItem("year") || "2024");
+    setDepartment(localStorage.getItem("department") || "FI");
+    setGrade(localStorage.getItem("grade") || "3");
+    setSemester(localStorage.getItem("semester") || "前期");
+    setYearChecked(localStorage.getItem("yearChecked") === "true");
+    setDepartmentChecked(localStorage.getItem("departmentChecked") === "true");
+    setGradeChecked(localStorage.getItem("gradeChecked") === "true");
+    setSemesterChecked(localStorage.getItem("semesterChecked") === "true");
+    setSearchText(localStorage.getItem("searchText") || "");
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("year", year);
