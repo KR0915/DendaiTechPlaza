@@ -87,8 +87,8 @@ export default function FormContent({ type, contentId, onContentAdded }: FormCon
                 <form onSubmit={handleCommentSubmit} className="space-y-4 mt-2">
                     <div className="flex items-start gap-2">
                         {type === "comment"
-                            ? <AvatarPost src={`/user/icons/${session?.user.id}.webp`} alt={`${session.user.name}`} fallback={`${session.user.name}`} size="md" />
-                            : <AvatarPost src={`/user/icons/${session?.user.id}.webp`} alt={`${session.user.name}`} fallback={`${session.user.name}`} size="sm" />
+                            ? <AvatarPost src={`/api/get-icon?id=${session?.user.id}`}  alt={`${session.user.name}`} fallback={`${session.user.name}`} size="md" />
+                            : <AvatarPost src={`/api/get-icon?id=${session?.user.id}`}  alt={`${session.user.name}`} fallback={`${session.user.name}`} size="sm" />
                         }
                         <div className="flex flex-col flex-grow">
                             <Textarea

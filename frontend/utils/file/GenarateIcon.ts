@@ -10,9 +10,7 @@ export default async function GenarateIcon(): Promise<boolean> {
         return false;
     }
     try {
-        console.log("tyoke")
         const publicDir = path.join(process.cwd(), 'public/user/icons');
-
         const sourceFile = path.join(publicDir, 'base.webp');
         const destinationFile = path.join(publicDir, `${session.user.id}.webp`);
         await copyFile(sourceFile, destinationFile);
