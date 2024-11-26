@@ -9,8 +9,8 @@ import { addUser } from "@/utils/dendaitech/Authentication/POST/AuthenticationPO
 import GenarateIcon from "@/utils/file/GenarateIcon"
 import { signIn } from 'next-auth/react'
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
-import router from "next/router"
+import { useRouter, useSearchParams } from "next/navigation"
+
 import { useState } from 'react'
 
 export default function RegisterForm() {
@@ -20,6 +20,7 @@ export default function RegisterForm() {
     const [password, setPassword] = useState<string>('');
     const [commonPassword, setCommonPassword] = useState<string>('');
     const [errorMessage, setErrorMessage] = useState<Error>();
+    const router = useRouter();
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || process.env.NEXT_PUBLIC_URL as string;
 
@@ -43,7 +44,7 @@ export default function RegisterForm() {
                         console.log("1111111111111111111111111111111");
                         const genatateAction = await GenarateIcon();
                         if (genatateAction) {
-                        console.log("Icon111111111111111111111");
+                            console.log("Icon111111111111111111111");
                             router.push(callbackUrl);
                         }
                     } catch (error) {
