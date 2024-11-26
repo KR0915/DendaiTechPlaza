@@ -33,6 +33,8 @@ export interface CommentPage {
 }
 
 export interface Post {
+    id: Key | null | undefined;
+    content: ReactNode;
     postId: number;
     userId: string;
     username: string;

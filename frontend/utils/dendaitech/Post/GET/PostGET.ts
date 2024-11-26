@@ -165,7 +165,7 @@ export async function getSearchPosts(keyword?: string, year?: number, grade?: nu
         targetUrl.searchParams.append('year', year.toString());
     }
     if (grade) {
-        const verification = z.number().min(1, "gradeの値は1以上でお願いします。").max(4, `gradeの値は4以下でお願いします。`).safeParse(year);
+        const verification = z.number().min(1, "gradeの値は1以上でお願いします。").max(4, `gradeの値は4以下でお願いします。`).safeParse(grade);
         if (!verification.success) {
             return verification.error.errors[0].message;
         }

@@ -1,95 +1,112 @@
 "use client";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import { CheckboxSelect } from "./components/checkboxSelect";
-import { useCheckboxOption } from "./components/useCheckboxOption";
-import { Button } from "@/components/ui/button";
-import SubmitButton from "@/components/elements/Buttons/SubmitButton/SubmitButton";
+import React, { useState, useEffect, FormEvent } from "react";
+import { SearchForm } from "./components/SearchForm";
+import { SearchResults } from "./components/SearchResults";
+import { getSearchPosts } from "@/utils/dendaitech/Post/GET/PostGET";
+import { Post } from "@/types/post";
+import { useSearchOptions } from "./hooks/useSearchOptions";
+import { isPostResponse } from "./utils/searchUtils";
 
-export default function search() {
-  const {
-    year,
-    setYear,
-    department,
-    setDepartment,
-    grade,
-    setGrade,
-    semester,
-    setSemester,
-    yearChecked,
-    setYearChecked,
-    departmentChecked,
-    setDepartmentChecked,
-    gradeChecked,
-    setGradeChecked,
-    semesterChecked,
-    setSemesterChecked,
-    handleClear,
-    yearOptions,
-    departmentOptions,
-    gradeOptions,
-    semesterOptions,
-  } = useCheckboxOption();
+export default function SearchPage() {
+  const searchOptions = useSearchOptions();
+  const [searchResults, setSearchResults] = useState<{
+    content: Post[];
+    totalPages: number;
+    number: number;
+    size: number;
+  }>(() => {
+    const savedResults = localStorage.getItem('searchResults');
+    return savedResults ? JSON.parse(savedResults) : { content: [], totalPages: 0, number: 0, size: 10 };
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const query = searchParams.get('q');
+    if (query) {
+      searchOptions.setSearchText(query);
+      handleSearch(new Event('submit') as unknown as FormEvent<HTMLFormElement>);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('searchResults', JSON.stringify(searchResults));
+  }, [searchResults]);
+
+  const handleSearch = async (e: FormEvent<HTMLFormElement> | Event, page: number = 0) => {
+    if (e instanceof Event) {
+      e.preventDefault();
+    }
+    setIsLoading(true);
+    setHasSearched(true);
+    setError(null);
+    try {
+      const results = await getSearchPosts(
+        searchOptions.searchText || undefined,
+        searchOptions.yearChecked ? parseInt(searchOptions.year) : undefined,
+        searchOptions.gradeChecked ? parseInt(searchOptions.grade) : undefined,
+        searchOptions.departmentChecked ? searchOptions.department : undefined,
+        searchOptions.semesterChecked ? searchOptions.semester : undefined,
+        page,
+        10
+      );
+      if (isPostResponse(results)) {
+        setSearchResults({
+          content: results.content || [],
+          totalPages: results.totalPages || 0,
+          number: results.number || 0,
+          size: results.size || 10,
+        });
+        const searchParams = new URLSearchParams(window.location.search);
+        searchParams.set('q', searchOptions.searchText || '');
+        searchParams.set('page', page.toString());
+        window.history.pushState({}, '', `${window.location.pathname}?${searchParams}`);
+      } else {
+        throw new Error(results);
+      }
+    } catch (error) {
+      console.error("検索中にエラーが発生しました:", error);
+      if (error instanceof Error) {
+        setError(`検索中にエラーが発生しました: ${error.message}`);
+      } else {
+        setError("検索中に予期せぬエラーが発生しました。もう一度お試しください。");
+      }
+      setSearchResults({ content: [], totalPages: 0, number: 0, size: 10 });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    handleSearch(new Event('submit'), page);
+  };
 
   return (
     <div className="bg-slate-200 min-h-screen">
       <div className="space-y-2 p-8 max-w-4xl mx-auto">
-        <div className="bg-white rounded-md relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-          <Input placeholder="キーワード or 投稿ID" className="pl-10 w-full" />
-        </div>
-        <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-5">
-            <div className="md:col-span-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-              <CheckboxSelect
-                label={"年度"}
-                value={year}
-                onValueChange={setYear}
-                checked={yearChecked}
-                onCheckedChange={setYearChecked}
-                options={yearOptions}
-              />
-              <CheckboxSelect
-                label={"学科"}
-                value={department}
-                onValueChange={setDepartment}
-                checked={departmentChecked}
-                onCheckedChange={setDepartmentChecked}
-                options={departmentOptions}
-              />
-              <CheckboxSelect
-                label={"学年"}
-                value={grade}
-                onValueChange={setGrade}
-                checked={gradeChecked}
-                onCheckedChange={setGradeChecked}
-                options={gradeOptions}
-              />
-              <CheckboxSelect
-                label={"開講時期"}
-                value={semester}
-                onValueChange={setSemester}
-                checked={semesterChecked}
-                onCheckedChange={setSemesterChecked}
-                options={semesterOptions}
-              />
-            </div>
-            <div className="mt-2 md:ml-auto md:self-end">
-              <Button
-                variant="outline"
-                onClick={handleClear}
-                className="bg-white"
-              >
-                入力をクリア
-              </Button>
-            </div>
+        <SearchForm
+          searchOptions={searchOptions}
+          handleSearch={handleSearch}
+          handleClear={searchOptions.handleClear}
+          isLoading={isLoading}
+        />
+        {error && (
+          <div
+            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
+            <span className="block sm:inline">{error}</span>
           </div>
-          <SubmitButton
-            preText={"検索"}
-            postText={"検索中..."}
-            disabled={false}
-          />
-        </div>
+        )}
+        {isLoading ? (
+          <div className="text-center mt-4" aria-label="読み込み中">
+            読み込み中...
+          </div>
+        ) : hasSearched ? (
+          <SearchResults results={searchResults} onPageChange={handlePageChange} />
+        ) : null}
       </div>
     </div>
   );
