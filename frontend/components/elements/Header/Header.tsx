@@ -17,7 +17,7 @@ export default function Header() {
         </div>
         <div className="col-start-3 col-span-1 my-auto">
           <div className="border-l-2 justify-self-center hover:opacity-40">
-            <Link href={"/"}>
+            <Link href={"/createPost"}>
               <div className="pl-2 flex ">
                 <Image
                   src={"/header/pen-tool.svg"}
