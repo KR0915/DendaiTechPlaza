@@ -6,6 +6,7 @@ import { SearchForm } from "./components/SearchForm";
 import { SearchResults } from "./components/SearchResults";
 import { useSearchOptions } from "./hooks/useSearchOptions";
 import { isPostResponse } from "./utils/searchUtils";
+import Header from "@/components/elements/Header/Header";
 
 export default function SearchPage() {
   //コンポーネントのマウント状態を記録
@@ -123,7 +124,7 @@ export default function SearchPage() {
         setIsLoading(false);
       }
     },
-    [searchOptions, isLoading, prevSearchConditions]
+    [searchOptions, prevSearchConditions]
   );
 
   const setInitialSearchFromQuery = useCallback(() => {
@@ -178,24 +179,27 @@ export default function SearchPage() {
   }
 
   return (
-    <div className="bg-slate-200 min-h-screen">
-      <div className="space-y-2 p-8 max-w-4xl mx-auto">
-        {memoizedSearchForm}
-        {error && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-            role="alert"
-          >
-            <span className="block sm:inline">{error}</span>
-          </div>
-        )}
-        {isLoading ? (
-          <div className="text-center mt-4" aria-label="読み込み中">
-            読み込み中...
-          </div>
-        ) : (
-          memoizedSearchResults
-        )}
+    <div>
+      <Header />
+      <div className="bg-slate-200 min-h-screen">
+        <div className="space-y-2 p-8 max-w-4xl mx-auto">
+          {memoizedSearchForm}
+          {error && (
+            <div
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+              role="alert"
+            >
+              <span className="block sm:inline">{error}</span>
+            </div>
+          )}
+          {isLoading ? (
+            <div className="text-center mt-4" aria-label="読み込み中">
+              読み込み中...
+            </div>
+          ) : (
+            memoizedSearchResults
+          )}
+        </div>
       </div>
     </div>
   );
