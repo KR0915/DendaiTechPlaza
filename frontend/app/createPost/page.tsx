@@ -1,13 +1,14 @@
 'use client';
 
-import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { addPost } from "@/utils/dendaitech/Post/POST/PostPOST";
-import { Loader2, X } from "lucide-react";
+import { Loader2, Plus, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import AvatarPost from "../post/components/avatar"; // AvatarPost コンポーネントをインポート
 import { ItemSelect } from "./components/ItemSelect";
 
 
@@ -27,7 +28,7 @@ export default function CreatePost() {
     const [grade, setGrade] = useState("1");
     const [department, setDepartment] = useState("ES");
     const [semester, setSemester] = useState("前期");
-    const [sharedUrls, setSharedUrls] = useState(["", ""]);
+    const [sharedUrls, setSharedUrls] = useState([""]);
     const [error, setError] = useState("");
     const router = useRouter();
     const { data: session, status } = useSession();
@@ -70,96 +71,102 @@ export default function CreatePost() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-slate-200 postContent">
-            <Card className="relative max-w-full md:max-w-screen-md mt-48 mb-48 p-8">
-                <div className="absolute top-4 left-4">
-                    <AvatarPost src={`/api/get-icon?id=${session.user.id}`} alt={session.user.username} fallback={session.user.username} size="md" />
-                </div>
-                <h1 className="text-2xl mb-4">新しい投稿を作成</h1>
-                {error && <p className="text-red-500">{error}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">共有URL</label>
-                        {sharedUrls.map((url, index) => (
-                            <div key={index} className="flex items-center mb-2">
-                                <input
-                                    type="url"
-                                    value={url}
-                                    onChange={(e) => handleUrlChange(index, e.target.value)}
-                                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => removeUrlField(index)}
-                                    className="ml-2 text-red-500"
-                                >
-                                    <X />
-                                </button>
-                            </div>
-                        ))}
-                        {sharedUrls.length < 4 && (
-                            <button type="button" onClick={addUrlField} className="text-blue-500">
-                                URLを追加
-                            </button>
-                        )}
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">タイトル</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">説明</label>
-                        <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-gray-700">学年度</label>
-                        <input
-                            type="number"
-                            value={year}
-                            onChange={(e) => setYear(Number(e.target.value))}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                    <Label className="text-sm font-medium text-gray-700">学年</Label>
-                        <ItemSelect
-                            data={gradeData}
-                            labelName={"学年"}
-                            value={grade}
-                            onChange={(value) => setGrade(value)} />
-                    </div>
-                    <div className="mb-4">
-                        <Label className="text-sm font-medium text-gray-700">学部</Label>
-                        <ItemSelect
-                            labelName={"学部"}
-                            data={departmentsData}
-                            value={department}
-                            onChange={(value) => setDepartment(value)} />
-                    </div>
-                    <div className="mb-4">
-                        <Label className="text-sm font-medium text-gray-700">学期</Label>
-                        <ItemSelect
-                            labelName={"学期"}
-                            data={semestersData}
-                            value={semester}
-                            onChange={(value) => setSemester(value)} />
-                    </div>
-                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
-                        投稿する
-                    </button>
-                </form>
+            <Card className="max-w-full min-w-[95vw] md:min-w-[768px] md:max-w-screen-md mt-48 mb-48 md:mx-12">
+                <CardHeader>
+
+                    <CardTitle>新しい投稿を作成</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    {error && <p className="text-red-500">{error}</p>}
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-4">
+                            <Label className="block text-sm font-medium text-gray-700">共有URL</Label>
+                            {sharedUrls.map((url, index) => (
+                                <div key={index} className="flex items-center mb-2">
+                                    <Input
+                                        type="url"
+                                        value={url}
+                                        onChange={(e) => handleUrlChange(index, e.target.value)}
+                                        className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                                        required
+                                    />
+                                    {index > 0 &&
+                                        <Button
+                                            variant="ghost"
+                                            size={"icon"}
+                                            onClick={() => removeUrlField(index)}
+                                            className="ml-2 text-red-500"
+                                        >
+                                            <X />
+                                        </Button>
+                                    }
+
+                                </div>
+                            ))}
+                            {sharedUrls.length < 4 && (
+                                <Button type="button" variant="ghost" onClick={addUrlField} className="hover:text-blue-500 w-full bg-slate-100">
+                                    <Plus />
+                                </Button>
+                            )}
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">タイトル</label>
+                            <input
+                                type="text"
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">説明</label>
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700">学年度</label>
+                            <input
+                                type="number"
+                                value={year}
+                                onChange={(e) => setYear(Number(e.target.value))}
+                                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"
+                                required
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <Label className="text-sm font-medium text-gray-700">学年</Label>
+                            <ItemSelect
+                                data={gradeData}
+                                labelName={"学年"}
+                                value={grade}
+                                onChange={(value) => setGrade(value)} />
+                        </div>
+                        <div className="mb-4">
+                            <Label className="text-sm font-medium text-gray-700">学部</Label>
+                            <ItemSelect
+                                labelName={"学部"}
+                                data={departmentsData}
+                                value={department}
+                                onChange={(value) => setDepartment(value)} />
+                        </div>
+                        <div className="mb-4">
+                            <Label className="text-sm font-medium text-gray-700">学期</Label>
+                            <ItemSelect
+                                labelName={"学期"}
+                                data={semestersData}
+                                value={semester}
+                                onChange={(value) => setSemester(value)} />
+                        </div>
+                        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                            投稿する
+                        </button>
+                    </form>
+                </CardContent>
             </Card>
         </div>
     );
