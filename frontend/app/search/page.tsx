@@ -124,7 +124,7 @@ export default function SearchPage() {
         setIsLoading(false);
       }
     },
-    [searchOptions, prevSearchConditions]
+    [searchOptions,isLoading, prevSearchConditions]
   );
 
   const setInitialSearchFromQuery = useCallback(() => {
