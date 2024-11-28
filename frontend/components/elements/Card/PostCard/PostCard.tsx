@@ -1,9 +1,11 @@
+'use client';
 import Image from "@/node_modules/next/image";
 import { Post } from "@/types/post";
 import { convertUTCtoJST } from "@/utils/timeFormatter/timeFormatter";
 import Link from "next/link";
-import { Suspense } from "react";
+import { usePathname } from "next/navigation";
 import BookmarkButton from "../../Buttons/BookmarkButton/BookmarkButton";
+import BookmarkButtonWithCountFlat from "../../Buttons/BookmarkButton/BookmarkButtonWithCountFlat";
 
 interface PostCardProps {
   post: Post;
@@ -14,6 +16,7 @@ interface PostCardProps {
 
 
 export default function PostCards({ post, bookmarkStatus, bookmarkCount, OnClickBookmarkButton }: PostCardProps) {
+  const pathname = usePathname();
   return (
     <div
       key={post.postId}
@@ -35,12 +38,13 @@ export default function PostCards({ post, bookmarkStatus, bookmarkCount, OnClick
         </div>
         <div className="flex items-center">
           <div>
-            <BookmarkButton postId={post.postId} State={bookmarkStatus && bookmarkStatus.get(post.postId) || false} OnClickBookmarkButton={OnClickBookmarkButton} />
+            {pathname === "/"
+              ? <BookmarkButton postId={post.postId} State={bookmarkStatus && bookmarkStatus.get(post.postId) || false} OnClickBookmarkButton={OnClickBookmarkButton} />
+              : <BookmarkButtonWithCountFlat count={post.likesCount} postId={post.postId} />
+            }
           </div>
           <div className="text-DendaiTechBlue">
-            <Suspense fallback={post.likesCount}>
-              {bookmarkCount ? bookmarkCount.get(post.postId) : post.likesCount}
-            </Suspense>
+              {bookmarkCount && bookmarkCount.get(post.postId)}
           </div>
         </div>
       </div>

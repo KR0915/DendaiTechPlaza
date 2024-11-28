@@ -1,16 +1,16 @@
-import React, { FormEvent } from "react";
+import SubmitButton from "@/components/elements/Buttons/SubmitButton/SubmitButton";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import SubmitButton from "@/components/elements/Buttons/SubmitButton/SubmitButton";
+import { FormEvent } from "react";
 import { CheckboxSelect } from "../components/CheckboxSelect";
+import { SearchOptionsReturn } from "../hooks/useSearchOptions";
 import {
-  yearOptions,
   departmentOptions,
   gradeOptions,
   semesterOptions,
+  yearOptions,
 } from "../utils/searchUtils";
-import { SearchOptionsReturn } from "../hooks/useSearchOptions";
 
 interface SearchFormProps {
   searchOptions: SearchOptionsReturn;
