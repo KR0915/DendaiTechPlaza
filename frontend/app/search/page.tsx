@@ -8,20 +8,28 @@ import { useSearchOptions } from "./hooks/useSearchOptions";
 import { isPostResponse } from "./utils/searchUtils";
 
 export default function SearchPage() {
+  //コンポーネントのマウント状態を記録
   const [isClient, setIsClient] = useState(false);
+
+  //カスタムフック, ドロップダウンの状態を保持
   const searchOptions = useSearchOptions();
+
+  //投稿の検索した結果を保持、ページネーション関連も保持
   const [searchResults, setSearchResults] = useState<{
     content: Post[];
     totalPages: number;
     number: number;
     size: number;
   }>(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const savedResults = localStorage.getItem("searchResults");
-      return savedResults ? JSON.parse(savedResults) : { content: [], totalPages: 0, number: 0, size: 10 };
+      return savedResults
+        ? JSON.parse(savedResults)
+        : { content: [], totalPages: 0, number: 0, size: 10 };
     }
     return { content: [], totalPages: 0, number: 0, size: 10 };
   });
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
@@ -32,31 +40,35 @@ export default function SearchPage() {
     setIsClient(true);
   }, []);
 
-  const saveSearchResults = useCallback(() => {
+  //検索結果が変わるごとに保管する
+  useEffect(() => {
     if (isClient) {
       localStorage.setItem("searchResults", JSON.stringify(searchResults));
     }
   }, [isClient, searchResults]);
 
-  useEffect(() => {
-    saveSearchResults();
-  }, [saveSearchResults]);
-
   const handleSearch = useCallback(
     async (e: FormEvent<HTMLFormElement> | Event, page: number = 0) => {
-      e.preventDefault();
+      e.preventDefault(); //ページのリロード(再レンダリング)を防止
       if (isLoading) return;
 
       const currentSearchConditions = {
         searchText: searchOptions.searchText,
         year: searchOptions.yearChecked ? searchOptions.year : undefined,
         grade: searchOptions.gradeChecked ? searchOptions.grade : undefined,
-        department: searchOptions.departmentChecked ? searchOptions.department : undefined,
-        semester: searchOptions.semesterChecked ? searchOptions.semester : undefined,
+        department: searchOptions.departmentChecked
+          ? searchOptions.department
+          : undefined,
+        semester: searchOptions.semesterChecked
+          ? searchOptions.semester
+          : undefined,
         page,
       };
 
-      if (JSON.stringify(currentSearchConditions) === JSON.stringify(prevSearchConditions)) {
+      if (
+        JSON.stringify(currentSearchConditions) ===
+        JSON.stringify(prevSearchConditions)
+      ) {
         return;
       }
 
@@ -69,8 +81,12 @@ export default function SearchPage() {
         const results = await getSearchPosts(
           searchOptions.searchText || undefined,
           searchOptions.yearChecked ? parseInt(searchOptions.year) : undefined,
-          searchOptions.gradeChecked ? parseInt(searchOptions.grade) : undefined,
-          searchOptions.departmentChecked ? searchOptions.department : undefined,
+          searchOptions.gradeChecked
+            ? parseInt(searchOptions.grade)
+            : undefined,
+          searchOptions.departmentChecked
+            ? searchOptions.department
+            : undefined,
           searchOptions.semesterChecked ? searchOptions.semester : undefined,
           page,
           10
@@ -98,7 +114,9 @@ export default function SearchPage() {
         if (error instanceof Error) {
           setError(`検索中にエラーが発生しました: ${error.message}`);
         } else {
-          setError("検索中に予期せぬエラーが発生しました。もう一度お試しください。");
+          setError(
+            "検索中に予期せぬエラーが発生しました。もう一度お試しください。"
+          );
         }
         setSearchResults({ content: [], totalPages: 0, number: 0, size: 10 });
       } finally {
@@ -114,7 +132,9 @@ export default function SearchPage() {
     const query = searchParams.get("q");
     if (query) {
       searchOptions.setSearchText(query);
-      handleSearch(new Event("submit") as unknown as FormEvent<HTMLFormElement>);
+      handleSearch(
+        new Event("submit") as unknown as FormEvent<HTMLFormElement>
+      );
       setHasInitialSearched(true);
     }
   }, [isClient, hasInitialSearched, searchOptions, handleSearch]);
@@ -123,27 +143,35 @@ export default function SearchPage() {
     setInitialSearchFromQuery();
   }, [setInitialSearchFromQuery]);
 
-  const handlePageChange = useCallback((page: number) => {
-    handleSearch(new Event("submit"), page);
-  }, [handleSearch]);
+  const handlePageChange = useCallback(
+    (page: number) => {
+      handleSearch(new Event("submit"), page);
+    },
+    [handleSearch]
+  );
 
-  const memoizedSearchForm = useMemo(() => (
-    <SearchForm
-      searchOptions={searchOptions}
-      handleSearch={handleSearch}
-      handleClear={searchOptions.handleClear}
-      isLoading={isLoading}
-    />
-  ), [searchOptions, handleSearch, isLoading]);
-
-  const memoizedSearchResults = useMemo(() => (
-    hasSearched ? (
-      <SearchResults
-        results={searchResults}
-        onPageChange={handlePageChange}
+  const memoizedSearchForm = useMemo(
+    () => (
+      <SearchForm
+        searchOptions={searchOptions}
+        handleSearch={handleSearch}
+        handleClear={searchOptions.handleClear}
+        isLoading={isLoading}
       />
-    ) : null
-  ), [hasSearched, searchResults, handlePageChange]);
+    ),
+    [searchOptions, handleSearch, isLoading]
+  );
+
+  const memoizedSearchResults = useMemo(
+    () =>
+      hasSearched ? (
+        <SearchResults
+          results={searchResults}
+          onPageChange={handlePageChange}
+        />
+      ) : null,
+    [hasSearched, searchResults, handlePageChange]
+  );
 
   if (!isClient) {
     return <div>読み込み中...</div>;
@@ -165,7 +193,9 @@ export default function SearchPage() {
           <div className="text-center mt-4" aria-label="読み込み中">
             読み込み中...
           </div>
-        ) : memoizedSearchResults}
+        ) : (
+          memoizedSearchResults
+        )}
       </div>
     </div>
   );

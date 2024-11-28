@@ -6,6 +6,7 @@ export function isPostResponse(
   return (response as PostResponse).content !== undefined;
 }
 
+//ドロップダウンの年度のプロパティ
 export const yearOptions = [
   { value: "2017", label: "2017" },
   { value: "2018", label: "2018" },
@@ -19,6 +20,7 @@ export const yearOptions = [
   { value: "2026", label: "2026" },
 ];
 
+//ドロップダウンの学科のプロパティ
 export const departmentOptions = [
   { value: "AD", label: "AD" },
   { value: "AJ", label: "AJ" },
@@ -42,6 +44,7 @@ export const departmentOptions = [
   { value: "RG", label: "RG" },
 ];
 
+//ドロップダウンの学年のプロパティ
 export const gradeOptions = [
   { value: "1", label: "1" },
   { value: "2", label: "2" },
@@ -49,6 +52,7 @@ export const gradeOptions = [
   { value: "4", label: "4" },
 ];
 
+//ドロップダウンの学期のプロパティ
 export const semesterOptions = [
   { value: "前期", label: "前期" },
   { value: "後期", label: "後期" },

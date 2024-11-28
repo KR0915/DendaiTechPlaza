@@ -13,6 +13,7 @@ interface SearchResultsProps {
   onPageChange: (page: number) => void;
 }
 
+//検索したポストを生成、ページネーションも生成
 export const SearchResults: React.FC<SearchResultsProps> = ({ results, onPageChange }) => {
   if (!results || !results.content || results.content.length === 0) {
     return <div className="text-center mt-4">検索結果がありません。</div>;
