@@ -7,6 +7,11 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 
+//label:1(年度),FI(学科)等 (utils/searchUtils.tsを参照)
+//value:上記と同様
+//onValueChange:ドロップダウンで選択変更時に選択した値を受ける
+//checkeḍ:チェックボックスの状態(選択されているか、されていないか)
+//onChecked:チェックボックスの状態の変更時に値を受ける
 interface CheckboxSelectProps {
   label: string;
   value: string;
@@ -16,6 +21,7 @@ interface CheckboxSelectProps {
   options: { value: string; label: string }[];
 }
 
+//チェックボックスとドロップダウンをまとめたコンポーネント
 export function CheckboxSelect({
   label,
   value,

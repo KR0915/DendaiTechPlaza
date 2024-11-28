@@ -1,20 +1,28 @@
 import SubmitButton from "@/components/elements/Buttons/SubmitButton/SubmitButton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search } from 'lucide-react';
-import React, { FormEvent } from "react";
+import { Search } from "lucide-react";
+import { FormEvent } from "react";
 import { CheckboxSelect } from "../components/CheckboxSelect";
 import { SearchOptionsReturn } from "../hooks/useSearchOptions";
-import { departmentOptions, gradeOptions, semesterOptions, yearOptions } from "../utils/searchUtils";
+import {
+  departmentOptions,
+  gradeOptions,
+  semesterOptions,
+  yearOptions,
+} from "../utils/searchUtils";
 
 interface SearchFormProps {
   searchOptions: SearchOptionsReturn;
-  handleSearch: (e: FormEvent<HTMLFormElement> | Event, page?: number) => Promise<void>;
+  handleSearch: (
+    e: FormEvent<HTMLFormElement> | Event,
+    page?: number
+  ) => Promise<void>;
   handleClear: () => void;
   isLoading: boolean;
 }
 
-export const SearchForm: React.FC<SearchFormProps> = React.memo(({
+export const SearchForm: React.FC<SearchFormProps> = ({
   searchOptions,
   handleSearch,
   handleClear,
@@ -42,21 +50,25 @@ export const SearchForm: React.FC<SearchFormProps> = React.memo(({
   } = searchOptions;
 
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault();
-      handleSearch(e);
-    }} aria-label="検索フォーム">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault(); //検索時、ページのリロード(再レンダリング)を防止
+        handleSearch(e);
+      }}
+    >
       <div className="space-y-2">
         <div className="bg-white rounded-md relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
             placeholder="キーワード or 投稿ID"
             className="pl-10 w-full"
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e) => setSearchText(e.target.value)} //入力された文字列をセット
             onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSearch(new Event('submit') as unknown as FormEvent<HTMLFormElement>);
+              if (e.key === "Enter") {
+                e.preventDefault(); //検索時、ページのリロード(再レンダリング)を防止
+                handleSearch(
+                  new Event("submit") as unknown as FormEvent<HTMLFormElement>
+                );//Enterを押しても「検索」ボタンを押したときと同じ動作をする
               }
             }}
             value={searchText}
@@ -103,8 +115,8 @@ export const SearchForm: React.FC<SearchFormProps> = React.memo(({
               <Button
                 variant="outline"
                 onClick={(e) => {
-                  e.preventDefault();
-                  handleClear();
+                  e.preventDefault(); //検索時、ページのリロード(再レンダリング)
+                  handleClear(); //チェックを外す
                 }}
                 className="bg-white"
                 aria-label="入力をクリア"
@@ -123,6 +135,4 @@ export const SearchForm: React.FC<SearchFormProps> = React.memo(({
       </div>
     </form>
   );
-});
-
-SearchForm.displayName = "SearchForm";
+};

@@ -1,5 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from "react";
 
+//searchUtilsで宣言してある検索条件の変数を保持する型
+//ユーザの入力(searchText), チェックボックス選択解除(handleClear)も合わせて宣言
 export type SearchOptionsReturn = {
   year: string;
   setYear: (value: string) => void;
@@ -22,17 +24,32 @@ export type SearchOptionsReturn = {
   handleClear: () => void;
 };
 
+//プルダウンの状態管理
 export const useSearchOptions = (): SearchOptionsReturn => {
-  const [year, setYear] = useState(() => localStorage.getItem("year") || "2024");
-  const [department, setDepartment] = useState(() => localStorage.getItem("department") || "FI");
-  const [grade, setGrade] = useState(() => localStorage.getItem("grade") || "3");
-  const [semester, setSemester] = useState(() => localStorage.getItem("semester") || "前期");
-  const [yearChecked, setYearChecked] = useState(() => localStorage.getItem("yearChecked") === "true");
-  const [departmentChecked, setDepartmentChecked] = useState(() => localStorage.getItem("departmentChecked") === "true");
-  const [gradeChecked, setGradeChecked] = useState(() => localStorage.getItem("gradeChecked") === "true");
-  const [semesterChecked, setSemesterChecked] = useState(() => localStorage.getItem("semesterChecked") === "true");
-  const [searchText, setSearchText] = useState(() => localStorage.getItem("searchText") || "");
+  const [year, setYear] = useState("2024");
+  const [department, setDepartment] = useState("FI");
+  const [grade, setGrade] = useState("3");
+  const [semester, setSemester] = useState("前期");
+  const [yearChecked, setYearChecked] = useState(false);
+  const [departmentChecked, setDepartmentChecked] = useState(false);
+  const [gradeChecked, setGradeChecked] = useState(false);
+  const [semesterChecked, setSemesterChecked] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
+  //初回レンダリング,ページのリロードで利用
+  useEffect(() => {
+    setYear(localStorage.getItem("year") || "2024");
+    setDepartment(localStorage.getItem("department") || "FI");
+    setGrade(localStorage.getItem("grade") || "3");
+    setSemester(localStorage.getItem("semester") || "前期");
+    setYearChecked(localStorage.getItem("yearChecked") === "true");
+    setDepartmentChecked(localStorage.getItem("departmentChecked") === "true");
+    setGradeChecked(localStorage.getItem("gradeChecked") === "true");
+    setSemesterChecked(localStorage.getItem("semesterChecked") === "true");
+    setSearchText(localStorage.getItem("searchText") || "");
+  }, []);
+
+  //ドロップダウン,検索ワード等をローカルストレージに保存
   useEffect(() => {
     localStorage.setItem("year", year);
     localStorage.setItem("department", department);
@@ -43,8 +60,19 @@ export const useSearchOptions = (): SearchOptionsReturn => {
     localStorage.setItem("gradeChecked", gradeChecked.toString());
     localStorage.setItem("semesterChecked", semesterChecked.toString());
     localStorage.setItem("searchText", searchText);
-  }, [year, department, grade, semester, yearChecked, departmentChecked, gradeChecked, semesterChecked, searchText]);
+  }, [
+    year,
+    department,
+    grade,
+    semester,
+    yearChecked,
+    departmentChecked,
+    gradeChecked,
+    semesterChecked,
+    searchText,
+  ]);
 
+  //チェックボックスのチェックを外す処理
   const handleClear = useCallback(() => {
     setYearChecked(false);
     setDepartmentChecked(false);
