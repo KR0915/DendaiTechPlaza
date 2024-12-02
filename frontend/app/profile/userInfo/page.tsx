@@ -32,15 +32,16 @@ export default async function userInfo() {
                 </Suspense>
 
 
-                <form>
+                <form className="max-w-screen-md">
                     <Label className="font-bold">ユーザー名</Label>
-                    <Input className="w-3/6"></Input>
-                    <Label className="font-bold">メールアドレス</Label>
-                    <Input className="w-3/6"></Input>
-                    <Label className="font-bold">パスワード</Label>
-                    <Input className="w-3/6"></Input>
-
-                    <Button className="mt-8 bg-DendaiTechBlue">変更</Button>
+                    <Input></Input>
+                    <Label>メールアドレス</Label>
+                    <Input></Input>
+                    <Label>パスワード</Label>
+                    <Input></Input>
+                    <div className="flex">
+                        <Button className="ml-auto mt-8 bg-DendaiTechBlue">変更</Button>
+                    </div>
                 </form>
             </div>
         </div>

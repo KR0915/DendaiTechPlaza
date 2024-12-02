@@ -77,7 +77,7 @@ export default function CreatePost() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-slate-200 postContent">
-            <Card className="max-w-full min-w-[95vw] md:min-w-[768px] md:max-w-screen-md mt-48 mb-48 md:mx-12">
+            <Card className="max-w-full min-w-[95vw] md:min-w-[768px] md:max-w-screen-md mt-24 md:mt-32 mb-48 md:mx-12">
                 <CardHeader>
                     <div className="flex">
                         <AvatarPost src={`/api/get-icon?id=${session.user.id}`} alt={`${session.user.username}`} fallback={`${session.user.username}`} />

@@ -18,7 +18,7 @@ export default async function post({ params }: { params: Promise<{ id: string }>
 
     return (
         <><div className="flex flex-col items-center justify-center min-h-screen bg-slate-200 postContent">
-            <Card className="max-w-full md:max-w-screen-md mt-48 mb-48">
+            <Card className="max-w-full md:max-w-screen-md mt-24 md:mt-32 mb-48">
 
                 {/* OGP Grid */}
 

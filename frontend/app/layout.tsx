@@ -33,7 +33,9 @@ export default function RootLayout({
       >
         <Providers>
           <Header />
-          {children}
+          <div className="mt-16">
+            {children}
+          </div>
           <Toaster />
         </Providers>
       </body>

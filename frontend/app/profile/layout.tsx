@@ -10,7 +10,7 @@ export default function RootLayout({
     return (
         <SidebarProvider>
             <ProfileSidebar />
-            <SidebarInset className="pt-16">
+            <SidebarInset>
                 <CustomTrigger />
                 {children}
             </SidebarInset>
