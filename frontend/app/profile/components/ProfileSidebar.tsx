@@ -1,7 +1,11 @@
-import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
+'use client';
+import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { useMediaQuery } from "usehooks-ts";
 
 export function ProfileSidebar() {
+    const { toggleSidebar } = useSidebar()
+    const isDesktop = useMediaQuery("(min-width: 768px)");
     const items = [
         {
             label: "プロフィール編集",
@@ -20,13 +24,19 @@ export function ProfileSidebar() {
         },
     ];
 
+    const handleItemClick = () => {
+        if (!isDesktop) {
+            toggleSidebar();
+        }
+    };
+
     return (
-        <Sidebar>
+        <Sidebar className="">
             <SidebarContent>
                 <SidebarGroup>
-                    <SidebarMenu>
+                    <SidebarMenu className="mt-16">
                         {items.map((item) => (
-                            <SidebarMenuItem key={item.key}>
+                            <SidebarMenuItem onClick={handleItemClick}key={item.key}>
                                 <SidebarMenuButton asChild>
                                     <Link href={item.url}>{item.label}</Link>
                                 </SidebarMenuButton>

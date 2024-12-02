@@ -1,3 +1,4 @@
+import Header from "@/components/elements/Header/Header";
 import { Toaster } from "@/components/ui/toaster";
 import { Providers } from "@/Providers";
 import type { Metadata } from "next";
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
+          <Header />
           {children}
           <Toaster />
         </Providers>

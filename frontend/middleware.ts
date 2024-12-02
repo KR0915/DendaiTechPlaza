@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
     const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET })
 
     // 許可リンク集。ここにかいてあるリンクから始まるパスはログインして無くても見れる。
-    const publicPaths = ['/signin', '/register', '/search', '/post', '/user/icons', '/confirmCurrentDirectory']
+    const publicPaths = ['/signin', '/register', '/search','/header' , '/post', '/user/icons', '/confirmCurrentDirectory']
 
     // トップページまたは許可されたリンクかどうか調べる。
     const isPublicPath = request.nextUrl.pathname === '/' || publicPaths.some(path => request.nextUrl.pathname.startsWith(path))

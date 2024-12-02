@@ -6,7 +6,6 @@ import { SearchForm } from "./components/SearchForm";
 import { SearchResults } from "./components/SearchResults";
 import { useSearchOptions } from "./hooks/useSearchOptions";
 import { isPostResponse } from "./utils/searchUtils";
-import Header from "@/components/elements/Header/Header";
 
 export default function SearchPage() {
   //コンポーネントのマウント状態を記録
@@ -180,7 +179,6 @@ export default function SearchPage() {
 
   return (
     <div>
-      <Header />
       <div className="bg-slate-200 min-h-screen">
         <div className="space-y-2 p-8 max-w-4xl mx-auto">
           {memoizedSearchForm}
