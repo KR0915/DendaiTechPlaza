@@ -1,0 +1,40 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: nextjs-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend/public:/app/public
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+    container_name: springboot-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/dendaiTech
+      SPRING_DATASOURCE_USERNAME: kaihatsurta
+      SPRING_DATASOURCE_PASSWORD: WEVtaE1pVkFwc0NuRkJkUVp1dmM
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    container_name: postgres-db
+    environment:
+      POSTGRES_DB: dendaiTech
+      POSTGRES_USER: kaihatsurta
+      POSTGRES_PASSWORD: WEVtaE1pVkFwc0NuRkJkUVp1dmM
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d # SQLスクリプトを自動実行するための設定
+    ports:
+      - "54320:5432"
+
+volumes:
+  db-data:

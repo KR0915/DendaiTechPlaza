@@ -59,6 +59,34 @@ docker-compose down --volumes
 docker-compose up -d
 ```
 
+### dockercomposeの開発環境と、本番環境の起動別コマンド
+
+開発
+
+```bash
+docker-compose -f docker-compose-dev.yml up  
+```
+
+本番
+
+```bash
+docker-compose -f docker-compose-prod.yml up  
+```
+
+### dockercomposeの開発環境と、本番環境の起動別コマンド　ビルドまでする場合
+
+開発
+
+```bash
+docker-compose -f docker-compose-dev.yml up  --build
+```
+
+本番
+
+```bash
+docker-compose -f docker-compose-prod.yml up --build
+```
+
 ## バックエンド設定
 
 SpringbootのJARファイルを作成するには：
