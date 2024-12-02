@@ -20,70 +20,65 @@ export default function PostCards({ post, bookmarkStatus, bookmarkCount, OnClick
   return (
     <div
       key={post.postId}
-      className="my-2 grid grid-cols-[auto,1fr] gap-6 border rounded-lg shadow-xl bg-white hover:opacity-80 min-w-[300px]"
+      className="my-2 border rounded-lg shadow-xl bg-white min-w-[300px] relative group"
     >
-      <div className="flex flex-col items-center">
-        <div className="relative w-14 h-14 p-2">
-          <Image
-            src={`/api/get-icon?id=${post.userId}`}
-            alt="アバター"
-            fill
-            sizes="56px"
-            style={{
-              objectFit: "contain",
-              padding: "2px",
-            }}
-            className="rounded-full"
-          />
-        </div>
-        <div className="flex items-center">
-          <div>
-            {pathname === "/"
-              ? <BookmarkButton postId={post.postId} State={bookmarkStatus && bookmarkStatus.get(post.postId) || false} OnClickBookmarkButton={OnClickBookmarkButton} />
-              : <BookmarkButtonWithCountFlat count={post.likesCount} postId={post.postId} />
-            }
+
+      <Link
+        href={`/post/${post.postId}`}
+        className="absolute inset-0 z-10"
+      />
+      <div className="relative transition-all duration-300 ease-in-out group-hover:bg-slate-800/10 flex">
+        <div className="flex flex-col items-center">
+          <div className="relative w-14 h-14 p-2">
+            <Image
+              src={`/api/get-icon?id=${post.userId}`}
+              alt="アバター"
+              fill
+              sizes="56px"
+              style={{
+                objectFit: "contain",
+                padding: "2px",
+              }}
+              className="rounded-full"
+            />
           </div>
-          <div className="text-DendaiTechBlue">
+          <div className="flex items-center">
+            <div className="relative z-20">
+              {pathname === "/"
+                ? <BookmarkButton postId={post.postId} State={bookmarkStatus && bookmarkStatus.get(post.postId) || false} OnClickBookmarkButton={OnClickBookmarkButton} />
+                : <BookmarkButtonWithCountFlat count={post.likesCount} postId={post.postId} />
+              }
+            </div>
+            <div className="text-DendaiTechBlue">
               {bookmarkCount && bookmarkCount.get(post.postId)}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="flex flex-col space-y-2 py-2">
-        <Link href={`/post/${post.postId}`}>
+
+        <div className="flex flex-grow flex-col space-y-2 py-2">
           <h3 className="text-lg font-bold">{post.title}</h3>
           <p className="text-sm">{post.description}</p>
-        </Link>
-        <div className="flex flex-wrap gap-2">
-          <Link href={"/search"}>
-            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+          <div className="flex flex-wrap gap-2">
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded">
               {post.year}
             </div>
-          </Link>
-          <Link href={"/search"}>
-            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded">
               {post.departmentName}
             </div>
-          </Link>
-          <Link href={"/search"}>
-            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded">
               {post.grade}
             </div>
-          </Link>
-          <Link href={"/search"}>
-            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
+            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded">
               {post.semester}
             </div>
-          </Link>
-          <Link href={"/search"}>
-            <div className="bg-zinc-400 px-2 py-1 text-xs font-medium text-white rounded hover:bg-zinc-500">
-              {post.username}
+            <div className="ml-auto pr-2  text-sm text-gray-500 self-end">
+              {convertUTCtoJST(post.updatedAt)}
             </div>
-          </Link>
-          <div className="ml-auto pr-2  text-sm text-gray-500 self-end">
-            {convertUTCtoJST(post.updatedAt)}
           </div>
         </div>
+
       </div>
+
     </div>
   );
 }
