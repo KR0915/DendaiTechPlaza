@@ -25,6 +25,8 @@ services:
       - "3000"
     environment:
       - NODE_ENV=production
+    volumes:
+      - ./frontend/public:/app/public
     networks:
       - app-network
     depends_on:
