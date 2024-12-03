@@ -1,17 +1,21 @@
 package com.dendai.backend.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dendai.backend.dto.BookmarkCheckDto;
 import com.dendai.backend.dto.ChangePasswordDto;
 import com.dendai.backend.dto.PostDtoImpl;
 import com.dendai.backend.dto.UserInfoDto;
@@ -31,6 +35,8 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "User", description = "ユーザー管理API")
 public class UserController {
 
+    
+
     private final UserService userService;
 
     @SecurityRequirement(name = "bearer-jwt")
@@ -41,6 +47,14 @@ public class UserController {
             @Parameter(description = "ページサイズ") @RequestParam(defaultValue = "10") int size) {
         Page<PostDtoImpl> bookmarks = userService.getUserBookmarks(getCurrentUserId(), page, size);
         return ResponseEntity.ok(bookmarks);
+    }
+
+    @SecurityRequirement(name = "bearer-jwt")
+    @Operation(summary = "複数の投稿のブックマーク状態を確認", description = "指定された投稿IDのリストに対して、ユーザーがブックマークしているかどうかを確認します")
+    @PostMapping("/bookmarkswithPostNumber")
+    public ResponseEntity<List<Boolean>> checkUserBookmarks(@RequestBody BookmarkCheckDto bookmarkCheckDto) {
+        List<Boolean> bookmarkStatus = userService.checkUserBookmarks(getCurrentUserId(), bookmarkCheckDto.getPostIds());
+        return ResponseEntity.ok(bookmarkStatus);
     }
 
     @SecurityRequirement(name = "bearer-jwt")

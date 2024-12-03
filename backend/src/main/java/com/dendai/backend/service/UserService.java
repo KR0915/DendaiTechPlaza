@@ -18,4 +18,5 @@ public interface UserService {
     void changePassword(Integer userId, ChangePasswordDto changePasswordDto);
     void deleteAccount(Integer userId);
     Page<PostDtoImpl> getUserBookmarks(Integer userId, int page, int size);
+    List<Boolean> checkUserBookmarks(Integer userId, List<Long> postIds);
 }

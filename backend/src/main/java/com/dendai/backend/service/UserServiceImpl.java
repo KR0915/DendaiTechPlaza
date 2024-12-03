@@ -2,6 +2,7 @@ package com.dendai.backend.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -147,5 +148,13 @@ public class UserServiceImpl implements UserService {
     public Page<PostDtoImpl> getUserBookmarks(Integer userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return userRepository.findUserBookmarks(userId, pageable);
+    }
+
+    @Override
+    public List<Boolean> checkUserBookmarks(Integer userId, List<Long> postIds) {
+        List<Long> bookmarkedPostIds = bookmarkRepository.findBookmarkedPostIds(userId, postIds);
+        return postIds.stream()
+                .map(bookmarkedPostIds::contains)
+                .collect(Collectors.toList());
     }
 }
