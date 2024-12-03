@@ -12,10 +12,10 @@ jobs:
       - name: Install SSH Key for Deploy
         uses: appleboy/ssh-action@master
         with:
-          key: ${{ secrets.SK }}
-          host: ${{secrets.SSH_HOST}}
-          username: ${{secrets.SSH_USERNAME}}
-          port: ${{secrets.SSH_PORT}}
+          key: .ssh/dendaiGit
+          host: 133.20.51.166
+          username: wsp
+          port: 22
           script: |
             cd conoha-app
             git pull origin main     
